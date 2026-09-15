@@ -1,4 +1,21 @@
 {
   "$schema": "./schemas/dependencies.schema.json",
-  "dependencies": []
+  "dependencies": [
+    {
+      "id": "pptx-renderer",
+      "package": "@aiden0z/pptx-renderer",
+      "version": "1.2.4",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/aiden0z/pptx-renderer",
+      "assets": [
+        {
+          "key": "browser",
+          "path": "dist/aiden0z-pptx-renderer.browser.es.js",
+          "mime": "text/javascript",
+          "stripSourceMapComment": true,
+          "compression": "gzip"
+        }
+      ]
+    }
+  ]
 }

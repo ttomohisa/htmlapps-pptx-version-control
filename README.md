@@ -6,7 +6,7 @@
 
 [日本語版 README](README.ja.md)
 
-A browser-only PowerPoint version-control tool for `.pptx` files. It stores project history locally, compares meaningful presentation changes, and provides branch, merge, conflict-resolution, and Git-friendly export workflows without uploading selected presentations to a server.
+A browser-only PowerPoint version-control tool for `.pptx` files. It stores project history locally, compares meaningful presentation changes, provides PPTX Diff-style visual comparison, and supports branch, merge, conflict-resolution, and Git-friendly export workflows without uploading selected presentations to a server.
 
 ## 🚀 Live demo
 
@@ -20,6 +20,7 @@ GitHub Pages delivers the initial HTML. After it loads, PPTX parsing, version st
 
 - **Save PowerPoint versions locally** — Create a project from a PPTX, then drop each edited PPTX into the same project as a new version.
 - **Review meaningful changes** — Compare text, numbers, images, objects, layout, formatting, slide order, and speaker notes instead of raw OOXML noise.
+- **Compare the actual slides visually** — Review saved versions, branch heads, or the current unsaved edit with Side by side, Overlay, Split, and Blink views.
 - **Keep Git-like history in the browser** — Project, commit, branch, ref, and HEAD data are stored in IndexedDB with SHA-256 content-addressed objects.
 - **Branch without duplicating presentations manually** — Create, switch, rename, and delete branches, including branches created from older saved versions.
 - **Merge divergent work** — Use 3-way merge with BASE / current / incoming versions and automatic slide-, object-, and property-level merging when safe.
@@ -58,10 +59,25 @@ Python, Node.js, and a local web server are not required. The builder uses Windo
 3. Edit the presentation normally in PowerPoint.
 4. Drop the edited PPTX into the **edited PPTX** area, or choose it with the file button.
 5. Review the detected changes and save the next version.
-6. Use **History**, **Diff**, **Branches**, and **Merge** when you need to inspect or combine work.
-7. Export important projects as `.pptxvc` files so the browser database is not your only copy.
+6. Use **Compare** to choose any saved versions or branch heads and inspect both Semantic Diff and the rendered slides.
+7. Use **Branches** and **Merge** when you need to split or combine work.
+8. Export important projects as `.pptxvc` files so the browser database is not your only copy.
 
 A small first-run sample is included at `examples/sample-presentation.pptx`.
+
+
+### Visual Compare
+
+The **Compare** tab keeps Semantic Diff as the source of truth and adds rendered-slide confirmation. Choose a Branch and Version on each side, then review the selected slide with:
+
+- **Side by side** — Shows both versions at the same slide geometry. On narrow screens the two slides stack vertically.
+- **Overlay** — Places both versions on the same stage and lets you choose which version is on top.
+- **Split** — Clips the revised side with an on-slide draggable boundary without resizing either slide.
+- **Blink** — Alternates the two versions, with a pause/resume control; automatic blinking is not started when reduced motion is requested.
+
+Use category filters or **Changed slides only** to narrow the result list. Visual markers are linked to the Semantic Diff cards, but text changes deliberately mark the whole affected text box instead of guessing an exact changed-word position. Speaker-note changes remain available as a separate comparison area.
+
+After dropping an edited PPTX, **Visual Compare** can also compare the current branch HEAD with that unsaved file before you save a new version. This review is read-only and does not create a commit.
 
 ### History and restore
 
@@ -111,6 +127,9 @@ The repository includes a workflow that builds the standalone HTML and deploys `
 4. After a successful deployment, the demo is available at `https://ttomohisa.github.io/htmlapps-pptx-version-control/`.
 
 Each push to `main` validates the repository, rebuilds the standalone HTML, checks the single-file output, and deploys the generated `dist/` directory when GitHub Pages is enabled.
+
+
+> v1.1.2 exposes Visual Compare for saved versions, branch-to-branch review, and HEAD-to-unsaved-PPTX review while keeping all comparison work local and read-only until you explicitly save a version.
 
 ## Development and build layout
 
@@ -172,9 +191,13 @@ Local project history is stored in IndexedDB on the device. Deleting browser sit
 
 ## Dependencies
 
-The application currently bundles no third-party runtime libraries. PPTX package parsing, semantic modeling, ZIP handling, version-control storage, and export logic are implemented in the app with browser APIs.
+| Library | Version | License | Purpose |
+| --- | ---: | --- | --- |
+| @aiden0z/pptx-renderer | 1.2.4 | Apache-2.0 | Embedded high-fidelity slide rendering for Visual Compare |
 
-See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for repository policy around future dependencies.
+PPTX package parsing, semantic modeling, repository storage, branch/merge logic, and Git-friendly export remain implemented by the app with browser APIs. The renderer is embedded into the single HTML at build time and does not create a runtime network dependency.
+
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for details.
 
 ## Contributing
 

@@ -1,5 +1,13 @@
 {
   "$schema": "./schemas/dependencies-lock.schema.json",
   "schemaVersion": 1,
-  "dependencies": []
+  "dependencies": [
+    {
+      "id": "pptx-renderer",
+      "package": "@aiden0z/pptx-renderer",
+      "version": "1.2.4",
+      "tarballSha256": "ce3ed6237030f52f9bab8e04f875434839fcd32ae656e3578f6e56cfcbd2b8c5",
+      "integrity": "sha512-/4X/BApiknc/JM4nAWQRp5zrnA2GKSMv5r1u3XLsMvySw9DTQjyXIKRtltRsmIYfoN32tHGFnrSlGok7nFS60w=="
+    }
+  ]
 }

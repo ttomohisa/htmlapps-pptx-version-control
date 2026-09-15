@@ -1,5 +1,58 @@
 # Changelog
 
+## [1.1.2] - 2026-09-16
+
+### Fixed
+- Aligned slide matching with PPTX Diff so inserted slides do not cascade into false slide-to-slide matches when PowerPoint slide IDs are renumbered or reused.
+- Exact semantic content is anchored first; slide IDs are now treated as supporting evidence and require content/structure similarity before being trusted.
+- Improved fallback slide matching using title, text, object profile, embedded resources, and coarse geometry.
+- Improved object matching by using shape source IDs only when supported by type/content/geometry evidence, reducing false Text/Object/Layout/Formatting differences after slide insertion.
+- Added visible chevron icons to Visual Compare slide navigation on desktop and mobile.
+
+## [1.1.0] - 2026-09-15
+
+### Added
+- Added PPTX Diff-style Visual Compare for saved versions, branch-to-branch comparisons, and HEAD-to-unsaved-PPTX review.
+- Added Side by side, Overlay, Split, and Blink visual modes with lazy high-fidelity rendering.
+- Added comparison filters for Text, Number, Object, Image, Layout, Formatting, and Speaker notes, plus a changed-slides-only view.
+- Added Semantic Diff-linked visual markers, marker visibility controls, Previous / Next navigation, and mobile Visual Compare navigation.
+- Added a pre-save **Visual Compare** action after loading an edited PPTX so changes can be reviewed before a new version is committed.
+
+### Changed
+- Renamed the project Diff tab to **Compare** and expanded it with read-only Branch / Version selectors.
+- Kept Semantic Diff as the source of truth while using the embedded renderer only for visual confirmation.
+- Kept branch comparison read-only: comparing another branch never switches the active branch or moves symbolic HEAD.
+
+## [1.0.3] - 2026-09-15
+
+### Added
+- Added read-only branch-to-branch comparison inputs without switching the active branch or symbolic HEAD.
+- Added HEAD-to-unsaved-working-PPTX comparison sessions for the upcoming pre-commit visual review flow.
+- Added lazy Visual Compare render planning around only the selected slide and nearby slides.
+- Added explicit Added / Removed-side rendering states, stale-render guards, pair-scoped handle cleanup, and renderer-view memory cleanup.
+
+### Changed
+- Hardened the embedded renderer pipeline before exposing the public Visual Compare UI in v1.1.0.
+
+## [1.0.2] - 2026-09-15
+
+### Added
+- Embedded the same high-fidelity PPTX renderer foundation used by PPTX Diff.
+- Added renderer preparation for saved Commit and unsaved working-PPTX comparison inputs.
+- Added renderer cache keys, small LRU presentation caching, and explicit render/media cleanup.
+
+### Changed
+- Kept the renderer foundation internal; the public Visual Compare UI is planned for v1.1.0.
+
+## [1.0.1] - 2026-09-15
+
+### Changed
+- Added a normalized internal comparison-session layer for saved commits, empty/base inputs, and the currently loaded working PPTX.
+- Routed existing parent and arbitrary-version Semantic Diff through the same Compare Core without changing user-facing results.
+- Standardized comparison category IDs and deterministic slide-pair / future visual-marker IDs to match PPTX Diff terminology.
+- Added exact PPTX package resolvers and stable renderer cache keys as the foundation for v1.1.0 Visual Compare.
+
+
 ## [1.0.0] - 2026-09-15
 
 ### Added
