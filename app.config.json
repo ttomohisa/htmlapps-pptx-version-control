@@ -1,0 +1,26 @@
+{
+  "$schema": "./schemas/app-config.schema.json",
+  "name": "PPTX Version Control",
+  "nameJa": "PPTX Version Control",
+  "slug": "pptx-version-control",
+  "version": "1.0.0",
+  "description": "Manage PowerPoint PPTX versions, semantic diffs, branches, merges, and local project history entirely in the browser.",
+  "descriptionJa": "PowerPoint（PPTX）のバージョン、差分、ブランチ、マージをブラウザ内だけで管理できるローカル履歴ツールです。",
+  "defaultLanguage": "auto",
+  "repository": {
+    "owner": "ttomohisa",
+    "name": "htmlapps-pptx-version-control"
+  },
+  "build": {
+    "output": "dist/index.html",
+    "blockRuntimeNetwork": true,
+    "selfExtract": {
+      "enabled": true,
+      "output": "dist/index.self-extract.html"
+    },
+    "sizeBudget": {
+      "readableWarningMb": 25,
+      "selfExtractWarningMb": 12
+    }
+  }
+}
