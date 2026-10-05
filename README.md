@@ -63,6 +63,8 @@ Python, Node.js, and a local web server are not required. The builder uses Windo
 7. Use **Branches** and **Merge** when you need to split or combine work.
 8. Export important projects as `.pptxvc` files so the browser database is not your only copy.
 
+In **History → Details**, edit a version’s display name and choose **Save name**. The name is captured when you press Save, so switching or closing details cannot save another version’s input. Repeated clicks share one pending save; a failed save can be retried. Labels do not change the saved PPTX or commit identity.
+
 A small first-run sample is included at `examples/sample-presentation.pptx`.
 
 
@@ -208,3 +210,7 @@ Bug reports and feature proposals are welcome through GitHub Issues. See [CONTRI
 Copyright © 2026 ttomohisa
 
 Licensed under the [MIT License](LICENSE).
+
+### Regression checks
+
+Node.js 22 or later is required for development regression checks (not for using the standalone app). After changing source, run `build-standalone.ps1` to refresh both HTML variants and `pptx-version-control.html`, then run `scripts/check-repository.ps1`. The check rejects stale committed root HTML before building and runs the dialog, comparison, renderer, and release-parity checks. Include the refreshed root HTML in the change.

@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+- Keep history details owned by the latest request so delayed reads cannot replace a newer selection or reopen a dismissed dialog.
+- Capture the version display name on Save, prevent duplicate pending saves, and keep late save results out of newer dialogs or changed project/source contexts.
+- Add deterministic dialog boundary regressions, include existing comparison/renderer regressions in repository checks, and keep the root standalone HTML synchronized with the default build.
+
 ## [1.1.2] - 2026-09-16
 
 ### Fixed
