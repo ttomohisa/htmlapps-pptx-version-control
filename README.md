@@ -83,6 +83,8 @@ After dropping an edited PPTX, **Visual Compare** can also compare the current b
 
 ### History and restore
 
+In an older History row, **Compare with latest** compares that saved version with the current branch’s saved HEAD at the moment you click. It keeps the loaded PPTX, checkout and branch unchanged, including unsaved edits. **View changes** still compares with the previous version. Changing project, branch or source discards pending comparisons, so delayed results or errors cannot replace your newer work.
+
 Opening a historical version is read-only and does not move the current branch HEAD. You can export that version as a PPTX, compare it with another saved version, or restore its content as a new version while keeping the existing history.
 
 To continue editing from an older point without changing the current branch, create a new branch from that saved version.

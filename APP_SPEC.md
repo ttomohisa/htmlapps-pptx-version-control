@@ -212,6 +212,20 @@ After the new commit is created, the active branch ref moves to it and the Seman
 
 The Diff view provides From / To selectors populated from project history. The selected semantic snapshots are compared with the existing PowerPoint-aware Semantic Diff engine. Reversing From / To is allowed and naturally reverses added / removed semantics.
 
+### Compare an older History version with latest
+
+Older rows in the active branch History expose **Compare with latest** / **最新版と比較**. The HEAD row has no identical-pair shortcut. Clicking captures the project, active branch, selected saved version and current saved HEAD before asynchronous reads. The result is selected version → captured HEAD, with the active branch on both sides even after a previous cross-branch comparison. Empty, single-version, unknown and foreign-project rows are safe no-ops.
+
+This action uses the existing Semantic Diff / Visual Compare session without loading a saved PPTX into the workspace, moving HEAD, changing checkout state, switching branches or writing repository records. The currently loaded unsaved File and model remain intact. **View changes** continues to compare a version with its first parent.
+
+Parent, arbitrary-pair, History-shortcut and HEAD-to-working comparisons share request ownership:
+
+- Only the current request in the same project, branch and source context may publish a session or display an error. Only the exact request owner may release its loading state; it must still release that state if a delayed context refresh made its result stale.
+- Accepted source replacement, project reset/reopen, stored-version load and branch switch/create/rename invalidate outstanding comparison work before asynchronous storage completes. Invalid or empty file selections do not abandon the current comparison.
+- Repeated triggers share the in-progress work by ignoring duplicate requests. Current failures release controls for retry; an abandoned request cannot change a newer request’s controls or result.
+- Working comparisons capture the saved HEAD, working model/File and active branch before awaiting storage. Comparison controls remain disabled while their request is pending.
+- Dialog ownership and label-save behavior remain unchanged; no schema, PPTX-byte or renderer change is needed.
+
 ### Version details and display names
 
 Each history item exposes a details dialog containing version number, saved time, source filename, package size, content hash, and Commit ID. A user may set an optional display name. This label is mutable presentation metadata and does not alter the immutable commit ID or original commit message.
