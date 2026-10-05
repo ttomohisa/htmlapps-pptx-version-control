@@ -461,3 +461,8 @@ Write-Host "[OK] Fetch/XHR/WebSocket-style runtime network access is blocked by 
 if ($selfExtractEnabled) {
   Write-Host "[OK] Self-extracting HTML: $selfExtractOutputPath" -ForegroundColor Green
 }
+
+# Keep the checked-in single-file release synchronized on default builds only.
+if (-not $OutputPathWasSpecified) {
+  Copy-Item -LiteralPath $OutputPath -Destination (Join-Path $Root "pptx-version-control.html") -Force
+}

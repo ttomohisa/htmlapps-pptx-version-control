@@ -216,6 +216,16 @@ The Diff view provides From / To selectors populated from project history. The s
 
 Each history item exposes a details dialog containing version number, saved time, source filename, package size, content hash, and Commit ID. A user may set an optional display name. This label is mutable presentation metadata and does not alter the immutable commit ID or original commit message.
 
+History details and display-name saves have explicit ownership:
+
+- Only the latest details request may populate or open the dialog. Close, Escape, backdrop dismissal, source replacement, project reopen/reset, stored-version loading, and branch switching invalidate older reads.
+- A queued close event from a previous dialog must not dismiss a newer session.
+- Save captures the selected commit and the trimmed display name (up to 100 characters) before asynchronous storage reads. Clearing the name restores the original message as the display name.
+- Repeated Save clicks, including reopening the same commit during a save, perform only one pending write for that commit. A failed save releases the button for retry.
+- A save already requested may finish after the dialog is closed; its completion must not replace another dialog's title or edits. After the project/source context changes it must not publish stale history or comparison UI.
+- Labels remain mutable metadata only. Commit identity, parents, tree, timestamps, source hashes, original messages, package bytes, and export payloads remain unchanged.
+
+
 ### Repository cleanup foundation
 
 The local repository walks every branch ref in every local project, finds all reachable commits, then removes unreachable commits and unreferenced tree / package / semantic objects. History still reachable from any branch must never be deleted by this cleanup.

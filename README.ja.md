@@ -63,6 +63,8 @@ Python、Node.js、ローカルWebサーバーは不要です。Windows標準の
 7. 必要に応じて **ブランチ / マージ** を使います。
 8. 重要なプロジェクトは `.pptxvc` でも書き出し、ブラウザ内の履歴だけに依存しないようにしてください。
 
+**履歴 → 詳細** で表示名を編集し、**名前を保存** を押せます。押した時点の名前を対象のバージョンに保存するため、詳細を閉じたり切り替えたりしても別バージョンの入力を保存しません。連打しても保存処理は重複せず、失敗時は再試行できます。保存済みPPTXやコミットのIDは変わりません。
+
 初回確認用として `examples/sample-presentation.pptx` を同梱しています。
 
 
@@ -208,3 +210,7 @@ PPTXパッケージ解析、Semantic Model、ローカル履歴、Branch / Merge
 Copyright © 2026 ttomohisa
 
 このプロジェクトは [MIT License](LICENSE) で公開されています。
+
+### 回帰テスト
+
+開発用の回帰テストにはNode.js 22以降が必要です（HTMLアプリの利用には不要）。ソース変更後は `build-standalone.ps1` で両HTML形式と `pptx-version-control.html` を更新し、生成されたルートHTMLも変更に含めてから `scripts/check-repository.ps1` を実行します。チェックはビルド前に配布HTMLの更新漏れを検出し、詳細ダイアログ・比較・レンダラー・配布HTML一致を検証します。

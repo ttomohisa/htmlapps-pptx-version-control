@@ -230,10 +230,15 @@ if ([string]::IsNullOrWhiteSpace([string]$app.slug)) { throw "app.config.json: s
 if ([string]::IsNullOrWhiteSpace([string]$app.version)) { throw "app.config.json: version is required" }
 
 $buildArguments = @{}
+if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+  throw "Node.js 22 or later is required to run the regression checks."
+}
+# Check committed release bytes before the build can repair a stale root file.
+& node (Join-Path $Root "test/release-parity-regression.mjs") --root-only
+if ($LASTEXITCODE -ne 0) { throw "Root release is stale. Run build-standalone.ps1 and include the generated root HTML." }
 if ($ForceDownload) { $buildArguments.ForceDownload = $true }
 & (Join-Path $Root "build-standalone.ps1") @buildArguments
 
-Write-Host "[OK] Repository check passed." -ForegroundColor Green
 
 # WebRTC readiness DataChannel regression
 $webrtcReadyText = Get-Content -Raw -Encoding UTF8 (Join-Path $Root "components\webrtc-qr-pairing.html")
@@ -250,3 +255,18 @@ if (-not $webrtcReadyText.Contains("options.requireReadyChannelOpen!==false&&(!r
   throw "WebRTC application-ready must wait for the designated DataChannel to open."
 }
 
+
+# Source-function tests use only fictitious boundary data; no browser or PPTX input.
+foreach ($test in @(
+  "version-dialog-regression.mjs",
+  "compare-core-regression.mjs",
+  "visual-compare-hardening-regression.mjs",
+  "visual-compare-v110-regression.mjs",
+  "renderer-foundation-regression.mjs",
+  "release-parity-regression.mjs",
+  "release-check-regression.mjs"
+)) {
+  & node (Join-Path $Root ("test/" + $test))
+  if ($LASTEXITCODE -ne 0) { throw "Regression failed: $test" }
+}
+Write-Host "[OK] Repository check passed." -ForegroundColor Green
