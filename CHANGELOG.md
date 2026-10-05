@@ -2,7 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+- Add **Compare with latest** to older History rows, comparing the selected saved version with the active branch’s saved HEAD captured at click time without changing the working PPTX, checkout, branch or repository.
+
+
 ### Fixed
+- Own parent, arbitrary-pair and working comparisons by request and project/source context, suppressing stale sessions, errors and finalizers after project, branch or source changes.
+- Ignore repeated working-comparison triggers and retain the disabled comparison control until the current request finishes; current failures remain retryable.
+- Add actual-source comparison ownership and History-shortcut boundary regressions to repository validation.
 - Keep history details owned by the latest request so delayed reads cannot replace a newer selection or reopen a dismissed dialog.
 - Capture the version display name on Save, prevent duplicate pending saves, and keep late save results out of newer dialogs or changed project/source contexts.
 - Add deterministic dialog boundary regressions, include existing comparison/renderer regressions in repository checks, and keep the root standalone HTML synchronized with the default build.
