@@ -258,6 +258,7 @@ if (-not $webrtcReadyText.Contains("options.requireReadyChannelOpen!==false&&(!r
 
 # Source-function tests use only fictitious boundary data; no browser or PPTX input.
 foreach ($test in @(
+  "header-language-regression.mjs",
   "version-dialog-regression.mjs",
   "comparison-ownership-regression.mjs",
   "compare-core-regression.mjs",

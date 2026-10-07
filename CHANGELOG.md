@@ -14,6 +14,12 @@
 - Capture the version display name on Save, prevent duplicate pending saves, and keep late save results out of newer dialogs or changed project/source contexts.
 - Add deterministic dialog boundary regressions, include existing comparison/renderer regressions in repository checks, and keep the root standalone HTML synchronized with the default build.
 
+## [1.1.3] - 2026-10-07
+
+- Normalize the language switch to EN / JA and describe the target language in localized accessible names and tooltips.
+- Preserve localized Help labels, privacy wording, and header layout; document the language controls in Help.
+- Add source, readable, root-alias, and self-extract header regressions for repeated switching and saved language restoration.
+
 ## [1.1.2] - 2026-09-16
 
 ### Fixed

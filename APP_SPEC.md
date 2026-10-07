@@ -1,6 +1,6 @@
 # PPTX Version Control — App Specification
 
-Version: 1.1.0
+Version: 1.1.3
 
 ## Goal
 
@@ -562,3 +562,11 @@ The app must not send user PPTX data to Browser Kitty or any external server. CS
 - Low-confidence matches are not used as move anchors.
 - Object source IDs are likewise guarded by object type plus content, geometry, placeholder, resource, or name evidence.
 - Regression requirement: the PPTX Diff insertion fixture must report the inserted Executive Summary as Added while matching Sales Overview, Visual Assets, Layout and Formatting, Object Inventory, and Closing to their corresponding revised slides.
+
+## Header language controls
+
+- Japanese UI shows `EN`; English UI shows `JA`. Both switch without a reload and retain the language preference.
+- The language button title and accessible name describe the target language in the current UI language: `英語に切り替え` / `Switch to Japanese`.
+- Keep the existing localized Help button title, accessible name, icon and dialog heading.
+- Keep Japanese privacy copy `完全ローカル処理` and the existing accurate English equivalent.
+- Header styles, responsive layout, and application workflows remain unchanged.
