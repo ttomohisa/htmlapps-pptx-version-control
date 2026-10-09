@@ -272,3 +272,6 @@ foreach ($test in @(
   if ($LASTEXITCODE -ne 0) { throw "Regression failed: $test" }
 }
 Write-Host "[OK] Repository check passed." -ForegroundColor Green
+
+& node (Join-Path $Root "scripts/test-icon-normalization.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Icon normalization checks failed." }
