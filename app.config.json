@@ -3,7 +3,7 @@
   "name": "PPTX Version Control",
   "nameJa": "PPTX Version Control",
   "slug": "pptx-version-control",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "Manage PowerPoint PPTX versions locally with semantic diff, branches, merge, and PPTX Diff-style visual comparison across saved versions, branches, and unsaved edits.",
   "descriptionJa": "PowerPoint（PPTX）の履歴・差分・ブランチ・マージを完全ローカル処理で管理し、保存版・ブランチ・未保存の編集内容をPPTX Diff風の見た目比較で確認できるツールです。",
   "defaultLanguage": "auto",

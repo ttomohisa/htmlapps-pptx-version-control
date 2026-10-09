@@ -1,6 +1,11 @@
 # PPTX Version Control — App Specification
 
-Version: 1.1.3
+## v1.1.4 — Icon normalization
+
+- Canonical background and matching artwork green: `#16624f`; background x/y radii exactly 25% of their respective dimensions.
+- Preserve artwork, padding, app behavior, and synchronized header/favicon/download/loader representations.
+
+Version: 1.1.4
 
 ## Goal
 
