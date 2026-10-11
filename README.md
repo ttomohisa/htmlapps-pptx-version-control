@@ -24,7 +24,7 @@ GitHub Pages delivers the initial HTML. After it loads, PPTX parsing, version st
 - **Keep Git-like history in the browser** — Project, commit, branch, ref, and HEAD data are stored in IndexedDB with SHA-256 content-addressed objects.
 - **Branch without duplicating presentations manually** — Create, switch, rename, and delete branches, including branches created from older saved versions.
 - **Merge divergent work** — Use 3-way merge with BASE / current / incoming versions and automatic slide-, object-, and property-level merging when safe.
-- **Resolve conflicts in the UI** — Choose the current or incoming change, or manually edit supported text conflicts before creating the merge version. On short screens, scroll inside the resolver to reach choices, manual editing and Continue; Close stays visible.
+- **Resolve conflicts in the UI** — Choose the current or incoming change, or manually edit supported text conflicts before creating the merge version.
 - **Take your history with you** — Export and import a complete project as one `.pptxvc` file, including refs, commits, and required objects.
 - **Review normalized data with ordinary Git** — Export stable per-slide JSON, resolved relationships, and SHA-256-named media as a Git-friendly ZIP.
 - **Restore real PPTX files** — Open or export historical versions without moving HEAD, and restore older content as a new version while preserving history.
@@ -63,12 +63,11 @@ Python, Node.js, and a local web server are not required. The builder uses Windo
 7. Use **Branches** and **Merge** when you need to split or combine work.
 8. Export important projects as `.pptxvc` files so the browser database is not your only copy.
 
-Dialogs keep the background page still while open. Scroll inside long dialogs to reach their contents; the existing Close and Cancel actions remain available. Merge planning preserves matched slides and objects and asks you to resolve competing edits before creating a merge version.
+Merge planning preserves matched slides and objects and asks you to resolve competing edits before creating a merge version.
 
 In **History → Details**, edit a version’s display name and choose **Save name**. The name is captured when you press Save, so switching or closing details cannot save another version’s input. Repeated clicks share one pending save; a failed save can be retried. Labels do not change the saved PPTX or commit identity.
 
 A small first-run sample is included at `examples/sample-presentation.pptx`.
-
 
 ### Visual Compare
 
@@ -133,7 +132,6 @@ The repository includes a workflow that builds the standalone HTML and deploys `
 4. After a successful deployment, the demo is available at `https://ttomohisa.github.io/htmlapps-pptx-version-control/`.
 
 Each push to `main` validates the repository, rebuilds the standalone HTML, checks the single-file output, and deploys the generated `dist/` directory when GitHub Pages is enabled.
-
 
 > v1.1.2 exposes Visual Compare for saved versions, branch-to-branch review, and HEAD-to-unsaved-PPTX review while keeping all comparison work local and read-only until you explicitly save a version.
 
