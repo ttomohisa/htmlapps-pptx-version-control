@@ -1,11 +1,21 @@
 # PPTX Version Control — App Specification
 
+## v1.1.5 — Modal scroll lock and merge lineage
+
+- Lock both the root document and body only while a native modal dialog is open; closing the last modal restores background scrolling without moving the page.
+- Preserve the existing whole-dialog scrolling, sticky Close header, internal controls, cancellation handlers, and shield/check privacy badge.
+- At viewport heights of 600 px or less, the Conflict Resolver uses one bounded dialog scroll surface with its Close header still sticky. Progress, conflict list, values, choices, manual textarea and footer keep their natural heights; the footer must not consume or overlap the choice area. Preserve normal-height layout and all resolution handlers. Verify actual choice, manual editing and Continue reachability at 393 x 252 in both languages.
+- Rebind cloned slide/object matcher results to their original input arrays at the merge adapters. Do not change matching scores, thresholds, identity decisions, package bytes, or repository schema.
+- Merging the synthetic divergent three-version project retains both slides and all four objects, keeps the stable checklist anchor and independent current-branch edit, and reports the current/incoming text conflict for an explicit choice.
+- Unchanged, one-sided changes, additions, removals, reordering and independent mixed-slide edits must retain their intended content and order without mutating the input snapshots.
+- Run the modal and merge-lineage regressions against source, readable release, tracked root alias and restored self-extract payload. Native-browser scrolling and merge/export verification remain separate acceptance checks.
+
 ## v1.1.4 — Icon normalization
 
 - Canonical background and matching artwork green: `#16624f`; background x/y radii exactly 25% of their respective dimensions.
 - Preserve artwork, padding, app behavior, and synchronized header/favicon/download/loader representations.
 
-Version: 1.1.4
+Version: 1.1.5
 
 ## Goal
 
