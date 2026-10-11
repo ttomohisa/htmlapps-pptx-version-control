@@ -51,10 +51,10 @@ test(`${target}: existing close, cancel and backdrop handler ownership stays unc
   assert.equal(hash(handlers), '4ec0c743b4ad74e2182e4504b97254c04326d5d4852f5a0c0ee9ac6b902ef7fe');
 });
 
-test(`${target}: localized Help explains modal-only background locking`, () => {
-  assert.match(html, /<p data-i18n="helpDialogs">[^<]+<\/p>/);
-  assert.match(html, /helpDialogs:'[^']*背景[^']*スクロール[^']*'/);
-  assert.match(html, /helpDialogs:'[^']*background page[^']*scroll[^']*'/);
+test(`${target}: localized Help omits implementation commentary`, () => {
+  assert.doesNotMatch(html, /<p data-i18n="helpDialogs">[^<]+<\/p>/);
+  assert.doesNotMatch(html, /helpDialogs:'[^']*背景[^']*スクロール[^']*'/);
+  assert.doesNotMatch(html, /helpDialogs:'[^']*background page[^']*scroll[^']*'/);
 });
 
 test(`${target}: short conflict resolvers use one dialog scroll surface instead of starving their body`, () => {
