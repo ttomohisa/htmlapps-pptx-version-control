@@ -271,6 +271,13 @@ foreach ($test in @(
   & node (Join-Path $Root ("test/" + $test))
   if ($LASTEXITCODE -ne 0) { throw "Regression failed: $test" }
 }
+# Inspect the same modal and merge contracts in every shipped representation.
+foreach ($target in @("src/index.template.html", "dist/index.html", "pptx-version-control.html", "dist/index.self-extract.html")) {
+  & node (Join-Path $Root "test/dialog-layout-regression.mjs") $target
+  if ($LASTEXITCODE -ne 0) { throw "Dialog layout regression failed: $target" }
+  & node (Join-Path $Root "test/merge-lineage-regression.mjs") $target
+  if ($LASTEXITCODE -ne 0) { throw "Merge lineage regression failed: $target" }
+}
 Write-Host "[OK] Repository check passed." -ForegroundColor Green
 
 & node (Join-Path $Root "scripts/test-icon-normalization.cjs")

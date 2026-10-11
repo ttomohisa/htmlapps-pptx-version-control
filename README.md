@@ -63,6 +63,8 @@ Python, Node.js, and a local web server are not required. The builder uses Windo
 7. Use **Branches** and **Merge** when you need to split or combine work.
 8. Export important projects as `.pptxvc` files so the browser database is not your only copy.
 
+Dialogs keep the background page still while open. Scroll inside long dialogs to reach their contents; the existing Close and Cancel actions remain available. Merge planning preserves matched slides and objects and asks you to resolve competing edits before creating a merge version.
+
 In **History → Details**, edit a version’s display name and choose **Save name**. The name is captured when you press Save, so switching or closing details cannot save another version’s input. Repeated clicks share one pending save; a failed save can be retried. Labels do not change the saved PPTX or commit identity.
 
 A small first-run sample is included at `examples/sample-presentation.pptx`.

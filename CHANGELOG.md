@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.5 - 2026-10-11
+
+- Stop background scrolling while native dialogs are open, preserving their existing scrolling and Close/Cancel controls.
+- Repair merge adapters after matcher results became cloned objects, retaining slides and objects and reporting real conflicts instead of producing an empty presentation.
+- Add exact synthetic three-commit merge and modal regressions across source and shipped HTML forms; check the current configured release badge.
+
 ## 1.1.4 - 2026-10-09
 
 - Normalize icon brand color and exact 25% background corner radii without changing artwork.
