@@ -3,6 +3,7 @@
 ## 1.1.5 - 2026-10-11
 
 - Stop background scrolling while native dialogs are open, preserving their existing scrolling and Close/Cancel controls.
+- Let short Conflict Resolver dialogs scroll as a single surface so choices and manual editing are not squeezed under the footer.
 - Repair merge adapters after matcher results became cloned objects, retaining slides and objects and reporting real conflicts instead of producing an empty presentation.
 - Add exact synthetic three-commit merge and modal regressions across source and shipped HTML forms; check the current configured release badge.
 

@@ -24,7 +24,7 @@ GitHub Pages delivers the initial HTML. After it loads, PPTX parsing, version st
 - **Keep Git-like history in the browser** — Project, commit, branch, ref, and HEAD data are stored in IndexedDB with SHA-256 content-addressed objects.
 - **Branch without duplicating presentations manually** — Create, switch, rename, and delete branches, including branches created from older saved versions.
 - **Merge divergent work** — Use 3-way merge with BASE / current / incoming versions and automatic slide-, object-, and property-level merging when safe.
-- **Resolve conflicts in the UI** — Choose the current or incoming change, or manually edit supported text conflicts before creating the merge version.
+- **Resolve conflicts in the UI** — Choose the current or incoming change, or manually edit supported text conflicts before creating the merge version. On short screens, scroll inside the resolver to reach choices, manual editing and Continue; Close stays visible.
 - **Take your history with you** — Export and import a complete project as one `.pptxvc` file, including refs, commits, and required objects.
 - **Review normalized data with ordinary Git** — Export stable per-slide JSON, resolved relationships, and SHA-256-named media as a Git-friendly ZIP.
 - **Restore real PPTX files** — Open or export historical versions without moving HEAD, and restore older content as a new version while preserving history.

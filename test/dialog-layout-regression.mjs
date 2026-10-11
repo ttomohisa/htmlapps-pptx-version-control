@@ -57,6 +57,52 @@ test(`${target}: localized Help explains modal-only background locking`, () => {
   assert.match(html, /helpDialogs:'[^']*background page[^']*scroll[^']*'/);
 });
 
+test(`${target}: short conflict resolvers use one dialog scroll surface instead of starving their body`, () => {
+  // At 393 x 252 the old four-row grid left 2px for the body. Check the
+  // allocation contract, not a simulated browser layout; native hit testing
+  // still verifies the actual choices, textarea, footer and sticky Close.
+  const mediaStart = css.indexOf('@media(max-height:600px)');
+  assert.ok(mediaStart >= 0, 'short-height resolver fallback exists');
+  let depth = 1, end = css.indexOf('{', mediaStart) + 1;
+  const start = end;
+  for (; end < css.length && depth; end++) {
+    if (css[end] === '{') depth++;
+    if (css[end] === '}') depth--;
+  }
+  assert.equal(depth, 0, 'short-height media rule is complete');
+  const short = css.slice(start, end - 1);
+  const rules = new Map([...short.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, declarations]) => [selector.trim(), declarations]));
+  assert.deepEqual([...rules.keys()].sort(), ['.resolver-body', '.resolver-detail', '.resolver-dialog', '.resolver-shell'], 'fallback is scoped to resolver allocation only');
+  assert.match(rules.get('.resolver-dialog'), /(?:^|;)overflow:auto(?:;|$)/, 'dialog owns the bounded scroll surface');
+  assert.match(rules.get('.resolver-shell'), /(?:^|;)display:block(?:;|$)/, 'progress and footer no longer reserve fixed grid tracks');
+  assert.match(rules.get('.resolver-shell'), /(?:^|;)height:auto(?:;|$)/, 'mobile 100dvh shell is released');
+  assert.match(rules.get('.resolver-shell'), /(?:^|;)max-height:none(?:;|$)/, 'desktop shell no longer compresses body');
+  assert.match(rules.get('.resolver-body'), /(?:^|;)display:block(?:;|$)/, 'conflict list and details get their intrinsic height');
+  assert.match(rules.get('.resolver-detail'), /(?:^|;)overflow:visible(?:;|$)/, 'choices and manual editing stay in the dialog scroll chain');
+  assert.doesNotMatch(short, /(?:^|[;{])(?:min-height|max-height|height):(?:\d|calc|min\()/, 'no guessed pixel allocation or viewport-height child');
+  assert.ok(mediaStart > css.indexOf('@media(max-width:760px)'), 'fallback wins over the mobile grid');
+});
+
+test(`${target}: resolver choice and manual controls retain usable intrinsic sizes and flow`, () => {
+  assert.match(css, /\.button\{min-height:40px;/, 'choices and Continue retain their full target height');
+  assert.match(css, /\.resolver-manual textarea\{width:100%;min-height:120px;resize:vertical;/, 'manual text remains editable at its normal size');
+  const footer = css.match(/\.resolver-footer\{([^{}]*)\}/)[1];
+  assert.doesNotMatch(footer, /position:(?:fixed|sticky|absolute)/, 'footer never overlays choice controls');
+  assert.match(css, /\.dialog-head\{position:sticky;top:0;/, 'Close stays visible while the dialog scrolls');
+  const start = html.indexOf('<dialog id="conflictResolverDialog"');
+  const markup = html.slice(start, html.indexOf('</dialog>', start) + '</dialog>'.length);
+  assert.equal(hash(markup), '5bd5fd7d4d8240f63dc5d363c7f9f8bac6e9e76a629bcf82f459414668504624', 'all resolver controls, order, IDs, labels and hidden states are preserved');
+});
+
+test(`${target}: resolver behavior and merge handlers remain byte-identical`, () => {
+  const start = html.indexOf('function resetMergeResolverState');
+  assert.ok(start >= 0);
+  assert.equal(hash(html.slice(start, html.indexOf('async function performSelectedMerge', start))), '0d7f3b81ba23f21a23ecb67d440bc141ea610edd6419e24a3c722e9423fc12e2');
+  const handlerStart = html.indexOf("$('#openConflictResolverButton').addEventListener");
+  assert.ok(handlerStart >= 0);
+  assert.equal(hash(html.slice(handlerStart, html.indexOf("$('#diffTab').addEventListener", handlerStart))), 'ce57bb77f8a25f4c85622154f86c47b0a3ec83aa380df4328fea4d168861e28c', 'choice, manual, previous/next, Continue, Close and backdrop handlers retain ownership');
+});
+
 test('canonical checker tests modal contracts in source and all shipped forms', () => {
   const checker = read('scripts/check-repository.ps1');
   const start = checker.indexOf('foreach ($target in @("src/index.template.html"');

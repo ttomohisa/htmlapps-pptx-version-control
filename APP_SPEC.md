@@ -4,6 +4,7 @@
 
 - Lock both the root document and body only while a native modal dialog is open; closing the last modal restores background scrolling without moving the page.
 - Preserve the existing whole-dialog scrolling, sticky Close header, internal controls, cancellation handlers, and shield/check privacy badge.
+- At viewport heights of 600 px or less, the Conflict Resolver uses one bounded dialog scroll surface with its Close header still sticky. Progress, conflict list, values, choices, manual textarea and footer keep their natural heights; the footer must not consume or overlap the choice area. Preserve normal-height layout and all resolution handlers. Verify actual choice, manual editing and Continue reachability at 393 x 252 in both languages.
 - Rebind cloned slide/object matcher results to their original input arrays at the merge adapters. Do not change matching scores, thresholds, identity decisions, package bytes, or repository schema.
 - Merging the synthetic divergent three-version project retains both slides and all four objects, keeps the stable checklist anchor and independent current-branch edit, and reports the current/incoming text conflict for an explicit choice.
 - Unchanged, one-sided changes, additions, removals, reordering and independent mixed-slide edits must retain their intended content and order without mutating the input snapshots.
