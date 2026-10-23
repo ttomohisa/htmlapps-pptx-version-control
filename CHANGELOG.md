@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Standardize the phone informational footer, final Help build metadata, and equivalent local-processing badge wording.
+
 ## 1.1.5 - 2026-10-11
 
 - Stop background scrolling while native dialogs are open, preserving their existing scrolling and Close/Cancel controls.

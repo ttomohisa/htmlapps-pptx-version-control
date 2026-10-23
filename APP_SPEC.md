@@ -1,5 +1,11 @@
 # PPTX Version Control — App Specification
 
+## Phone footer and Help metadata
+
+- Hide only the informational footer at the existing 760px phone breakpoint. Preserve functional navigation and controls.
+- Show existing build metadata quietly at the very end of How to use & Notes on both desktop and phone. No new phone metadata hiding.
+- Use `Fully local processing` for the existing `完全ローカル処理` badge. Keep distinct privacy statements, app versions, dependencies and application behavior unchanged.
+
 ## v1.1.5 — Modal scroll lock and merge lineage
 
 - Lock both the root document and body only while a native modal dialog is open; closing the last modal restores background scrolling without moving the page.

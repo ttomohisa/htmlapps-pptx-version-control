@@ -101,7 +101,7 @@ for (const path of targets) {
     const h = setup(html, 'ja');
     const badge = () => h.nodes.find(n => n.dataset.i18n === 'localBadge').textContent;
     assert.equal(badge(), '完全ローカル処理');
-    h.$('#languageButton').click(); assert.equal(badge(), isDiff ? 'Fully local processing' : 'Completely local');
+    h.$('#languageButton').click(); assert.equal(badge(), 'Fully local processing');
     h.$('#languageButton').click(); assert.equal(badge(), '完全ローカル処理');
   });
 }
