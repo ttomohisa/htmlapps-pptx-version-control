@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.6 - 2026-10-27
+
+- Keep the header version badge visible at narrow widths by truncating only the app title.
+- Remove redundant language-switching instructions from Japanese and English Help.
+
+
 ## Unreleased
 
 - Standardize the phone informational footer, final Help build metadata, and equivalent local-processing badge wording.
