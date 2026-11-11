@@ -72,6 +72,7 @@ jobs:
           node scripts/prepare-release.mjs
           (cd release-assets && sha256sum -c SHA256SUMS.txt)
           unzip -t release-assets/*.zip
+          bash -n scripts/publish-release.sh
           node --test test/release-publish-regression.mjs
 
       - name: Upload verified release assets
