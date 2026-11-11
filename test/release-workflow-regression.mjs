@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 const read = name => fs.readFileSync(new URL('../' + name, import.meta.url), 'utf8');
 const workflow = read('.github/workflows/release.yml');
 const prepare = read('scripts/prepare-release.mjs');
+const publish = read('scripts/publish-release.sh');
 
 test('release workflow verifies PR builds but only publishes after main validation', () => {
   assert.ok(workflow.includes('  pull_request:'), 'PR can test packaging without publishing');
@@ -22,10 +23,14 @@ test('release workflow verifies PR builds but only publishes after main validati
 });
 
 test('release workflow protects existing tags and release entries', () => {
-  assert.ok(workflow.includes('gh release view "$tag"'), 'do not republish a tag');
-  assert.ok(workflow.includes('if [[ "$ref_sha" != "$GITHUB_SHA" ]]'), 'do not repoint an existing tag');
-  assert.ok(workflow.includes('gh release create "$tag"'), 'a matching version creates the release');
-  assert.ok(workflow.includes('--verify-tag'), 'release only an existing verified tag');
+  assert.ok(workflow.includes('bash scripts/publish-release.sh'), 'publish uses the dedicated audited script');
+  assert.ok(workflow.includes('node --test test/release-publish-regression.mjs'), 'PR tests the publish script without credentials');
+  assert.ok(publish.includes('gh release view "$tag"'), 'do not republish a release');
+  assert.ok(publish.includes('git ls-remote --tags origin'), 'existing remote tags are checked read-only');
+  assert.ok(publish.includes('gh release create "$tag"'), 'release creation is performed by GitHub CLI');
+  assert.ok(publish.includes('--target "$GITHUB_SHA"'), 'missing tag is created from the exact commit');
+  assert.ok(publish.includes('--verify-tag'), 'existing matching tag is used as-is');
+  assert.ok(!publish.includes('gh api -X POST'), 'avoid the failing separate reference-creation request');
   assert.ok(workflow.includes('scripts/check-repository.ps1'), 'built HTML is validated before publishing');
   assert.ok(workflow.includes('actions/download-artifact@'), 'publish receives the verified build');
 });
