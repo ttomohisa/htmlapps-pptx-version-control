@@ -1,6 +1,9 @@
 name: Publish versioned release
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -44,9 +47,43 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-  publish:
-    if: github.ref == 'refs/heads/main'
+  package:
     needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exact revision for packaging
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Download validated standalone HTML
+        uses: actions/download-artifact@v4
+        with:
+          name: release-built-${{ github.sha }}
+          path: dist
+
+      - name: Build and verify the release package
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/prepare-release.mjs
+          (cd release-assets && sha256sum -c SHA256SUMS.txt)
+          unzip -t release-assets/*.zip
+
+      - name: Upload verified release assets
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-assets-${{ github.sha }}
+          path: release-assets/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: package
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -57,14 +94,11 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Download validated HTML
+      - name: Download verified release assets
         uses: actions/download-artifact@v4
         with:
-          name: release-built-${{ github.sha }}
-          path: dist
-
-      - name: Prepare release downloads and SHA-256 checksums
-        run: node scripts/prepare-release.mjs
+          name: release-assets-${{ github.sha }}
+          path: release-assets
 
       - name: Create version tag and GitHub Release if needed
         shell: bash
