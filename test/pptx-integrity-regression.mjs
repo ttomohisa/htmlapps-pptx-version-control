@@ -107,7 +107,9 @@ const mergeContext = vm.createContext({
   }))
 });
 vm.runInContext(between('function deepCloneJson', 'async function commitAncestorDistances') +
-  '\nthis.merge = threeWayMergeSemantic; this.resolve = applySemanticResolution;', mergeContext);
+  '\nthis.merge = threeWayMergeSemantic;', mergeContext);
+
+vm.runInContext(between('function findSlidePlanForPath', 'function renderConflictResolver') + '\nthis.resolve = applySemanticResolution;', mergeContext);
 
 const snapshot = formatting => ({
   slideSize: { width: 100, height: 50 },
