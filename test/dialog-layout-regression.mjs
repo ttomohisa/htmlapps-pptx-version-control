@@ -42,6 +42,14 @@ test(`${target}: Help scroll stays inside the dialog and clear of Close`, () => 
   assert.ok(css.includes('max-height:min(84dvh,760px)'), 'Help remains bounded by the viewport');
 });
 
+test(`${target}: next-action panel uses a flat neutral surface`, () => {
+  const rule = css.match(/\\.next-action-card\\{([^{}]*)\\}/)?.[1];
+  assert.ok(rule, 'next-action panel style exists');
+  assert.match(rule, /(?:^|;)background:var\\(--surface\\)(?:;|$)/);
+  assert.match(rule, /(?:^|;)border:1px solid var\\(--line\\)(?:;|$)/);
+  assert.doesNotMatch(rule, /(?:linear|radial|conic)-gradient\\(/, 'card has no gradient');
+});
+
 test(`${target}: Hero and Help use concise, version-independent copy`, () => {
   assert.ok(html.includes('data-i18n="introTitle">PowerPointの編集履歴を保存・比較'));
   assert.ok(html.includes('data-i18n="helpScopeTitle">主な機能'));
