@@ -107,7 +107,7 @@ const mergeContext = vm.createContext({
   }))
 });
 vm.runInContext(between('function deepCloneJson', 'async function commitAncestorDistances') +
-  '\nthis.merge = threeWayMergeSemantic;', mergeContext);
+  '\nthis.merge = threeWayMergeSemantic; this.resolve = applySemanticResolution;', mergeContext);
 
 const snapshot = formatting => ({
   slideSize: { width: 100, height: 50 },
@@ -157,4 +157,20 @@ test('mixed-slide materialization detects a changed object z-order before writin
   assert.equal(context.check(original, revised), false);
   assert.equal(context.check(original, original), true);
   assert.match(getLine('async function materializeMixedSlide('), /relativeObjectOrderUnchanged/);
+});
+
+test('resolving a font-size conflict updates the nested formatting plan', () => {
+  const result = mergeContext.merge(
+    snapshot({ fontSize: 12, fill: 'white' }),
+    snapshot({ fontSize: 14, fill: 'white' }),
+    snapshot({ fontSize: 18, fill: 'white' })
+  );
+  assert.equal(result.conflicts.length, 1);
+  mergeContext.resolve(result, result.conflicts[0], { choice: 'theirs' });
+  const plan = result.slidePlans[0].objectPlans[0];
+  assert.equal(plan.merged.formatting.fontSize, 18);
+  assert.equal(plan.groupSources.formattingKeys.fontSize, 'theirs');
+  assert.equal(plan.groupSources.formatting, 'theirs');
+  assert.equal(result.merged.slides[0].objects[0].formatting.fontSize, 14,
+    'the aggregate is rebuilt after conflict resolution rather than modified in place');
 });
