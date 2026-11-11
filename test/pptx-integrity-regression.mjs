@@ -147,3 +147,14 @@ test('changed source bytes remain saveable even if the semantic fingerprint is e
   assert.match(source, /fileState==='changed'\|\|fileState==='noise'/);
   assert.match(source, /parent&&parent\.sourceSha256===state\.model\.sourceSha256/);
 });
+
+test('mixed-slide materialization detects a changed object z-order before writing OOXML', () => {
+  const guard = getLine('function relativeObjectOrderUnchanged(');
+  const context = vm.createContext({});
+  vm.runInContext(guard + '\nthis.check = relativeObjectOrderUnchanged;', context);
+  const original = { objects: [{ stableId: 'shape' }, { stableId: 'image' }] };
+  const revised = { objects: [{ stableId: 'image' }, { stableId: 'shape' }] };
+  assert.equal(context.check(original, revised), false);
+  assert.equal(context.check(original, original), true);
+  assert.match(getLine('async function materializeMixedSlide('), /relativeObjectOrderUnchanged/);
+});
