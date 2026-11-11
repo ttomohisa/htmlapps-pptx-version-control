@@ -20,6 +20,7 @@ const testCode = [
   line('function mergeSingleRunText('),
   line('function mergeSingleRunFormatting('),
   line('function slideHasUniqueObjectIds('),
+  line('function relativeObjectOrderUnchanged('),
   line('function setTextContentInObject('),
   between('async function materializeMixedSlide(', 'async function ensureContentTypes('),
   between('async function slideAncillarySignature(', 'function verifyMaterializedMerge('),
