@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
 const read = name => fs.readFileSync(new URL('../' + name, import.meta.url), 'utf8');
 const workflow = read('.github/workflows/release.yml');
@@ -35,5 +36,5 @@ test('standalone release assets include both formats, license and checksums', ()
   assert.ok(prepare.includes('LICENSE'));
   assert.ok(prepare.includes("crypto.createHash('sha256')"));
   assert.ok(prepare.includes('SHA256SUMS.txt'));
-  execFileSync(process.execPath, ['--check', new URL('../scripts/prepare-release.mjs', import.meta.url).pathname], {stdio:'pipe'});
+  execFileSync(process.execPath, ['--check', fileURLToPath(new URL('../scripts/prepare-release.mjs', import.meta.url))], {stdio:'pipe'});
 });
