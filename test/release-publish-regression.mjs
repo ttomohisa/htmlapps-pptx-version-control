@@ -28,7 +28,7 @@ function setup(t, opts = {}) {
   const gh = `#!/usr/bin/env node
 const fs = require('node:fs');
 const args = process.argv.slice(2);
-fs.appendFileSync(process.env.MOCK_CALLS, JSON.stringify(['gh', ...args])+'\\n');
+fs.appendFileSync(process.env.MOCK_CALLS, JSON.stringify(['gh', ...args])+String.fromCharCode(10));
 if (args[0] === 'release' && args[1] === 'view') {
   if (process.env.MOCK_VIEW_ERROR) {
     console.error(process.env.MOCK_VIEW_ERROR === '403' ? 'gh: forbidden (HTTP 403)' : 'gh: unavailable');
@@ -53,15 +53,15 @@ if (args[0] === 'release' && args[1] === 'view') {
   const git = `#!/usr/bin/env node
 const fs = require('node:fs');
 const args = process.argv.slice(2);
-fs.appendFileSync(process.env.MOCK_CALLS, JSON.stringify(['git', ...args])+'\\n');
+fs.appendFileSync(process.env.MOCK_CALLS, JSON.stringify(['git', ...args])+String.fromCharCode(10));
 if (args[0] !== 'ls-remote' || args[1] !== '--tags') process.exit(1);
 if (process.env.MOCK_TAG_SHA) {
   const tag = 'refs/tags/v1.1.7';
   if (process.env.MOCK_ANNOTATED === 'true') {
-    console.log('b'.repeat(40) + '\\t' + tag);
-    console.log(process.env.MOCK_TAG_SHA + '\\t' + tag + '^{}');
+    console.log('b'.repeat(40) + String.fromCharCode(9) + tag);
+    console.log(process.env.MOCK_TAG_SHA + String.fromCharCode(9) + tag + '^{}');
   } else {
-    console.log(process.env.MOCK_TAG_SHA + '\\t' + tag);
+    console.log(process.env.MOCK_TAG_SHA + String.fromCharCode(9) + tag);
   }
 }
 `;
