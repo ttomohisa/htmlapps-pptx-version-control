@@ -33,21 +33,21 @@ test(`${target}: existing whole-dialog scroll and sticky Close shell stay unchan
 });
 
 test(`${target}: Help scroll stays inside the dialog and clear of Close`, () => {
-  assert.match(css, /#helpDialog\\{overflow:hidden\\}/, 'Help must not scroll the dialog frame');
-  assert.match(css, /#helpDialog\\[open\\]\\{display:flex;flex-direction:column;/, 'Help uses an in-panel layout');
-  assert.match(css, /#helpDialog \\.dialog-head\\{position:relative;flex:0 0 auto;/, 'Help header is outside the scrolling body');
-  assert.match(css, /#helpDialog \\.dialog-close\\{[^{}]*min-width:44px;min-height:44px/, 'Close has a usable touch target');
-  assert.match(css, /#helpDialog \\.dialog-body\\{[^{}]*overflow-y:auto;[^{}]*margin:0 10px 10px 0;/, 'Scrollbar is inset from the outer right edge');
-  assert.match(css, /@media\\(max-width:760px\\)\\{\\.page-intro \\.local-badge\\{display:none\\}/, 'privacy badge is hidden only on narrow screens');
-  assert.match(css, /#helpDialog\\[open\\]\\{[^{}]*max-height:min\\(84dvh,760px\\)/, 'Help remains bounded by the viewport');
+  assert.ok(css.includes('#helpDialog{overflow:hidden}'), 'Help must not scroll the dialog frame');
+  assert.ok(css.includes('#helpDialog[open]{display:flex;flex-direction:column;'), 'Help uses an in-panel layout');
+  assert.ok(css.includes('#helpDialog .dialog-head{position:relative;flex:0 0 auto;'), 'Help header is outside the scrolling body');
+  assert.ok(css.includes('#helpDialog .dialog-close{flex:0 0 auto;min-width:44px;min-height:44px}'), 'Close has a usable touch target');
+  assert.ok(css.includes('#helpDialog .dialog-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;margin:0 10px 10px 0;'), 'Scrollbar is inset from the right edge');
+  assert.ok(css.includes('@media(max-width:760px){.page-intro .local-badge{display:none}'), 'privacy badge is hidden on narrow screens');
+  assert.ok(css.includes('max-height:min(84dvh,760px)'), 'Help remains bounded by the viewport');
 });
 
 test(`${target}: Hero and Help use concise, version-independent copy`, () => {
-  assert.match(html, /data-i18n="introTitle">PowerPointの編集履歴を保存・比較</);
-  assert.match(html, /data-i18n="helpScopeTitle">主な機能</);
-  assert.match(html, /helpScopeTitle:'What you can do'/);
-  assert.match(html, /introTitle:'Save and compare PowerPoint versions'/);
-  assert.doesNotMatch(html, /v1\\.1\\.2でできること|What v1\\.1\\.2 does/);
+  assert.ok(html.includes('data-i18n="introTitle">PowerPointの編集履歴を保存・比較'));
+  assert.ok(html.includes('data-i18n="helpScopeTitle">主な機能'));
+  assert.ok(html.includes("helpScopeTitle:'What you can do'"));
+  assert.ok(html.includes("introTitle:'Save and compare PowerPoint versions'"));
+  assert.ok(!html.includes('v1.1.2でできること') && !html.includes('What v1.1.2 does'));
 });
 
 test(`${target}: all seven native dialogs retain their existing controls`, () => {
