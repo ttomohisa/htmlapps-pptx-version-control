@@ -8,13 +8,16 @@ const read = name => fs.readFileSync(new URL('../' + name, import.meta.url), 'ut
 const workflow = read('.github/workflows/release.yml');
 const prepare = read('scripts/prepare-release.mjs');
 
-test('release workflow is not triggered by an unmerged pull request', () => {
+test('release workflow verifies PR builds but only publishes after main validation', () => {
+  assert.ok(workflow.includes('  pull_request:'), 'PR can test packaging without publishing');
   assert.ok(workflow.includes('  push:'));
   assert.ok(workflow.includes('    branches:\n      - main'));
-  assert.ok(!workflow.includes('  pull_request:'), 'untrusted PR builds cannot publish releases');
-  assert.ok(workflow.includes("if: github.ref == 'refs/heads/main'"), 'only main can publish');
-  assert.ok(workflow.includes('    needs: verify'), 'release requires the successful standalone validation job');
-  assert.ok(workflow.includes('      contents: write'), 'publish job has permission to create the tag and release');
+  assert.ok(workflow.includes("if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'"), 'only main can publish');
+  assert.ok(workflow.includes('  package:\n    needs: verify'), 'packaging needs the validated build');
+  assert.ok(workflow.includes('    needs: package'), 'release needs verified package artifacts');
+  assert.ok(workflow.includes('      contents: write'), 'only the release job needs content write permission');
+  assert.ok(workflow.includes('sha256sum -c SHA256SUMS.txt'), 'PR must check packaged assets');
+  assert.ok(workflow.includes('unzip -t release-assets/*.zip'), 'PR must verify the archive');
   assert.ok(workflow.includes('  cancel-in-progress: false'), 'a newer push must not interrupt an in-progress release');
 });
 
