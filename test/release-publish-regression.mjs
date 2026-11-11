@@ -87,7 +87,7 @@ if (process.env.MOCK_TAG_SHA) {
       ...extraEnv,
     };
     const result = spawnSync('bash', [script], { cwd: dir, env, encoding: 'utf8' });
-    const commands = fs.existsSync(calls) ? fs.readFileSync(calls, 'utf8').trim().split('\\n').map(JSON.parse) : [];
+    const commands = fs.existsSync(calls) ? fs.readFileSync(calls, 'utf8').trim().split(String.fromCharCode(10)).map(JSON.parse) : [];
     return { ...result, commands };
   }
   return { run };
