@@ -32,6 +32,24 @@ test(`${target}: existing whole-dialog scroll and sticky Close shell stay unchan
   assert.equal(hash(html.slice(start, html.indexOf('\n', start))), '248a0018fa25c634435ae4f8689348f35465b8dd77baa47bd127f94623f861ca');
 });
 
+test(`${target}: Help scroll stays inside the dialog and clear of Close`, () => {
+  assert.match(css, /#helpDialog\\{overflow:hidden\\}/, 'Help must not scroll the dialog frame');
+  assert.match(css, /#helpDialog\\[open\\]\\{display:flex;flex-direction:column;/, 'Help uses an in-panel layout');
+  assert.match(css, /#helpDialog \\.dialog-head\\{position:relative;flex:0 0 auto;/, 'Help header is outside the scrolling body');
+  assert.match(css, /#helpDialog \\.dialog-close\\{[^{}]*min-width:44px;min-height:44px/, 'Close has a usable touch target');
+  assert.match(css, /#helpDialog \\.dialog-body\\{[^{}]*overflow-y:auto;[^{}]*margin:0 10px 10px 0;/, 'Scrollbar is inset from the outer right edge');
+  assert.match(css, /@media\\(max-width:760px\\)\\{\\.page-intro \\.local-badge\\{display:none\\}/, 'privacy badge is hidden only on narrow screens');
+  assert.match(css, /#helpDialog\\[open\\]\\{[^{}]*max-height:min\\(84dvh,760px\\)/, 'Help remains bounded by the viewport');
+});
+
+test(`${target}: Hero and Help use concise, version-independent copy`, () => {
+  assert.match(html, /data-i18n="introTitle">PowerPointの編集履歴を保存・比較</);
+  assert.match(html, /data-i18n="helpScopeTitle">主な機能</);
+  assert.match(html, /helpScopeTitle:'What you can do'/);
+  assert.match(html, /introTitle:'Save and compare PowerPoint versions'/);
+  assert.doesNotMatch(html, /v1\\.1\\.2でできること|What v1\\.1\\.2 does/);
+});
+
 test(`${target}: all seven native dialogs retain their existing controls`, () => {
   const expected = { versionDialog:['closeVersionDialogButton','saveVersionLabelButton'], revertDialog:['cancelRevertButton','confirmRevertButton'], conflictResolverDialog:['closeConflictResolverButton','resolverContinueButton'], branchDialog:['cancelBranchButton','confirmBranchButton'], deleteBranchDialog:['cancelDeleteBranchButton','confirmDeleteBranchButton'], deleteProjectDialog:['cancelDeleteProjectButton','confirmDeleteProjectButton'], helpDialog:['closeHelpButton'] };
   for (const [id, controls] of Object.entries(expected)) {
