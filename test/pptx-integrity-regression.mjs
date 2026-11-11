@@ -246,3 +246,79 @@ test('unmodeled slide XML and relationships are compared before a merge is accep
   assert.match(between('async function materializeMerge(', 'async function analyzeMerge('), /verifyMaterializedMerge\(semantic,model\)/);
   assert.match(getLine('function applyMaterialResolutions('), /plan.materialResolved=true/);
 });
+
+
+test('merge analysis from a switched branch cannot revive after delayed completion', async () => {
+  let resolveAnalysis;
+  const pending = new Promise(resolve => { resolveAnalysis = resolve; });
+  const state = { project:{id:'p'}, currentBranchRef:'refs/heads/main',
+    currentBranch:'main', mergeSourceRef:'refs/heads/feature', busy:false,
+    mergeLoading:false, mergeAnalysisEpoch:0, mergeAnalysis:null };
+  const messages=[];
+  const ctx=vm.createContext({
+    state, $: () => ({disabled:false}),
+    analyzeMerge: async () => pending,
+    resetMergeResolverState:()=>{},
+    mergeAnalysisKey:()=> 'key', renderMerge:()=>{}, renderMergeSourceOptions:()=>{},
+    AppToast:{show:x=>messages.push(x.message)},t:x=>x,
+    console
+  });
+  vm.runInContext(getLine('async function analyzeSelectedMerge(')+'\\nthis.analyzeSelectedMerge=analyzeSelectedMerge;',ctx);
+  const inFlight=ctx.analyzeSelectedMerge();
+  state.currentBranchRef='refs/heads/other';
+  state.currentBranch='other';
+  state.mergeAnalysisEpoch++;
+  resolveAnalysis({projectId:'p',targetRef:'refs/heads/main',sourceRef:'refs/heads/feature',
+    oursCommit:{id:'old-main'},theirsCommit:{id:'feature'},preview:{file:{}}});
+  await inFlight;
+  assert.equal(state.mergeAnalysis,null,'stale result must not be reintroduced');
+  assert.deepEqual(messages,[]);
+});
+
+test('merge analysis rejects a head that changed after parsing', async () => {
+  const state={project:{id:'p'},currentBranchRef:'refs/heads/main',mergeSourceRef:'refs/heads/feature'};
+  const refs=new Map([['refs/heads/main','main-A'],['refs/heads/feature','feature-A']]);
+  const ctx=vm.createContext({state,getBranchRef:async(_,ref)=>({commitId:refs.get(ref)})});
+  vm.runInContext(getLine('async function mergeAnalysisIsCurrent(')+'\\nthis.check=mergeAnalysisIsCurrent;',ctx);
+  const analysis={projectId:'p',targetRef:'refs/heads/main',sourceRef:'refs/heads/feature',
+    oursCommit:{id:'main-A'},theirsCommit:{id:'feature-A'}};
+  assert.equal(await ctx.check(analysis),true);
+  refs.set('refs/heads/main','main-B');
+  assert.equal(await ctx.check(analysis),false,'stale target ref must be refused');
+  refs.set('refs/heads/main','main-A');
+  refs.set('refs/heads/feature','feature-B');
+  assert.equal(await ctx.check(analysis),false,'stale source ref must be refused');
+  refs.set('refs/heads/feature','feature-A');
+  state.currentBranchRef='refs/heads/other';
+  assert.equal(await ctx.check(analysis),false,'changed destination branch must be refused');
+});
+
+test('stale merge is rejected before any IndexedDB write', async () => {
+  const analysis={projectId:'p',targetRef:'refs/heads/main',sourceRef:'refs/heads/feature',
+    oursCommit:{id:'main-A'},theirsCommit:{id:'feature-A'},preview:{file:{name:'preview.pptx'},model:{}}};
+  const state={project:{id:'p'},currentBranchRef:'refs/heads/other',
+    mergeSourceRef:'refs/heads/feature',mergeAnalysis:analysis,busy:false};
+  let writes=0,rendered=0,notification='';
+  const ctx=vm.createContext({state,
+    $:()=>({disabled:false}),
+    setStatus:()=>{},t:x=>x,
+    mergeAnalysisIsCurrent:async()=>false,
+    repoWrite:async()=>{writes++},
+    resetMergeResolverState:()=>{},renderMerge:()=>{rendered++},
+    AppToast:{show:x=>{notification=x.message}},console});
+  vm.runInContext(getLine('async function performSelectedMerge(')+'\\nthis.perform=performSelectedMerge;',ctx);
+  await ctx.perform();
+  assert.equal(writes,0);
+  assert.equal(state.mergeAnalysis,null);
+  assert.equal(state.busy,false);
+  assert.equal(notification,'mergeStale');
+  assert.equal(rendered,1);
+});
+
+test('package-only shape effects are included in ancillary comparison', () => {
+  const code=getLine('async function slideAncillarySignature(');
+  assert.match(code,/effectLst/);
+  assert.match(code,/effectDag/);
+  assert.match(code,/objectEffects/);
+  assert.match(code,/cNvPr/);
+});
