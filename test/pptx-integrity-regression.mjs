@@ -205,7 +205,7 @@ test('repository writes only resolve after transaction completion', () => {
 
 test('materializer uses safe single-run text transfer for independently edited text and styles', () => {
   assert.match(getLine('function mergeSingleRunText('), /ta\[0\]\.textContent=tb\[0\]\.textContent/);
-  const materializer = getLine('async function materializeMixedSlide(');
+  const materializer = between('async function materializeMixedSlide(', 'async function ensureContentTypes(');
   assert.match(materializer, /ownFontChange=/);
   assert.match(materializer, /ownLayout=/);
   assert.match(materializer, /mergeSingleRunText\(oursNode,theirsNode\)/);
@@ -213,7 +213,7 @@ test('materializer uses safe single-run text transfer for independently edited t
 });
 
 test('mixed slides refuse hyperlink relationship copies and duplicate object IDs', () => {
-  const materializer = getLine('async function materializeMixedSlide(');
+  const materializer = between('async function materializeMixedSlide(', 'async function ensureContentTypes(');
   assert.match(materializer, /op\.theirs\?\.hyperlinks\?\.length/);
   assert.match(materializer, /slideHasUniqueObjectIds\(oursDoc\)/);
   const context = vm.createContext({ nodesByLocal: root => root.nodes });
@@ -242,7 +242,7 @@ test('merged OOXML is rejected if the parsed result differs from the semantic me
 test('unmodeled slide XML and relationships are compared before a merge is accepted', () => {
   assert.match(getLine('async function slideAncillarySignature('), /canonicalizeXml/);
   assert.match(getLine('async function slideAncillarySignature('), /relationships/);
-  assert.match(getLine('async function materializeMerge('), /discarded!==baseAnc&&discarded!==source/);
-  assert.match(getLine('async function materializeMerge('), /verifyMaterializedMerge\(semantic,model\)/);
+  assert.match(between('async function materializeMerge(', 'async function analyzeMerge('), /discarded!==baseAnc&&discarded!==source/);
+  assert.match(between('async function materializeMerge(', 'async function analyzeMerge('), /verifyMaterializedMerge\(semantic,model\)/);
   assert.match(getLine('function applyMaterialResolutions('), /plan.materialResolved=true/);
 });
