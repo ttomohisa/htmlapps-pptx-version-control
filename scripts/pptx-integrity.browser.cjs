@@ -154,10 +154,26 @@ async function main() {
       const auxC=await api.slideAncillarySignature(makePkg(auxWipe),info);
       assert.notEqual(auxA,auxB,'transition change detected');
       assert.notEqual(auxB,auxC,'conflicting transition change detected');
+      // Unsupported shape effects must not disappear when another object changes text.
+      const shadow = '<a:effectLst><a:outerShdw blurRad="40000" dist="20000" dir="5400000"><a:srgbClr val="000000"/></a:outerShdw></a:effectLst>';
+      const glow = '<a:effectLst><a:glow rad="45000"><a:srgbClr val="FFFF00"/></a:glow></a:effectLst>';
+      const withEffect = effect => shape(3,'Other shape',false,'FFFFFF').replace('</p:spPr>',effect+'</p:spPr>');
+      const noEffects = await api.slideAncillarySignature(makePkg(documentXml(shape(2,'Base',false,'FFFFFF')+withEffect(''))),info);
+      const textOnly = await api.slideAncillarySignature(makePkg(documentXml(shape(2,'Edited',false,'FFFFFF')+withEffect(''))),info);
+      const addedShadow = await api.slideAncillarySignature(makePkg(documentXml(shape(2,'Base',false,'FFFFFF')+withEffect(shadow))),info);
+      const changedGlow = await api.slideAncillarySignature(makePkg(documentXml(shape(2,'Base',false,'FFFFFF')+withEffect(glow))),info);
+      assert.equal(noEffects,textOnly,'ordinary text edit does not affect opaque effect signature');
+      assert.notEqual(noEffects,addedShadow,'new shape shadow triggers package-level comparison');
+      assert.notEqual(addedShadow,changedGlow,'divergent opaque effects are distinct');
+      assert(addedShadow.includes('outerShdw'),'shadow is represented in the ancillary signature');
+      const unsafeDiscard = addedShadow!==noEffects && addedShadow!==textOnly;
+      assert(unsafeDiscard,'discarding a shape effect requires explicit slide-level resolution');
+
       return { result: 'PASS', checks: [
         'text + bold + fill actual OOXML', 'font size + alignment actual OOXML',
         'hyperlink relationships fail closed','duplicate cNvPr IDs fail closed',
-        'table manual edits fail closed','unsupported transition XML detected'
+        'table manual edits fail closed','unsupported transition XML detected',
+        'unsupported shadow and glow XML detected without false positives for text edits'
       ] };
     }, testCode);
     assert.equal(results.result,'PASS');
