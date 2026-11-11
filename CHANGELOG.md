@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.7 - 2026-11-11
+
+- Allow a new version when PPTX bytes changed but the supported semantic model is unchanged.
+- Include hyperlink targets and shape/image stacking order in comparisons and Git-friendly exports.
+- Validate the real CRC of every ZIP part, bound decompression, and verify content before PPTX export.
+- Merge independently edited formatting properties and protect text formatting when materializing mixed slide changes.
+- Keep manually resolved multiline text as separate DrawingML paragraphs.
+- Add focused regression checks for data integrity and semantic diff/merge.
+
+
 ## 1.1.6 - 2026-10-27
 
 - Keep the header version badge visible at narrow widths by truncating only the app title.
