@@ -40,7 +40,7 @@ if (args[0] === 'release' && args[1] === 'view') {
   }
   console.log(fs.readFileSync(process.env.MOCK_RELEASE_STATE, 'utf8').trim() === 'draft' ? 'true' : 'false');
 } else if (args[0] === 'release' && args[1] === 'create') {
-  if (process.env.MOCK_CREATE_ERROR) {
+  if (process.env.MOCK_CREATE_ERROR === 'true') {
     console.error('gh: Not Found (HTTP 404)');
     process.exit(1);
   }
