@@ -263,7 +263,7 @@ test('merge analysis from a switched branch cannot revive after delayed completi
     AppToast:{show:x=>messages.push(x.message)},t:x=>x,
     console
   });
-  vm.runInContext(getLine('async function analyzeSelectedMerge(')+'\\nthis.analyzeSelectedMerge=analyzeSelectedMerge;',ctx);
+  vm.runInContext(getLine('async function analyzeSelectedMerge(')+'\nthis.analyzeSelectedMerge=analyzeSelectedMerge;',ctx);
   const inFlight=ctx.analyzeSelectedMerge();
   state.currentBranchRef='refs/heads/other';
   state.currentBranch='other';
@@ -279,7 +279,7 @@ test('merge analysis rejects a head that changed after parsing', async () => {
   const state={project:{id:'p'},currentBranchRef:'refs/heads/main',mergeSourceRef:'refs/heads/feature'};
   const refs=new Map([['refs/heads/main','main-A'],['refs/heads/feature','feature-A']]);
   const ctx=vm.createContext({state,getBranchRef:async(_,ref)=>({commitId:refs.get(ref)})});
-  vm.runInContext(getLine('async function mergeAnalysisIsCurrent(')+'\\nthis.check=mergeAnalysisIsCurrent;',ctx);
+  vm.runInContext(getLine('async function mergeAnalysisIsCurrent(')+'\nthis.check=mergeAnalysisIsCurrent;',ctx);
   const analysis={projectId:'p',targetRef:'refs/heads/main',sourceRef:'refs/heads/feature',
     oursCommit:{id:'main-A'},theirsCommit:{id:'feature-A'}};
   assert.equal(await ctx.check(analysis),true);
@@ -306,7 +306,7 @@ test('stale merge is rejected before any IndexedDB write', async () => {
     repoWrite:async()=>{writes++},
     resetMergeResolverState:()=>{},renderMerge:()=>{rendered++},
     AppToast:{show:x=>{notification=x.message}},console});
-  vm.runInContext(getLine('async function performSelectedMerge(')+'\\nthis.perform=performSelectedMerge;',ctx);
+  vm.runInContext(getLine('async function performSelectedMerge(')+'\nthis.perform=performSelectedMerge;',ctx);
   await ctx.perform();
   assert.equal(writes,0);
   assert.equal(state.mergeAnalysis,null);
