@@ -8,6 +8,11 @@
 - Merge independently edited formatting properties and protect text formatting when materializing mixed slide changes.
 - Keep manually resolved multiline text as separate DrawingML paragraphs.
 - Add focused regression checks for data integrity and semantic diff/merge.
+- Prevent legacy semantic hashes from marking byte-identical PPTX as changed; align the working comparison action with its eligibility check.
+- Wait for IndexedDB transaction commit before reporting local write success.
+- Preserve independent run formatting and paragraph alignment in safe mixed-slide merges; reject table-wide manual text rewrites, linked-node copies and duplicate PowerPoint object IDs.
+- Compare unsupported slide-level XML and relationships before choosing an automatic result, then reparse the output PPTX and verify the supported semantic merge plan before saving.
+- Add native Chromium DrawingML merge cases and explicit fail-closed checks for links, transitions, tables, and IDs.
 
 
 ## 1.1.6 - 2026-10-27

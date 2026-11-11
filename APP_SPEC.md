@@ -1,5 +1,15 @@
 # PPTX Version Control — App Specification
 
+## v1.1.7 — PPTX merge integrity follow-up
+
+- When a stored file SHA-256 matches the working PPTX, treat the file as unchanged even if an earlier release calculated a different semantic fingerprint. Show working comparisons only for actual semantic changes.
+- Resolve IndexedDB request helpers after transaction completion rather than request success.
+- Mixed-slide merges must preserve independent single-run text/style edits when safe. When an edit involves incompatible run structure, table cells, relationship references or duplicate object IDs, surface an explicit package-level conflict instead of silently dropping content.
+- Compare slide-level non-object XML and slide relationship targets among BASE/current/incoming; changing animations and transitions cannot be discarded by selecting a semantic-only merge without review.
+- Parse the materialized PPTX again and compare supported per-slide content with the resolved semantic plan. If it differs, block saving and request slide-level resolution. This is not a full PowerPoint OOXML conformance verifier.
+- Tests must cover real DrawingML fragments in Chromium, structural merge guards, and the previously supported desktop/mobile and standalone build flows.
+
+
 ## Phone footer and Help metadata
 
 - Hide only the informational footer at the existing 760px phone breakpoint. Preserve functional navigation and controls.
