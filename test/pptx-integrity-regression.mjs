@@ -202,3 +202,23 @@ test('repository writes only resolve after transaction completion', () => {
   assert.match(code, /tx\.oncomplete=\(\)=>resolve\(result\)/);
   assert.doesNotMatch(code, /req\.onsuccess=\(\)=>resolve/);
 });
+
+test('materializer uses safe single-run text transfer for independently edited text and styles', () => {
+  assert.match(getLine('function mergeSingleRunText('), /ta\[0\]\.textContent=tb\[0\]\.textContent/);
+  const materializer = getLine('async function materializeMixedSlide(');
+  assert.match(materializer, /ownFontChange=/);
+  assert.match(materializer, /ownLayout=/);
+  assert.match(materializer, /mergeSingleRunText\(oursNode,theirsNode\)/);
+  assert.match(materializer, /mergeSingleRunFormatting\(oursNode,theirsNode\)/);
+});
+
+test('mixed slides refuse hyperlink relationship copies and duplicate object IDs', () => {
+  const materializer = getLine('async function materializeMixedSlide(');
+  assert.match(materializer, /op\.theirs\?\.hyperlinks\?\.length/);
+  assert.match(materializer, /slideHasUniqueObjectIds\(oursDoc\)/);
+  const context = vm.createContext({ nodesByLocal: root => root.nodes });
+  vm.runInContext(getLine('function slideHasUniqueObjectIds(')+'\nthis.check=slideHasUniqueObjectIds;',context);
+  const node = id => ({ getAttribute: () => id });
+  assert.equal(context.check({ nodes: [node('2'),node('3')] }),true);
+  assert.equal(context.check({ nodes: [node('2'),node('2')] }),false);
+});
