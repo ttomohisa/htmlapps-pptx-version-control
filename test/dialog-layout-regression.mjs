@@ -32,6 +32,32 @@ test(`${target}: existing whole-dialog scroll and sticky Close shell stay unchan
   assert.equal(hash(html.slice(start, html.indexOf('\n', start))), '248a0018fa25c634435ae4f8689348f35465b8dd77baa47bd127f94623f861ca');
 });
 
+test(`${target}: Help scroll stays inside the dialog and clear of Close`, () => {
+  assert.ok(css.includes('#helpDialog{overflow:hidden}'), 'Help must not scroll the dialog frame');
+  assert.ok(css.includes('#helpDialog[open]{display:flex;flex-direction:column;'), 'Help uses an in-panel layout');
+  assert.ok(css.includes('#helpDialog .dialog-head{position:relative;flex:0 0 auto;'), 'Help header is outside the scrolling body');
+  assert.ok(css.includes('#helpDialog .dialog-close{flex:0 0 auto;min-width:44px;min-height:44px}'), 'Close has a usable touch target');
+  assert.ok(css.includes('#helpDialog .dialog-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;margin:0 10px 10px 0;'), 'Scrollbar is inset from the right edge');
+  assert.ok(css.includes('@media(max-width:760px){.page-intro .local-badge{display:none}'), 'privacy badge is hidden on narrow screens');
+  assert.ok(css.includes('max-height:min(84dvh,760px)'), 'Help remains bounded by the viewport');
+});
+
+test(`${target}: next-action panel uses a flat neutral surface`, () => {
+  const rule = css.match(/\.next-action-card\{([^{}]*)\}/)?.[1];
+  assert.ok(rule, 'next-action panel style exists');
+  assert.match(rule, /(?:^|;)background:var\(--surface\)(?:;|$)/);
+  assert.match(rule, /(?:^|;)border:1px solid var\(--line\)(?:;|$)/);
+  assert.doesNotMatch(rule, /(?:linear|radial|conic)-gradient\(/, 'card has no gradient');
+});
+
+test(`${target}: Hero and Help use concise, version-independent copy`, () => {
+  assert.ok(html.includes('data-i18n="introTitle">PowerPointの編集履歴を保存・比較'));
+  assert.ok(html.includes('data-i18n="helpScopeTitle">主な機能'));
+  assert.ok(html.includes("helpScopeTitle:'What you can do'"));
+  assert.ok(html.includes("introTitle:'Save and compare PowerPoint versions'"));
+  assert.ok(!html.includes('v1.1.2でできること') && !html.includes('What v1.1.2 does'));
+});
+
 test(`${target}: all seven native dialogs retain their existing controls`, () => {
   const expected = { versionDialog:['closeVersionDialogButton','saveVersionLabelButton'], revertDialog:['cancelRevertButton','confirmRevertButton'], conflictResolverDialog:['closeConflictResolverButton','resolverContinueButton'], branchDialog:['cancelBranchButton','confirmBranchButton'], deleteBranchDialog:['cancelDeleteBranchButton','confirmDeleteBranchButton'], deleteProjectDialog:['cancelDeleteProjectButton','confirmDeleteProjectButton'], helpDialog:['closeHelpButton'] };
   for (const [id, controls] of Object.entries(expected)) {
@@ -94,10 +120,14 @@ test(`${target}: resolver choice and manual controls retain usable intrinsic siz
   assert.equal(hash(markup), '5bd5fd7d4d8240f63dc5d363c7f9f8bac6e9e76a629bcf82f459414668504624', 'all resolver controls, order, IDs, labels and hidden states are preserved');
 });
 
-test(`${target}: resolver behavior and merge handlers remain byte-identical`, () => {
+test(`${target}: resolver behavior remains reachable and event handlers stay byte-identical`, () => {
   const start = html.indexOf('function resetMergeResolverState');
   assert.ok(start >= 0);
-  assert.equal(hash(html.slice(start, html.indexOf('async function performSelectedMerge', start))), '0d7f3b81ba23f21a23ecb67d440bc141ea610edd6419e24a3c722e9423fc12e2');
+  const resolver = html.slice(start, html.indexOf('async function performSelectedMerge', start));
+  for (const marker of ['function renderConflictResolver', 'function setResolverChoice', 'function applySemanticResolution', 'function continueConflictResolution']) {
+    assert.ok(resolver.includes(marker), `missing resolver handler: ${marker}`);
+  }
+  assert.match(resolver, /groupSources\.formattingKeys/, 'formatting resolutions retain their per-property source');
   const handlerStart = html.indexOf("$('#openConflictResolverButton').addEventListener");
   assert.ok(handlerStart >= 0);
   assert.equal(hash(html.slice(handlerStart, html.indexOf("$('#diffTab').addEventListener", handlerStart))), 'ce57bb77f8a25f4c85622154f86c47b0a3ec83aa380df4328fea4d168861e28c', 'choice, manual, previous/next, Continue, Close and backdrop handlers retain ownership');

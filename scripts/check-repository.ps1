@@ -14,6 +14,9 @@ $required = @(
   "dependencies.json",
   "dependencies.lock.json",
   ".github\workflows\dependency-updates.yml",
+  ".github\workflows\release.yml",
+  "scripts\prepare-release.mjs",
+  "test\release-workflow-regression.mjs",
   "components\confirm-dialog.html",
   "components\toast.html",
   "components\popover-menu.html",
@@ -262,11 +265,13 @@ foreach ($test in @(
   "version-dialog-regression.mjs",
   "comparison-ownership-regression.mjs",
   "compare-core-regression.mjs",
+  "pptx-integrity-regression.mjs",
   "visual-compare-hardening-regression.mjs",
   "visual-compare-v110-regression.mjs",
   "renderer-foundation-regression.mjs",
   "release-parity-regression.mjs",
-  "release-check-regression.mjs"
+  "release-check-regression.mjs",
+  "release-workflow-regression.mjs"
 )) {
   & node (Join-Path $Root ("test/" + $test))
   if ($LASTEXITCODE -ne 0) { throw "Regression failed: $test" }

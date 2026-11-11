@@ -133,6 +133,8 @@ The repository includes a workflow that builds the standalone HTML and deploys `
 
 Each push to `main` validates the repository, rebuilds the standalone HTML, checks the single-file output, and deploys the generated `dist/` directory when GitHub Pages is enabled.
 
+The **Publish versioned release** workflow also runs on `main`. After validation succeeds, it uses the version in `app.config.json` to create a `vX.Y.Z` tag and GitHub Release, with readable/self-extracting HTML, a distribution ZIP and SHA-256 checksums. An existing release is not recreated; an existing tag pointing to a different commit is never moved. The workflow needs permission to write repository contents. Merge alone does not guarantee publication if the workflow fails.
+
 > v1.1.2 exposes Visual Compare for saved versions, branch-to-branch review, and HEAD-to-unsaved-PPTX review while keeping all comparison work local and read-only until you explicitly save a version.
 
 ## Development and build layout
@@ -183,6 +185,10 @@ The generated HTML includes a Content Security Policy containing `connect-src 'n
 Local project history is stored in IndexedDB on the device. Deleting browser site data can remove that history, which is why `.pptxvc` export is provided for portable backups.
 
 ## Limitations
+
+- Merges re-parse the generated PPTX and verify that supported text, formatting, slide content and order match the merge plan. This does not prove compatibility with every PowerPoint feature.
+- If an edit cannot be safely composed (such as certain animations, linked shapes, complex text or table-wide manual text changes), the conflict resolver requires a slide-level choice. It does not silently drop a change.
+- Projects saved by older releases can be opened without a new version being suggested for exactly the same PPTX bytes. Preserve important projects using the `.pptxvc` backup export.
 
 - The stable input format is `.pptx`. `.pptm`, `.potx`, and `.ppsx` are not release targets yet.
 - SmartArt, OLE objects, and unsupported OOXML extensions are preserved through the original package where possible, but may not receive detailed Semantic Diff.

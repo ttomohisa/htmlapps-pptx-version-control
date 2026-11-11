@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.1.7 - 2026-11-11
+
+- Allow a new version when PPTX bytes changed but the supported semantic model is unchanged.
+- Include hyperlink targets and shape/image stacking order in comparisons and Git-friendly exports.
+- Validate the real CRC of every ZIP part, bound decompression, and verify content before PPTX export.
+- Merge independently edited formatting properties and protect text formatting when materializing mixed slide changes.
+- Keep manually resolved multiline text as separate DrawingML paragraphs.
+- Add focused regression checks for data integrity and semantic diff/merge.
+- Prevent legacy semantic hashes from marking byte-identical PPTX as changed; align the working comparison action with its eligibility check.
+- Wait for IndexedDB transaction commit before reporting local write success.
+- Preserve independent run formatting and paragraph alignment in safe mixed-slide merges; reject table-wide manual text rewrites, linked-node copies and duplicate PowerPoint object IDs.
+- Compare unsupported slide-level XML and relationships before choosing an automatic result, then reparse the output PPTX and verify the supported semantic merge plan before saving.
+- Add native Chromium DrawingML merge cases and explicit fail-closed checks for links, transitions, tables, and IDs.
+- Replace the next-action panel gradient with a flat neutral surface and cover it with UI regression tests.
+- Prepare an automatic post-merge release workflow: validate main, create a version tag and publish standalone HTML, self-extracting HTML, ZIP and SHA-256 checksums, without changing existing tags.
+- Block stale merge results after branch/source changes and recheck both branch heads before committing a merge.
+- Detect unsupported per-shape effects (including shadows and glow) in package comparisons and require an explicit slide choice when automatic merging would discard them.
+
+
 ## 1.1.6 - 2026-10-27
 
 - Keep the header version badge visible at narrow widths by truncating only the app title.

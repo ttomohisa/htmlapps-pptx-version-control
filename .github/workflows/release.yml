@@ -1,0 +1,142 @@
+name: Publish versioned release
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pptx-version-control-release
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact main revision
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Build and validate standalone HTML
+        shell: pwsh
+        run: ./scripts/check-repository.ps1
+
+      - name: Upload validated HTML
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-built-${{ github.sha }}
+          path: |
+            dist/index.html
+            dist/index.self-extract.html
+            dist/dependency-manifest.json
+            dist/self-extract-manifest.json
+          if-no-files-found: error
+          retention-days: 7
+
+  package:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exact revision for packaging
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Download validated standalone HTML
+        uses: actions/download-artifact@v4
+        with:
+          name: release-built-${{ github.sha }}
+          path: dist
+
+      - name: Build and verify the release package
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/prepare-release.mjs
+          (cd release-assets && sha256sum -c SHA256SUMS.txt)
+          unzip -t release-assets/*.zip
+
+      - name: Upload verified release assets
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-assets-${{ github.sha }}
+          path: release-assets/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: package
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout exact main revision
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Download verified release assets
+        uses: actions/download-artifact@v4
+        with:
+          name: release-assets-${{ github.sha }}
+          path: release-assets
+
+      - name: Create version tag and GitHub Release if needed
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="$(node -p "require('./app.config.json').version")"
+          tag="v$version"
+          base="htmlapps-pptx-version-control-$tag"
+
+          # Idempotent on ordinary later main pushes or workflow reruns.
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json tagName >/dev/null 2>&1; then
+            echo "Release $tag already exists; skipping."
+            exit 0
+          fi
+
+          ref_type="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$tag" --jq '.object.type' 2>/dev/null || true)"
+          if [[ -n "$ref_type" ]]; then
+            ref_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$tag" --jq '.object.sha')"
+            if [[ "$ref_type" == "tag" ]]; then
+              ref_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/tags/$ref_sha" --jq '.object.sha')"
+            fi
+            if [[ "$ref_sha" != "$GITHUB_SHA" ]]; then
+              echo "::error::The existing $tag tag points to a different commit ($ref_sha); refusing to repoint it."
+              exit 1
+            fi
+          else
+            gh api -X POST "repos/$GITHUB_REPOSITORY/git/refs" \
+              -f "ref=refs/tags/$tag" -f "sha=$GITHUB_SHA" >/dev/null
+          fi
+
+          gh release create "$tag" \
+            "release-assets/$base.html" \
+            "release-assets/$base.self-extract.html" \
+            "release-assets/$base.zip" \
+            "release-assets/SHA256SUMS.txt" \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --title "PPTX Version Control $tag" \
+            --notes-file "release-assets/RELEASE_NOTES.md"

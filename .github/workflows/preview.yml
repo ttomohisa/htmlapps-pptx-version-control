@@ -53,6 +53,8 @@ jobs:
         New-Item -ItemType Directory -Force -Path "test-results/mobile-layout" | Out-Null
         node scripts/mobile-layout.browser.cjs 2>&1 | Tee-Object -FilePath "test-results/mobile-layout/browser.log"
         if ($LASTEXITCODE -ne 0) { throw "Phone layout browser regression failed." }
+        node scripts/pptx-integrity.browser.cjs
+        if ($LASTEXITCODE -ne 0) { throw "PPTX merge browser regression failed." }
     - name: Upload phone layout screenshots
       if: always()
       uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
