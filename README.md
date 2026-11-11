@@ -133,6 +133,8 @@ The repository includes a workflow that builds the standalone HTML and deploys `
 
 Each push to `main` validates the repository, rebuilds the standalone HTML, checks the single-file output, and deploys the generated `dist/` directory when GitHub Pages is enabled.
 
+The **Publish versioned release** workflow also runs on `main`. After validation succeeds, it uses the version in `app.config.json` to create a `vX.Y.Z` tag and GitHub Release, with readable/self-extracting HTML, a distribution ZIP and SHA-256 checksums. An existing release is not recreated; an existing tag pointing to a different commit is never moved. The workflow needs permission to write repository contents. Merge alone does not guarantee publication if the workflow fails.
+
 > v1.1.2 exposes Visual Compare for saved versions, branch-to-branch review, and HEAD-to-unsaved-PPTX review while keeping all comparison work local and read-only until you explicitly save a version.
 
 ## Development and build layout
