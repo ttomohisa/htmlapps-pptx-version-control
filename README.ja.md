@@ -133,7 +133,7 @@ Git向け書き出しは**通常のGitで差分レビューしやすくするた
 
 `main` へのPushでは、リポジトリ検証、単一HTMLの再生成、配布物の検査を行ったうえで、GitHub Pagesが有効な場合に生成済み `dist/` を公開します。
 
-`main` へのPushでは **Publish versioned release** も動きます。検証に成功すると `app.config.json` のバージョンから `vX.Y.Z` タグとGitHub Releaseを作成し、通常の単一HTML・自己展開版・配布用ZIP・SHA-256チェックサムを添付します。既存のReleaseは再作成せず、別コミットを指すタグを上書きしません。GitHub Actionsにリポジトリ内容への書き込み権限が必要です。マージ後にワークフローが失敗した場合は、タグとReleaseは作成されません。
+`main` へのPushでは **Publish versioned release** も動きます。検証に成功すると `app.config.json` のバージョンから `vX.Y.Z` タグとGitHub Releaseを作成し、通常の単一HTML・自己展開版・配布用ZIP・SHA-256チェックサムを添付します。既存のReleaseは再作成せず、別コミットを指すタグを上書きしません。GitHub Actionsにリポジトリ内容への書き込み権限が必要です。マージ後にワークフローが失敗した場合は、Releaseが公開されないことがあります。タグの作成後に失敗した場合は、同じコミットで再実行できます。
 
 > v1.1.2では、保存済みVersion同士・Branch同士・HEADと未保存PPTXの見た目比較を正式に公開しました。比較操作は読み取り専用で、明示的にVersionを保存するまで履歴やHEADを変更しません。
 
