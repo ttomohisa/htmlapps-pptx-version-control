@@ -37,6 +37,10 @@ async function main() {
     const page = await browser.newPage();
     await page.goto('about:blank');
     const results = await page.evaluate(async source => {
+      const assert = Object.assign((value,msg) => { if (!value) throw new Error(msg || 'Assertion failed'); }, {
+        equal: (a,b,msg) => { if (a !== b) throw new Error((msg || 'Values differ') + ': ' + String(a) + ' !== ' + String(b)); },
+        notEqual: (a,b,msg) => { if (a === b) throw new Error((msg || 'Values unexpectedly match') + ': ' + String(a)); }
+      });
       const REL_NS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
       const VOLATILE_ATTRS = new Set(['dirty', 'smtClean']);
       const local = (root, name) => root ? [...root.children].find(c => c.localName === name) || null : null;
