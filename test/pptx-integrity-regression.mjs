@@ -176,3 +176,29 @@ test('resolving a font-size conflict updates the nested formatting plan', () => 
   assert.equal(result.merged.slides[0].objects[0].formatting.fontSize, 14,
     'the aggregate is rebuilt after conflict resolution rather than modified in place');
 });
+
+test('older stored fingerprint cannot mark byte-identical PPTX as changed', () => {
+  const lines = [getLine('function latestCommit('), getLine('function currentFileState('), getLine('function currentWorkingComparable(')].join('\n');
+  const state = { project: { id: 'p' }, history: [{ sourceSha256: 'same-sha', fingerprint: 'old-model' }],
+    model: { sourceSha256: 'same-sha', fingerprint: 'new-model' }, checkoutCommitId: '', file: {} };
+  const fn = vm.runInNewContext(lines + '\nthis.result = { currentFileState, currentWorkingComparable }; result;', { state });
+  assert.equal(fn.currentFileState(), 'same');
+  assert.equal(fn.currentWorkingComparable(), false);
+  state.model.sourceSha256 = 'other-sha';
+  state.model.fingerprint = 'old-model';
+  assert.equal(fn.currentFileState(), 'noise');
+  assert.equal(fn.currentWorkingComparable(), false);
+  assert.match(getLine('function renderRepositoryPanel('), /workingCompare.hidden=!\(state.project&&fileState==='changed'/);
+});
+
+test('manual merge text refuses table objects instead of rewriting only the first cell', () => {
+  const code = getLine('function setTextContentInObject(');
+  assert.match(code, /node.localName!=='sp'/);
+  assert.match(code, /directByLocal\(node,'txBody'\)/);
+});
+
+test('repository writes only resolve after transaction completion', () => {
+  const code = getLine('async function repoRequest(');
+  assert.match(code, /tx\.oncomplete=\(\)=>resolve\(result\)/);
+  assert.doesNotMatch(code, /req\.onsuccess=\(\)=>resolve/);
+});
