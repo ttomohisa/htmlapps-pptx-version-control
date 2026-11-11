@@ -43,11 +43,11 @@ test(`${target}: Help scroll stays inside the dialog and clear of Close`, () => 
 });
 
 test(`${target}: next-action panel uses a flat neutral surface`, () => {
-  const rule = css.match(/\\.next-action-card\\{([^{}]*)\\}/)?.[1];
+  const rule = css.match(/\.next-action-card\{([^{}]*)\}/)?.[1];
   assert.ok(rule, 'next-action panel style exists');
-  assert.match(rule, /(?:^|;)background:var\\(--surface\\)(?:;|$)/);
-  assert.match(rule, /(?:^|;)border:1px solid var\\(--line\\)(?:;|$)/);
-  assert.doesNotMatch(rule, /(?:linear|radial|conic)-gradient\\(/, 'card has no gradient');
+  assert.match(rule, /(?:^|;)background:var\(--surface\)(?:;|$)/);
+  assert.match(rule, /(?:^|;)border:1px solid var\(--line\)(?:;|$)/);
+  assert.doesNotMatch(rule, /(?:linear|radial|conic)-gradient\(/, 'card has no gradient');
 });
 
 test(`${target}: Hero and Help use concise, version-independent copy`, () => {
