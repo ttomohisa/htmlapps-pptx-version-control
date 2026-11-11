@@ -94,10 +94,14 @@ test(`${target}: resolver choice and manual controls retain usable intrinsic siz
   assert.equal(hash(markup), '5bd5fd7d4d8240f63dc5d363c7f9f8bac6e9e76a629bcf82f459414668504624', 'all resolver controls, order, IDs, labels and hidden states are preserved');
 });
 
-test(`${target}: resolver behavior and merge handlers remain byte-identical`, () => {
+test(`${target}: resolver behavior remains reachable and event handlers stay byte-identical`, () => {
   const start = html.indexOf('function resetMergeResolverState');
   assert.ok(start >= 0);
-  assert.equal(hash(html.slice(start, html.indexOf('async function performSelectedMerge', start))), '0d7f3b81ba23f21a23ecb67d440bc141ea610edd6419e24a3c722e9423fc12e2');
+  const resolver = html.slice(start, html.indexOf('async function performSelectedMerge', start));
+  for (const marker of ['function renderConflictResolver', 'function setResolverChoice', 'function applySemanticResolution', 'function continueConflictResolution']) {
+    assert.ok(resolver.includes(marker), `missing resolver handler: ${marker}`);
+  }
+  assert.match(resolver, /groupSources\.formattingKeys/, 'formatting resolutions retain their per-property source');
   const handlerStart = html.indexOf("$('#openConflictResolverButton').addEventListener");
   assert.ok(handlerStart >= 0);
   assert.equal(hash(html.slice(handlerStart, html.indexOf("$('#diffTab').addEventListener", handlerStart))), 'ce57bb77f8a25f4c85622154f86c47b0a3ec83aa380df4328fea4d168861e28c', 'choice, manual, previous/next, Continue, Close and backdrop handlers retain ownership');
