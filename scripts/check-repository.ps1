@@ -16,6 +16,8 @@ $required = @(
   ".github\workflows\dependency-updates.yml",
   ".github\workflows\release.yml",
   "scripts\prepare-release.mjs",
+  "scripts\publish-release.sh",
+  "test\release-publish-regression.mjs",
   "test\release-workflow-regression.mjs",
   "components\confirm-dialog.html",
   "components\toast.html",
