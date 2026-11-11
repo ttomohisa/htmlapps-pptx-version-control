@@ -2,6 +2,13 @@
 
 ## v1.1.7 — PPTX merge integrity follow-up
 
+### Additional merge safety checks
+
+- An analysis belongs to its project, destination branch and source branch at specific head commit IDs. If a branch/source changes during analysis or before saving, discard the stale result and require a new review; never write a merge commit onto a different destination branch.
+- Compare unsupported object effects and styles (such as shadow, glow, 3D or extension elements) separately from the simplified semantic model. If an automatic result would discard another branch's unsupported change, stop and request a whole-slide choice instead of silently losing it.
+- These comparisons are conservative safety checks, not complete OOXML validation. Keep tests for delayed analysis, changed heads, blocked writes and native DrawingML effect differences.
+
+
 - When a stored file SHA-256 matches the working PPTX, treat the file as unchanged even if an earlier release calculated a different semantic fingerprint. Show working comparisons only for actual semantic changes.
 - Resolve IndexedDB request helpers after transaction completion rather than request success.
 - Mixed-slide merges must preserve independent single-run text/style edits when safe. When an edit involves incompatible run structure, table cells, relationship references or duplicate object IDs, surface an explicit package-level conflict instead of silently dropping content.
