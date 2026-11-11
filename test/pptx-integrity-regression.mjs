@@ -222,3 +222,27 @@ test('mixed slides refuse hyperlink relationship copies and duplicate object IDs
   assert.equal(context.check({ nodes: [node('2'),node('3')] }),true);
   assert.equal(context.check({ nodes: [node('2'),node('2')] }),false);
 });
+
+test('merged OOXML is rejected if the parsed result differs from the semantic merge plan', () => {
+  const context = vm.createContext({ stableStringify: v => JSON.stringify(v) });
+  vm.runInContext([
+    getLine('function objectMeaning('),
+    getLine('function slideMeaning('),
+    getLine('function semEqual('),
+    getLine('function verifyMaterializedMerge(')
+  ].join('\n')+'\nthis.verify=verifyMaterializedMerge;', context);
+  const object = { type: 'shape', text: 'Original', formatting: { bold: true } };
+  const slide = { objects: [object], notesText: '', themeFingerprint: '' };
+  const semantic = { order: ['slide:s1'], slidePlans: [{ key: 'slide:s1', merged: slide }] };
+  assert.equal(context.verify(semantic, { slides: [slide] }).length, 0);
+  assert.equal(context.verify(semantic, { slides: [{ ...slide, objects: [{ ...object, text: 'Lost text' }] }] }).length, 1);
+  assert.equal(context.verify(semantic, { slides: [] }).length, 1);
+});
+
+test('unmodeled slide XML and relationships are compared before a merge is accepted', () => {
+  assert.match(getLine('async function slideAncillarySignature('), /canonicalizeXml/);
+  assert.match(getLine('async function slideAncillarySignature('), /relationships/);
+  assert.match(getLine('async function materializeMerge('), /discarded!==baseAnc&&discarded!==source/);
+  assert.match(getLine('async function materializeMerge('), /verifyMaterializedMerge\(semantic,model\)/);
+  assert.match(getLine('function applyMaterialResolutions('), /plan.materialResolved=true/);
+});
