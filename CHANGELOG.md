@@ -13,6 +13,8 @@
 - Preserve independent run formatting and paragraph alignment in safe mixed-slide merges; reject table-wide manual text rewrites, linked-node copies and duplicate PowerPoint object IDs.
 - Compare unsupported slide-level XML and relationships before choosing an automatic result, then reparse the output PPTX and verify the supported semantic merge plan before saving.
 - Add native Chromium DrawingML merge cases and explicit fail-closed checks for links, transitions, tables, and IDs.
+- Replace the next-action panel gradient with a flat neutral surface and cover it with UI regression tests.
+- Prepare an automatic post-merge release workflow: validate main, create a version tag and publish standalone HTML, self-extracting HTML, ZIP and SHA-256 checksums, without changing existing tags.
 - Block stale merge results after branch/source changes and recheck both branch heads before committing a merge.
 - Detect unsupported per-shape effects (including shadows and glow) in package comparisons and require an explicit slide choice when automatic merging would discard them.
 
