@@ -206,7 +206,7 @@ Local project history is stored in IndexedDB on the device. Deleting browser sit
 
 | Library | Version | License | Purpose |
 | --- | ---: | --- | --- |
-| @aiden0z/pptx-renderer | 1.2.4 | Apache-2.0 | Embedded high-fidelity slide rendering for Visual Compare |
+| @aiden0z/pptx-renderer | 1.4.0 | Apache-2.0 | Embedded high-fidelity slide rendering for Visual Compare |
 
 PPTX package parsing, semantic modeling, repository storage, branch/merge logic, and Git-friendly export remain implemented by the app with browser APIs. The renderer is embedded into the single HTML at build time and does not create a runtime network dependency.
 
