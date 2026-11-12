@@ -18,6 +18,9 @@ GitHub Pages delivers the initial HTML. After it loads, PPTX parsing, version st
 
 ## Features
 
+Visual Compare bundles `@aiden0z/pptx-renderer` 1.4.0. The renderer is configured with `externalMedia: 'block'`: external media relationships in imported presentations are not loaded. Embedded pictures remain available. This is an additional safeguard alongside the standalone HTML's `connect-src 'none'` CSP; it is not a general network sandbox. Fidelity remains limited by the renderer's support for uncommon PowerPoint effects and fonts.
+
+
 - **Save PowerPoint versions locally** — Create a project from a PPTX, then drop each edited PPTX into the same project as a new version.
 - **Review meaningful changes** — Compare text, numbers, images, objects, layout, formatting, slide order, and speaker notes instead of raw OOXML noise.
 - **Compare the actual slides visually** — Review saved versions, branch heads, or the current unsaved edit with Side by side, Overlay, Split, and Blink views.
