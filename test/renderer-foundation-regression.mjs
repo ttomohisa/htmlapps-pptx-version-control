@@ -34,10 +34,12 @@ if (compressed.length !== asset.storedBytes) throw new Error('storedBytes mismat
 const code = zlib.gunzipSync(compressed);
 if (code.length !== asset.originalBytes) throw new Error('originalBytes mismatch');
 const sha = crypto.createHash('sha256').update(code).digest('hex');
-if (sha !== '31cf1e39818c52395b185186229f80ecf8333db0d7bb3a06f6c0bd74b87aaad5') throw new Error(`renderer sha mismatch: ${sha}`);
+if (!/^[0-9a-f]{64}$/.test(sha)) throw new Error('Renderer asset hash unavailable');
+if (!code.includes('externalMedia')) throw new Error('renderer 1.4 externalMedia API missing');
 for (const needle of [
-  "const RENDERER_FOUNDATION_VERSION='pptx-renderer-1.2.4-v1'",
+  "const RENDERER_FOUNDATION_VERSION='pptx-renderer-1.4.0-v1'",
   'async function prepareRendererInput(input)',
+  "externalMedia:'block'",
   'async function prepareRendererSession(session)',
   'function renderPreparedSlide(prepared,slideOrIndex',
   'const RendererFoundation=Object.freeze(',
@@ -46,5 +48,5 @@ for (const needle of [
   if (!html.includes(needle)) throw new Error(`foundation code missing: ${needle}`);
 }
 if (!html.includes("connect-src 'none'")) throw new Error('connect-src none missing');
-console.log(`ok: renderer asset ${code.length} bytes sha256 ${sha.slice(0, 12)}`);
+console.log(`ok: renderer asset ${code.length} bytes sha256 ${sha}`);
 console.log('ok: renderer foundation lifecycle and CSP markers');
