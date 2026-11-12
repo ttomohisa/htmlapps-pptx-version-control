@@ -92,6 +92,7 @@ async function main() {
         assert.ok(result.width > 0 && result.height > 0, 'slide has visible geometry');
         assert.ok(result.children > 0, 'slide is rendered with actual DOM nodes');
         assert.match(result.visibleText || '', /Synthetic audit/, 'fixture title text must render');
+        assert.equal(result.textColor, 'rgb(32, 33, 31)', 'PowerPoint title font color survives without the 1.2.4 patch');
         assert.deepEqual(requests, [], 'no HTTP requests during PPTX rendering');
         console.log('PASS renderer 1.4 Chromium ' + width + 'x' + height +
           ', slides=' + result.slides + ', dom nodes=' + result.children + ', title color=' + result.textColor + ', title fill=' + result.textFill);
