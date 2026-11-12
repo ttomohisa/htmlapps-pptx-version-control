@@ -6,7 +6,8 @@
       "id": "pptx-renderer",
       "package": "@aiden0z/pptx-renderer",
       "version": "1.4.0",
-      "tarballSha256": "3c10129958f16d8b2a97b9d3afc28600189ace99a01930dd53e8067d6b2662a3"
+      "tarballSha256": "3c10129958f16d8b2a97b9d3afc28600189ace99a01930dd53e8067d6b2662a3",
+      "integrity": "sha512-GUQbdJCYjTfXkJWtSgo5pIYXZYQjOQLlnjfRYE5ycpWgPa8rIK711wQa0kAl71H++vYnFYUp9fjQkKB8K/6ShA=="
     }
   ]
 }
