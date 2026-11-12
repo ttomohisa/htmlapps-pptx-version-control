@@ -34,7 +34,7 @@ if (compressed.length !== asset.storedBytes) throw new Error('storedBytes mismat
 const code = zlib.gunzipSync(compressed);
 if (code.length !== asset.originalBytes) throw new Error('originalBytes mismatch');
 const sha = crypto.createHash('sha256').update(code).digest('hex');
-if (!/^[0-9a-f]{64}$/.test(sha)) throw new Error('Renderer asset hash unavailable');
+if (sha !== 'eed96db79a8300ef66a57e8a5f4f2c06a5cb78ac30b7eecd5df921c05ac5069b') throw new Error(`renderer 1.4.0 asset hash mismatch: ${sha}`);
 if (!code.includes('externalMedia')) throw new Error('renderer 1.4 externalMedia API missing');
 for (const needle of [
   "const RENDERER_FOUNDATION_VERSION='pptx-renderer-1.4.0-v1'",
