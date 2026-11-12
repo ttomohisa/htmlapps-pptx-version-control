@@ -1,5 +1,13 @@
 # PPTX Version Control — App Specification
 
+## v1.1.8 — Renderer dependency refresh
+
+- Update the bundled high-fidelity visual renderer to `@aiden0z/pptx-renderer` 1.4.0 while keeping the app fully offline at runtime and retaining the browser-only single-file distribution.
+- Set `externalMedia: 'block'` for every `renderSlide` call. Embedded media must remain renderable; linked external media must not trigger network requests.
+- Remove the 1.2.4-specific minified JavaScript text-color rewrite. Verify text appearance with representative PPTX samples instead of depending on private minified names.
+- Retain safe PPTX ZIP limits, renderer lifecycle, handle disposal, all comparison modes, and cache versioning. Verify on desktop/mobile Chromium in Japanese and English.
+
+
 ## v1.1.7 — PPTX merge integrity follow-up
 
 ### Additional merge safety checks
