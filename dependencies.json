@@ -4,7 +4,7 @@
     {
       "id": "pptx-renderer",
       "package": "@aiden0z/pptx-renderer",
-      "version": "1.2.4",
+      "version": "1.4.0",
       "license": "Apache-2.0",
       "homepage": "https://github.com/aiden0z/pptx-renderer",
       "assets": [
