@@ -72,12 +72,16 @@ async function main() {
           try {
             await handle.ready;
             const rect = handle.element.getBoundingClientRect();
+            const textNode = [...handle.element.querySelectorAll('*')].reverse().find(el => el.textContent?.trim() === 'Synthetic audit');
+            const textColor = textNode ? getComputedStyle(textNode).color : '';
+            const textFill = textNode ? getComputedStyle(textNode).fill : '';
             return {
               slides: presentation.slides.length,
               width: rect.width,
               height: rect.height,
               children: handle.element.querySelectorAll('*').length,
-              visibleText: handle.element.textContent?.trim().slice(0, 120)
+              visibleText: handle.element.textContent?.trim().slice(0, 120),
+              textColor, textFill
             };
           } finally {
             handle.dispose();
@@ -87,9 +91,10 @@ async function main() {
         assert.ok(result.slides > 0, 'slides parsed');
         assert.ok(result.width > 0 && result.height > 0, 'slide has visible geometry');
         assert.ok(result.children > 0, 'slide is rendered with actual DOM nodes');
+        assert.match(result.visibleText || '', /Synthetic audit/, 'fixture title text must render');
         assert.deepEqual(requests, [], 'no HTTP requests during PPTX rendering');
         console.log('PASS renderer 1.4 Chromium ' + width + 'x' + height +
-          ', slides=' + result.slides + ', dom nodes=' + result.children);
+          ', slides=' + result.slides + ', dom nodes=' + result.children + ', title color=' + result.textColor + ', title fill=' + result.textFill);
       } finally {
         await context.close();
       }
