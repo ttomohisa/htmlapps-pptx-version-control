@@ -72,6 +72,8 @@ jobs:
           node scripts/prepare-release.mjs
           (cd release-assets && sha256sum -c SHA256SUMS.txt)
           unzip -t release-assets/*.zip
+          bash -n scripts/publish-release.sh
+          node --test test/release-publish-regression.mjs
 
       - name: Upload verified release assets
         uses: actions/upload-artifact@v7
@@ -104,39 +106,4 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          version="$(node -p "require('./app.config.json').version")"
-          tag="v$version"
-          base="htmlapps-pptx-version-control-$tag"
-
-          # Idempotent on ordinary later main pushes or workflow reruns.
-          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json tagName >/dev/null 2>&1; then
-            echo "Release $tag already exists; skipping."
-            exit 0
-          fi
-
-          ref_type="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$tag" --jq '.object.type' 2>/dev/null || true)"
-          if [[ -n "$ref_type" ]]; then
-            ref_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$tag" --jq '.object.sha')"
-            if [[ "$ref_type" == "tag" ]]; then
-              ref_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/tags/$ref_sha" --jq '.object.sha')"
-            fi
-            if [[ "$ref_sha" != "$GITHUB_SHA" ]]; then
-              echo "::error::The existing $tag tag points to a different commit ($ref_sha); refusing to repoint it."
-              exit 1
-            fi
-          else
-            gh api -X POST "repos/$GITHUB_REPOSITORY/git/refs" \
-              -f "ref=refs/tags/$tag" -f "sha=$GITHUB_SHA" >/dev/null
-          fi
-
-          gh release create "$tag" \
-            "release-assets/$base.html" \
-            "release-assets/$base.self-extract.html" \
-            "release-assets/$base.zip" \
-            "release-assets/SHA256SUMS.txt" \
-            --repo "$GITHUB_REPOSITORY" \
-            --verify-tag \
-            --title "PPTX Version Control $tag" \
-            --notes-file "release-assets/RELEASE_NOTES.md"
+        run: bash scripts/publish-release.sh
