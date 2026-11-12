@@ -23,7 +23,7 @@ jobs:
           node-version: 24
       - name: Synchronize lockfile against npm registry
         shell: pwsh
-        run: ./scripts/sync-dependency-lock.ps1 -Id pptx-renderer -ForceDownload
+        run: ./scripts/sync-dependency-lock.ps1 -ForceDownload
       - name: Build standalone HTML with the new renderer
         shell: pwsh
         run: ./build-standalone.ps1
