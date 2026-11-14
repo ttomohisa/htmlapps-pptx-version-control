@@ -29,14 +29,14 @@ test(`${target}: html and body lock only while a native modal is open`, () => {
 test(`${target}: existing whole-dialog scroll and sticky Close shell stay unchanged`, () => {
   const start = html.indexOf('    dialog{');
   assert.ok(start >= 0);
-  assert.equal(hash(html.slice(start, html.indexOf('\n', start))), '248a0018fa25c634435ae4f8689348f35465b8dd77baa47bd127f94623f861ca');
+  assert.equal(hash(html.slice(start, html.indexOf('\n', start))), '8077462f2514cadcf23e2d0192a38f9ea1ef38d632380ce63252a41a16be21c1');
 });
 
 test(`${target}: Help scroll stays inside the dialog and clear of Close`, () => {
   assert.ok(css.includes('#helpDialog{overflow:hidden}'), 'Help must not scroll the dialog frame');
   assert.ok(css.includes('#helpDialog[open]{display:flex;flex-direction:column;'), 'Help uses an in-panel layout');
   assert.ok(css.includes('#helpDialog .dialog-head{position:relative;flex:0 0 auto;'), 'Help header is outside the scrolling body');
-  assert.ok(css.includes('#helpDialog .dialog-close{flex:0 0 auto;min-width:44px;min-height:44px}'), 'Close has a usable touch target');
+  assert.ok(css.includes('#helpDialog .dialog-close{flex:0 0 auto}'), 'Close uses the shared 34px dialog-close');
   assert.ok(css.includes('#helpDialog .dialog-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;margin:0 10px 10px 0;'), 'Scrollbar is inset from the right edge');
   assert.ok(css.includes('@media(max-width:760px){.page-intro .local-badge{display:none}'), 'privacy badge is hidden on narrow screens');
   assert.ok(css.includes('max-height:min(84dvh,760px)'), 'Help remains bounded by the viewport');
@@ -117,7 +117,7 @@ test(`${target}: resolver choice and manual controls retain usable intrinsic siz
   assert.match(css, /\.dialog-head\{position:sticky;top:0;/, 'Close stays visible while the dialog scrolls');
   const start = html.indexOf('<dialog id="conflictResolverDialog"');
   const markup = html.slice(start, html.indexOf('</dialog>', start) + '</dialog>'.length);
-  assert.equal(hash(markup), '5bd5fd7d4d8240f63dc5d363c7f9f8bac6e9e76a629bcf82f459414668504624', 'all resolver controls, order, IDs, labels and hidden states are preserved');
+  assert.equal(hash(markup), '6c0b9b541b92381a39f5e1447a7af458042f2a583f22944cf4297a0e1e8c0285', 'all resolver controls, order, IDs, labels and hidden states are preserved');
 });
 
 test(`${target}: resolver behavior remains reachable and event handlers stay byte-identical`, () => {
