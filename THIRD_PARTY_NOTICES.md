@@ -12,7 +12,7 @@ When adding or updating a package in `dependencies.json`:
 
 Do not assume that a package being available from npm makes it compatible with MIT redistribution.
 
-## @aiden0z/pptx-renderer 1.2.4
+## @aiden0z/pptx-renderer 1.4.0
 
 - License: Apache-2.0
 - Purpose: High-fidelity local PPTX slide rendering for the Side by side, Overlay, Split, and Blink Visual Compare views.

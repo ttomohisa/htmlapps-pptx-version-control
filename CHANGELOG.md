@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.8 - 2026-11-13
+
+- Update the bundled @aiden0z/pptx-renderer from 1.2.4 to 1.4.0 for Visual Compare (side-by-side, overlay, split and blink).
+- Explicitly block external PPTX media relationships when rendering slides; bundled media still works offline.
+- Remove the renderer's obsolete 1.2.4-specific minified text-color compatibility patch and refresh renderer/cache regression tests.
+- Preserve the single-file, no-runtime-network behavior and validate the upgraded renderer in Chromium.
+
+
 ## 1.1.7 - 2026-11-11
 
 - Allow a new version when PPTX bytes changed but the supported semantic model is unchanged.
