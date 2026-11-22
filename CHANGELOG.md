@@ -10,6 +10,8 @@
 - Standardize the phone footer, Help build metadata, and local-processing badge.
 - Replace the hero heading and separate description with a single concise bilingual introduction; retain an accessible page heading and tighten mobile spacing.
 - Remove the Browser Kitty brand reference from Help privacy text in both languages.
+- Simplify Project Management, File and Analysis Details, and Comparison Results: retain section boundaries, replace nested cards with dividers and aligned data rows, and group project actions.
+- Extend native Chromium checks for expanded sections and horizontal overflow at narrow widths.
 
 ## 1.1.8 - 2026-11-13
 
