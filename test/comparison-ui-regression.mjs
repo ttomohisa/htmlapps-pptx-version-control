@@ -8,8 +8,8 @@ import test from 'node:test';
 const source = fs.readFileSync(new URL('../src/index.template.html', import.meta.url), 'utf8');
 const lines = source.split('\n');
 const functionLine = name => {
-  const result = lines.find(line => line.startsWith('function ' + name + '(') ||
-    line.startsWith('async function ' + name + '('));
+  const result = lines.filter(line => line.startsWith('function ' + name + '(') ||
+    line.startsWith('async function ' + name + '(')).at(-1);
   assert.ok(result, name);
   return result;
 };
