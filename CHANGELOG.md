@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.9 - 2026-11-22
+
+- Detect object stacking-order changes even when PowerPoint regenerates object IDs.
+- Report line-break and full-width/half-width changes in the text-diff category.
+- Validate project-backup references and PPTX structure before saving an imported history.
+- Warn before navigation discards a loaded PPTX that has not been saved as a version.
+- Align the standalone app and the next GitHub Release under a new patch version.
+- Standardize the phone footer, Help build metadata, and local-processing badge.
+
 ## 1.1.8 - 2026-11-13
 
 - Update the bundled @aiden0z/pptx-renderer from 1.2.4 to 1.4.0 for Visual Compare (side-by-side, overlay, split and blink).
@@ -32,10 +41,6 @@
 - Keep the header version badge visible at narrow widths by truncating only the app title.
 - Remove redundant language-switching instructions from Japanese and English Help.
 
-
-## Unreleased
-
-- Standardize the phone informational footer, final Help build metadata, and equivalent local-processing badge wording.
 
 ## 1.1.5 - 2026-10-11
 
