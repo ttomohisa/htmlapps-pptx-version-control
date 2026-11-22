@@ -34,6 +34,7 @@ function setup() {
     refreshBranchState:async()=>{},loadProjectHistory:async()=>[commits.c,commits.b,commits.a],computeProjectStats:async()=>({}),
     commitDisplayName:x=>x.label||x.message,formatDate:x=>x,shortHash:x=>x,
     currentFileState:()=> 'changed',
+    confirmDiscardWorkingChanges:()=>true, // Boundary tests proceed as if the user approved navigation.
     buildComparisonSession:async(from,to,{mode})=>({id:`${from.id}:${to.id}`,from,to,mode,result:{rows:[]},slidePairs:[]}),
     clearRendererPairHandles(){events.push('clearRenderer');}, stopVisualBlink(){events.push('stopBlink');},
     renderHistory(){events.push('history');},renderCompareControls(){events.push('controls');},renderDiff(){events.push('diff');},
