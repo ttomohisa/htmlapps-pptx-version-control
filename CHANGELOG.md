@@ -8,6 +8,8 @@
 - Warn before navigation discards a loaded PPTX that has not been saved as a version.
 - Align the standalone app and the next GitHub Release under a new patch version.
 - Standardize the phone footer, Help build metadata, and local-processing badge.
+- Replace the hero heading and separate description with a single concise bilingual introduction; retain an accessible page heading and tighten mobile spacing.
+- Remove the Browser Kitty brand reference from Help privacy text in both languages.
 
 ## 1.1.8 - 2026-11-13
 
