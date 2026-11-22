@@ -50,11 +50,24 @@ test(`${target}: next-action panel uses a flat neutral surface`, () => {
   assert.doesNotMatch(rule, /(?:linear|radial|conic)-gradient\(/, 'card has no gradient');
 });
 
-test(`${target}: Hero and Help use concise, version-independent copy`, () => {
-  assert.ok(html.includes('data-i18n="introTitle">PowerPointの編集履歴を保存・比較'));
+test(`${target}: Hero has only one visible explanatory paragraph, with accessible heading`, () => {
+  const intro = html.match(/<section class="page-intro">([\s\S]*?)<div class="local-badge">/)?.[1];
+  assert.ok(intro, 'Hero section should exist');
+  assert.ok(intro.includes('<h1 class="sr-only">PPTX Version Control</h1>'), 'Heading is accessible but not visible');
+  assert.ok(intro.includes('data-i18n="lead">PowerPoint（PPTX）の編集履歴を保存して、版ごとの変更点を比較できます。'));
+  assert.ok(!intro.includes('data-i18n="introTitle"'), 'Old headline should not appear');
+  assert.ok(html.includes("lead:'Save PowerPoint (PPTX) versions to keep an edit history and compare changes."));
+  assert.ok(css.includes('.page-intro p{margin:0;max-width:880px;'), 'Hero paragraph has no leftover title margin');
+  assert.ok(css.includes('.page-intro{padding-bottom:14px}.page-intro p{font-size:13px}'), 'Mobile copy stays readable');
+});
+test(`${target}: Help omits product-site name while retaining privacy information`, () => {
   assert.ok(html.includes('data-i18n="helpScopeTitle">主な機能'));
   assert.ok(html.includes("helpScopeTitle:'What you can do'"));
-  assert.ok(html.includes("introTitle:'Save and compare PowerPoint versions'"));
+  const help = html.match(/<dialog id="helpDialog">([\s\S]*?)<\/dialog>/)?.[1];
+  assert.ok(help);
+  assert.ok(help.includes('読み込んだPowerPointファイルはブラウザ内で処理され、外部サーバーには送信されません。'));
+  assert.ok(html.includes("helpPrivacyBody:'PowerPoint files are processed in your browser and are not sent to external servers.'"));
+  assert.ok(!help.includes('Browser Kitty') && !html.includes('Browser Kitty or any external server'));
   assert.ok(!html.includes('v1.1.2でできること') && !html.includes('What v1.1.2 does'));
 });
 
