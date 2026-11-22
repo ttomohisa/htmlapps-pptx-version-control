@@ -136,6 +136,135 @@
     #helpDialog .dialog-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;margin:0 10px 10px 0;padding:16px 18px 20px 20px;scrollbar-width:thin}
     @media(max-width:760px){.page-intro .local-badge{display:none}#helpDialog[open]{width:calc(100% - 20px);max-height:calc(100dvh - 24px)}#helpDialog .dialog-head{padding:12px 14px}#helpDialog .dialog-body{margin:0 8px 8px 0;padding:12px 12px 20px 16px}}
     @media(max-height:400px){#helpDialog[open]{max-height:calc(100dvh - 12px)}}
+
+    /* Shared visual hierarchy: one section boundary, plain content rows, and dividers. */
+    .project-tools>summary{padding:14px 16px;color:var(--text);font-size:12px}
+    .project-tools-body{padding:0 16px 16px}
+    .project-tools .repo-stats{gap:0;margin:0;padding:14px 0}
+    .project-tools .repo-stat{min-width:0;padding:4px 14px;border-left:1px solid var(--line);border-radius:0;background:transparent}
+    .project-tools .repo-stat:first-child{border-left:0;padding-left:0}
+    .project-tools .repo-stat strong{font-size:17px;font-weight:800;overflow-wrap:anywhere}
+    .project-tools .repo-stat span{margin-top:4px;font-size:10px;line-height:1.4}
+    .project-tools .repo-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px 16px;margin:0;padding:14px 0 0;border-top:1px solid var(--line)}
+    .repo-action-group{display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-width:0}
+    .repo-action-secondary{justify-content:flex-end;align-self:stretch;padding-left:16px;border-left:1px solid var(--line)}
+    .repo-actions .storage-action-result{grid-column:1/-1}
+    .repo-actions .storage-action-result:empty{display:none}
+    .project-tools .repo-message{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:11px;line-height:1.6}
+
+    /* File and analysis details: content and export are two sections, not cards in a card. */
+    .technical-drawer-body{padding:16px 18px 18px}
+    .technical-summary{gap:0;margin-bottom:16px}
+    .technical-drawer .file-card,.technical-drawer .export-card{min-width:0;padding:2px 22px 14px 0;border:0;border-radius:0;background:transparent}
+    .technical-drawer .export-card{padding:2px 0 14px 22px;border-left:1px solid var(--line)}
+    .technical-drawer .file-icon{width:44px;height:44px;border-radius:10px;background:var(--accent-soft);color:var(--accent)}
+    .technical-drawer .file-icon svg{width:26px;height:26px}
+    .technical-drawer .stat-grid{gap:0;margin-top:16px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .technical-drawer .stat{min-width:0;padding:4px 6px;border-radius:0;background:transparent}
+    .technical-drawer .stat+.stat{border-left:1px solid var(--line)}
+    .technical-drawer .stat-value{font-size:18px}
+    .technical-drawer .stat-label{font-size:10px}
+    .technical-drawer .verify-row,.technical-drawer .model-ready-row{margin-top:10px;padding:0;border-radius:0;background:transparent;line-height:1.6}
+    .technical-drawer .verify-row{color:var(--muted)}
+    .technical-drawer .verify-row svg,.technical-drawer .model-ready-row svg{color:var(--accent)}
+    .technical-drawer .file-name{font-size:14px}
+    .technical-drawer .file-meta{overflow-wrap:anywhere}
+    .technical-drawer .detail-tabs{margin:0}
+    .technical-drawer .panel{padding-top:12px}
+    .technical-drawer .list-card{border:0;border-radius:0}
+    .technical-drawer .semantic-overview{gap:0;padding:10px 0 14px;border-bottom:1px solid var(--line)}
+    .technical-drawer .semantic-stat{min-width:0;padding:5px 12px;border:0;border-left:1px solid var(--line);border-radius:0;background:transparent}
+    .technical-drawer .semantic-stat:first-child{padding-left:0;border-left:0}
+    .technical-drawer .semantic-stat strong{font-size:14px}
+    .technical-drawer .semantic-layout{gap:16px}
+    .technical-drawer .semantic-list,.technical-drawer .semantic-inspector{min-width:0;border:0;border-radius:0;background:transparent;overflow:visible}
+    .technical-drawer .semantic-inspector{padding-left:16px;border-left:1px solid var(--line)}
+    .technical-drawer .semantic-list-head,.technical-drawer .semantic-inspector-head{padding:10px 0;border-bottom:1px solid var(--line);background:transparent}
+    .technical-drawer .semantic-slide-list{overflow-y:auto;overflow-x:hidden}
+    .technical-drawer .semantic-slide-button{padding:10px 4px}
+    .technical-drawer .semantic-detail{padding:12px 0}
+    .technical-drawer .semantic-kv{gap:0 14px}
+    .technical-drawer .semantic-kv-item{min-width:0;padding:9px 0;border-bottom:1px solid var(--line);border-radius:0;background:transparent}
+    .technical-drawer .package-grid{gap:0;margin-bottom:10px}
+    .technical-drawer .package-group{min-width:0;padding:9px 12px;border:0;border-left:1px solid var(--line);border-radius:0;background:transparent}
+    .technical-drawer .package-group:first-child{padding-left:0;border-left:0}
+
+    /* Comparison: keep boundaries around slides, not every control and result. */
+    .compare-panel{gap:18px}
+    .compare-panel .compare-picker-card{padding:4px 0 18px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent}
+    .compare-panel .compare-picker-head{margin-bottom:16px}
+    .compare-panel .compare-picker-head p{font-size:11px;line-height:1.6}
+    .compare-panel .compare-readonly{padding:0;border-radius:0;background:transparent;font-size:10px}
+    .compare-panel .compare-side-card{min-width:0;padding:0;border:0;border-radius:0;background:transparent}
+    .compare-panel .compare-side-card:last-child{padding-left:16px;border-left:1px solid var(--line)}
+    .compare-panel .compare-side-index{width:22px;height:22px;background:var(--accent-soft);color:var(--accent);font-size:11px}
+    .compare-panel .compare-picker-actions{margin-top:16px}
+    .compare-panel .diff-empty{padding:18px 6px;border:0;border-radius:0;background:transparent}
+    .compare-panel .diff-summary{gap:0;padding:0 0 16px;border-bottom:1px solid var(--line)}
+    .compare-panel .diff-stat{min-width:0;padding:8px 12px;border:0;border-left:1px solid var(--line);border-radius:0;background:transparent}
+    .compare-panel .diff-stat:first-child{padding-left:0;border-left:0}
+    .compare-panel .diff-stat strong{font-size:19px}
+    .compare-panel .diff-stat span{margin-top:4px;font-size:10px}
+    .compare-panel .diff-toolbar{gap:9px;margin:0 0 12px;padding:4px 0 14px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent}
+    .compare-panel .diff-note{gap:7px;margin:0 0 18px;padding:0;border-radius:0;background:transparent;line-height:1.6}
+    .compare-panel .compare-slide-list{gap:0;padding-right:10px}
+    .compare-panel .compare-slide-row{min-width:0;padding:11px 8px 11px 10px;border:0;border-bottom:1px solid var(--line);border-left:3px solid transparent;border-radius:0;background:transparent}
+    .compare-panel .compare-slide-row:hover{border-left-color:var(--line-strong);background:var(--surface-muted)}
+    .compare-panel .compare-slide-row[aria-current="true"]{border-left-color:var(--accent);background:var(--accent-soft)}
+    .compare-panel .visual-compare{border:0;border-radius:0;background:transparent;overflow:visible}
+    .compare-panel .visual-compare-head{padding:4px 0 10px;border:0}
+    .compare-panel .visual-toolbar{padding:0 0 12px;border:0;background:transparent}
+    .compare-panel .visual-stage-shell{overflow:hidden;padding:12px;border:1px solid var(--line);border-radius:11px;background:#f2f3f0}
+    .compare-panel .visual-change-panel,.compare-panel .visual-notes-panel{margin-top:16px;padding:14px 0 0;border-top:1px solid var(--line)}
+    .compare-panel .visual-semantic-list{gap:0}
+    .compare-panel .visual-change-card{padding:10px 8px;border:0;border-bottom:1px solid var(--line);border-left:3px solid transparent;border-radius:0;background:transparent}
+    .compare-panel .visual-change-card[data-focused="true"]{border-left-color:var(--accent);background:var(--accent-soft);box-shadow:none}
+    .compare-panel .visual-no-changes{padding:12px 0;border-radius:0;background:transparent;text-align:left}
+    .compare-panel .diff-slide-list{gap:0}
+    .compare-panel .diff-slide-card{border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent}
+    .compare-panel .diff-slide-head{padding:14px 0 8px;border:0;background:transparent}
+    .compare-panel .diff-slide-body{padding:0 0 14px}
+    .compare-panel .diff-section{border:0;border-radius:0;background:transparent}
+    .compare-panel .diff-section-title{padding:9px 0;border-bottom:1px solid var(--line)}
+    .compare-panel .diff-item{padding:10px 0}
+
+    @media(max-width:760px){
+      .project-tools-body{padding:0 14px 14px}
+      .project-tools .repo-stats{gap:0;padding:10px 0}
+      .project-tools .repo-stat{padding:9px 10px;border-left:0}
+      .project-tools .repo-stat:nth-child(even){border-left:1px solid var(--line)}
+      .project-tools .repo-stat:nth-child(odd){padding-left:0}
+      .project-tools .repo-stat:nth-child(n+3){border-top:1px solid var(--line)}
+      .project-tools .repo-actions{grid-template-columns:minmax(0,1fr)}
+      .repo-action-main .button{flex:1 1 135px}
+      .repo-action-secondary{justify-content:flex-start;padding:12px 0 0;border:0;border-top:1px solid var(--line)}
+      .repo-action-secondary .button{flex:1 1 130px}
+      .technical-drawer-body{padding:12px 14px 16px}
+      .technical-drawer .file-card{padding:2px 0 16px}
+      .technical-drawer .export-card{padding:16px 0 0;border:0;border-top:1px solid var(--line)}
+      .technical-drawer .stat-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:8px 0}
+      .technical-drawer .stat{padding:8px 6px}
+      .technical-drawer .stat:nth-child(odd){border-left:0}
+      .technical-drawer .stat:nth-child(n+3){border-top:1px solid var(--line)}
+      .technical-drawer .semantic-overview{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .technical-drawer .semantic-stat{padding:8px 10px}
+      .technical-drawer .semantic-stat:nth-child(odd){padding-left:0;border-left:0}
+      .technical-drawer .semantic-stat:nth-child(n+3){border-top:1px solid var(--line)}
+      .technical-drawer .semantic-inspector{padding:12px 0 0;border:0;border-top:1px solid var(--line)}
+      .technical-drawer .package-group{padding:8px 10px}
+      .technical-drawer .package-group:nth-child(odd){padding-left:0;border-left:0}
+      .compare-panel .compare-picker-card{padding-bottom:16px}
+      .compare-panel .compare-pair-picker{gap:10px}
+      .compare-panel .compare-side-card:last-child{padding:14px 0 0;border:0;border-top:1px solid var(--line)}
+      .compare-panel .compare-readonly{margin-top:8px}
+      .compare-panel .diff-stat{padding:8px 10px}
+      .compare-panel .diff-stat:nth-child(odd){padding-left:0;border-left:0}
+      .compare-panel .diff-stat:nth-child(n+3){border-top:1px solid var(--line)}
+      .compare-panel .compare-slide-list{gap:6px;padding:1px 0 8px}
+      .compare-panel .compare-slide-row{flex:0 0 min(190px,72vw);min-height:82px;padding:10px;border-bottom:1px solid var(--line)}
+      .compare-panel .visual-stage-shell{padding:9px}
+      .compare-panel .visual-toolbar{gap:12px}
+    }
 </style>
 </head>
 <body>
@@ -191,7 +320,7 @@
       </section>
       <details class="project-tools" id="projectTools" hidden><summary data-i18n="projectManagement">プロジェクト管理</summary><div class="project-tools-body">
         <div class="repo-stats" id="repoStats" hidden><div class="repo-stat"><strong id="repoVersionCount">0</strong><span data-i18n="versions">バージョン</span></div><div class="repo-stat"><strong id="repoBranchCount">1</strong><span data-i18n="branches">ブランチ</span></div><div class="repo-stat"><strong id="repoObjectCount">0</strong><span data-i18n="storedObjects">保存オブジェクト</span></div><div class="repo-stat"><strong id="repoStorageSize">0 B</strong><span data-i18n="localStorageSize">ローカル使用量</span></div></div>
-        <div class="repo-actions" id="repoActions" hidden><button class="button" id="createBranchButton" type="button" data-i18n="createBranch">ブランチを作成</button><button class="button" id="exportProjectButton" type="button" data-i18n="exportProject">プロジェクトを書き出す</button><button class="button" id="exportGitButton" type="button" data-i18n="exportGit">Git向けに書き出す</button><button class="button" id="optimizeStorageButton" type="button" data-i18n="optimizeStorage">ストレージを整理</button><button class="button" id="newProjectButton" type="button" data-i18n="backToHome">ホームに戻る</button><button class="button danger-soft" id="deleteCurrentProjectButton" type="button" data-i18n="deleteProject">プロジェクトを削除</button><span class="storage-action-result" id="storageActionResult"></span></div>
+        <div class="repo-actions" id="repoActions" hidden><div class="repo-action-group repo-action-main"><button class="button" id="createBranchButton" type="button" data-i18n="createBranch">ブランチを作成</button><button class="button" id="exportProjectButton" type="button" data-i18n="exportProject">プロジェクトを書き出す</button><button class="button" id="exportGitButton" type="button" data-i18n="exportGit">Git向けに書き出す</button><button class="button" id="optimizeStorageButton" type="button" data-i18n="optimizeStorage">ストレージを整理</button></div><div class="repo-action-group repo-action-secondary"><button class="button" id="newProjectButton" type="button" data-i18n="backToHome">ホームに戻る</button><button class="button danger-soft" id="deleteCurrentProjectButton" type="button" data-i18n="deleteProject">プロジェクトを削除</button></div><span class="storage-action-result" id="storageActionResult"></span></div>
         <p class="repo-message" id="repoMessage" data-i18n="repositoryLocalNote">履歴はこのブラウザ内のIndexedDBに保存されます。重要な履歴は .pptxvc でも書き出してください。</p>
       </div></details>
       <section class="project-navigation" id="projectNavigation" hidden>
