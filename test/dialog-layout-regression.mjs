@@ -118,6 +118,28 @@ test(`${target}: comparison keeps a bordered slide stage but not stacked result 
     'diffSummary', 'compareFilterList', 'compareSlideList', 'visualStageShell']) assert.ok(html.includes(`id="${id}"`), id);
 });
 
+
+test(`${target}: compact comparison and keyboard-accessible breakdown remain available`, () => {
+  assert.ok(html.includes('id="diffSummary"'));
+  assert.ok(html.includes('id="diffBreakdown" hidden'));
+  assert.ok(html.includes('<summary><span data-i18n="diffBreakdownTitle">変更内容の内訳</span>'));
+  assert.ok(html.includes('id="diffBreakdownGrid"'));
+  assert.ok(html.includes("diffBreakdownTitle:'Breakdown by change type'"));
+  assert.ok(html.includes("renderCompactCompareSummary(session.result.summary)"));
+  assert.ok(html.includes("$('#compareSwapButton').addEventListener('click',swapCompareSides)"));
+  assert.doesNotMatch(html, /setTimeout\(\(\)=>showCompareDiff\(/,
+    'swap must not race asynchronous version-option loading');
+  assert.match(css, /\.diff-breakdown>summary:focus-visible\{outline:2px solid var\(--focus\)/);
+});
+
+test(`${target}: buttons have distinct primary, neutral, selected and danger styles`, () => {
+  assert.match(css, /\.button\.primary\{border-color:var\(--accent\);background:var\(--accent\);color:#fff/);
+  assert.match(css, /\.button:hover:not\(:disabled\)\{border-color:var\(--accent\)/);
+  assert.match(css, /\.button\.danger-soft\{border-color:var\(--line\);background:transparent;color:var\(--danger\)/);
+  assert.match(css, /\.visual-mode-button\[aria-pressed="true"\]\{border-color:var\(--accent\);background:var\(--accent\);color:#fff/);
+  assert.match(css, /\.compare-swap-button\.button\.icon-button\{width:42px;height:42px;border-radius:50%/);
+  assert.match(css, /@media\(max-width:760px\)\{[\s\S]*?\.button\{min-height:44px;padding:10px 12px\}/);
+});
 test(`${target}: existing shield/check privacy badge stays byte-identical`, () => {
   const badge = html.match(/<div class="local-badge">[\s\S]*?<\/div>/)[0];
   assert.equal(hash(badge), '77fe3f6c6d68577b9afb9fd4cecf97297dac96dcf5609a05bfe4ab93909bc85d');
