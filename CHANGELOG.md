@@ -12,6 +12,9 @@
 - Remove the Browser Kitty brand reference from Help privacy text in both languages.
 - Simplify Project Management, File and Analysis Details, and Comparison Results: retain section boundaries, replace nested cards with dividers and aligned data rows, and group project actions.
 - Extend native Chromium checks for expanded sections and horizontal overflow at narrow widths.
+- Reduce the comparison header to three slide totals and an optional breakdown of detailed change categories; preserve all filters and visual comparison modes.
+- Wait for asynchronous branch/version options before swapping comparison sides and re-running the comparison, including cross-branch and unsaved working versions.
+- Refresh primary, secondary, destructive, icon, filter, and mode buttons with consistent focus and touch affordances.
 
 ## 1.1.8 - 2026-11-13
 
