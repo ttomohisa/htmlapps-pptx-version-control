@@ -2,11 +2,13 @@
 // Browser-level confirmation of asynchronous branch/version swapping with a
 // real, synthetic .pptxvc fixture. No private files or external requests.
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright');
 
 async function main() {
+  fs.mkdirSync('test-results/mobile-layout', { recursive: true });
   const browser = await chromium.launch();
   try {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ja' });
@@ -47,6 +49,7 @@ async function main() {
       const summary = document.querySelector('#diffSummary');
       return !document.querySelector('#diffContent').hidden && summary?.children.length === 3;
     }, null, { timeout: 30000 });
+    await page.screenshot({ path: path.join('test-results/mobile-layout', 'comparison-390-before.png'), fullPage: true });
     const before = await page.locator('#diffMeta').textContent();
     assert.ok(before.includes(' → '), 'direction is shown');
     assert.equal(await page.locator('#diffSummary .diff-stat').count(), 3);
@@ -75,6 +78,11 @@ async function main() {
     assert.equal(await page.locator('#diffSummary .diff-stat').count(), 3);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
       'no horizontal overflow after swapping on a phone');
+    await page.screenshot({ path: path.join('test-results/mobile-layout', 'comparison-390-after.png'), fullPage: true });
+    await page.setViewportSize({ width: 1360, height: 900 });
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+      'no horizontal overflow on desktop');
+    await page.screenshot({ path: path.join('test-results/mobile-layout', 'comparison-1360.png'), fullPage: true });
     assert.deepEqual(errors, [], 'no page errors');
     assert.deepEqual(outbound, [], 'no runtime data requests');
     console.log('PASS: imported PPTXVC, compact counts, detail toggle, async cross-branch swap and reversed result');
