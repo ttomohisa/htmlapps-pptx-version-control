@@ -80,6 +80,44 @@ test(`${target}: all seven native dialogs retain their existing controls`, () =>
   }
 });
 
+
+test(`${target}: project management uses grouped actions and unboxed statistics`, () => {
+  const section = html.match(/<details class="project-tools"[^>]*>([\s\S]*?)<\/details>/)?.[1];
+  assert.ok(section, 'project management details exist');
+  assert.match(section, /class="repo-action-group repo-action-main"/);
+  assert.match(section, /class="repo-action-group repo-action-secondary"/);
+  for (const id of ['createBranchButton', 'exportProjectButton', 'exportGitButton', 'optimizeStorageButton',
+    'newProjectButton', 'deleteCurrentProjectButton', 'storageActionResult']) assert.ok(section.includes(`id="${id}"`), id);
+  assert.match(css, /\.project-tools \.repo-stat\{[^}]*background:transparent/);
+  assert.match(css, /\.project-tools \.repo-actions\{[^}]*border-top:1px solid var\(--line\)/);
+  assert.match(css, /\.repo-action-secondary\{[^}]*border-left:1px solid var\(--line\)/);
+});
+
+test(`${target}: file and analysis details separate content without nested bordered cards`, () => {
+  assert.match(css, /\.technical-drawer \.file-card,\.technical-drawer \.export-card\{[^}]*border:0/);
+  assert.match(css, /\.technical-drawer \.export-card\{[^}]*border-left:1px solid var\(--line\)/);
+  assert.match(css, /\.technical-drawer \.stat\{[^}]*background:transparent/);
+  assert.match(css, /\.technical-drawer \.semantic-stat\{[^}]*background:transparent/);
+  assert.match(css, /\.technical-drawer \.semantic-list,\.technical-drawer \.semantic-inspector\{[^}]*border:0/);
+  assert.match(css, /\.technical-drawer \.list-card\{border:0/);
+  assert.match(css, /\.technical-drawer \.export-card\{padding:16px 0 0;border:0;border-top:1px solid var\(--line\)/);
+  for (const id of ['slideCount', 'partCount', 'mediaCount', 'notesCount', 'outputFilename',
+    'downloadButton', 'semanticSlideList', 'partList']) assert.ok(html.includes(`id="${id}"`), id);
+});
+
+test(`${target}: comparison keeps a bordered slide stage but not stacked result cards`, () => {
+  assert.match(css, /\.compare-panel \.compare-picker-card\{[^}]*border:0/);
+  assert.match(css, /\.compare-panel \.compare-side-card\{[^}]*border:0/);
+  assert.match(css, /\.compare-panel \.diff-stat\{[^}]*border:0/);
+  assert.match(css, /\.compare-panel \.diff-toolbar\{[^}]*border:0/);
+  assert.match(css, /\.compare-panel \.visual-compare\{border:0/);
+  assert.match(css, /\.compare-panel \.visual-stage-shell\{[^}]*border:1px solid var\(--line\)/);
+  assert.match(css, /\.compare-panel \.visual-change-card\{[^}]*border:0/);
+  assert.match(css, /\.compare-panel \.compare-side-card:last-child\{padding:14px 0 0;border:0;border-top:1px solid var\(--line\)/);
+  for (const id of ['compareFromSelect', 'compareToSelect', 'compareVersionsButton',
+    'diffSummary', 'compareFilterList', 'compareSlideList', 'visualStageShell']) assert.ok(html.includes(`id="${id}"`), id);
+});
+
 test(`${target}: existing shield/check privacy badge stays byte-identical`, () => {
   const badge = html.match(/<div class="local-badge">[\s\S]*?<\/div>/)[0];
   assert.equal(hash(badge), '77fe3f6c6d68577b9afb9fd4cecf97297dac96dcf5609a05bfe4ab93909bc85d');
