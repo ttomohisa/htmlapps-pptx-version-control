@@ -42,6 +42,7 @@ function setup() {
     renderBranchPicker() {}, renderBranches() {}, stopVisualBlink() {}, resetMergeResolverState() {}, refreshLocalProjects: async () => {},
     openBranchDialog() {}, loadStoredCommit() {}, exportGitFriendly() {}, showCommitDiff() {},
     confirmBranchDialog() {}, confirmDeleteBranch() {}, confirmDeleteProject() {}, createRevertVersion() {},
+    confirmDiscardWorkingChanges: () => true, // All existing fixture revisions are already saved.
     renderProject() {}, clearRendererPairHandles() {}, setStatus() {}, updateProgress() {},
     activateTab() {}, fmt: x => x, errorText: e => e.message,
     showState: phase => { context.state.phase = phase; },
