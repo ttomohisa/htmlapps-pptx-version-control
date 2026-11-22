@@ -53,6 +53,45 @@ await page.evaluate(()=>scrollTo({left:0,top:0,behavior:'instant'}));await page.
 assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),label+': page width');if(cfg.nav&&width<=cfg.bp)await bounds(page.locator(cfg.nav),width,height,label);
 await auditHeader(page, label);
         if (file === 'dist/index.html' && [320,360,390,1360].includes(width)) await page.screenshot({path:path.join(evidence, `${language}-${width}-main.png`)});
+
+        if (file === 'dist/index.html' && [320,1360].includes(width)) {
+          // Keep the real application path: load a sample, save Version 1, then
+          // open both detail drawers and the comparison panel.
+          if (!(await page.locator('#projectState').isVisible())) {
+            await page.locator('#pptxInput').setInputFiles(path.resolve('examples/sample-presentation.pptx'));
+            await page.locator('#projectState').waitFor();
+          }
+          await page.locator('#projectNameInput').fill('Layout regression');
+          await page.locator('#commitMessageInput').fill('First version');
+          await page.locator(width <= cfg.bp ? '#mobileSaveVersionButton' : '#saveVersionButton').click();
+          await page.locator('#projectTools').waitFor({state:'visible',timeout:20000});
+          await page.locator('#projectTools > summary').click();
+          await page.locator('#technicalDrawer > summary').click();
+          await page.locator('#diffTab').click();
+          assert.equal(await page.locator('#diffPanel').isVisible(),true,label+': compare panel opens');
+          const hierarchy = await page.evaluate(() => {
+            const value = (selector, property) => getComputedStyle(document.querySelector(selector)).getPropertyValue(property).trim();
+            return {
+              projectStatBackground:value('.project-tools .repo-stat','background-color'),
+              fileCardBorder:value('.technical-drawer .file-card','border-top-width'),
+              exportCardBorder:value('.technical-drawer .export-card','border-top-width'),
+              comparePickerBorder:value('.compare-panel .compare-picker-card','border-top-width'),
+              compareSideBorder:value('.compare-panel .compare-side-card','border-top-width'),
+              slideStageBorder:value('.compare-panel .visual-stage-shell','border-top-width'),
+              pageWidth:document.documentElement.scrollWidth,
+              viewportWidth:innerWidth
+            };
+          });
+          assert.equal(hierarchy.projectStatBackground,'rgba(0, 0, 0, 0)',label+': project stats have no extra cards');
+          assert.equal(hierarchy.fileCardBorder,'0px',label+': file information has no nested card');
+          assert.equal(hierarchy.exportCardBorder,'0px',label+': export information has no nested card');
+          assert.equal(hierarchy.comparePickerBorder,'0px',label+': comparison picker is flat');
+          assert.equal(hierarchy.compareSideBorder,'0px',label+': comparison source is flat');
+          assert.equal(hierarchy.slideStageBorder,'1px',label+': actual slide stage keeps a boundary');
+          assert.ok(hierarchy.pageWidth<=hierarchy.viewportWidth+1,label+': expanded sections do not overflow '+JSON.stringify(hierarchy));
+          await page.screenshot({path:path.join(evidence,`${language}-${width}-sections.png`),fullPage:true});
+        }
+
         await page.locator('#helpButton').click();
         const visibleHelpText = await page.locator('#helpDialog').innerText();
         assert.doesNotMatch(visibleHelpText, /(?:EN\s*\/\s*JA|JA\s*[\/／]\s*EN|ヘッダーのEN|Use EN in the header)/, label + ': redundant language instructions removed');
