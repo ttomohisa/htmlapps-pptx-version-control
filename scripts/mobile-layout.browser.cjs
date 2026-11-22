@@ -84,7 +84,7 @@ await auditHeader(page, label);
           });
           assert.equal(hierarchy.projectStatBackground,'rgba(0, 0, 0, 0)',label+': project stats have no extra cards');
           assert.equal(hierarchy.fileCardBorder,'0px',label+': file information has no nested card');
-          assert.equal(hierarchy.exportCardBorder,'0px',label+': export information has no nested card');
+          assert.equal(hierarchy.exportCardBorder,width <= cfg.bp ? '1px' : '0px',label+': export information uses a section divider, not a nested card');
           assert.equal(hierarchy.comparePickerBorder,'0px',label+': comparison picker is flat');
           assert.equal(hierarchy.compareSideBorder,'0px',label+': comparison source is flat');
           assert.equal(hierarchy.slideStageBorder,'1px',label+': actual slide stage keeps a boundary');
