@@ -68,6 +68,26 @@ if (!shiftedInsertion.rows.some(row => row.original?.title.includes('Sales Overv
 if (!shiftedInsertion.rows.some(row => row.original?.title.includes('Closing') && row.revised?.title.includes('Closing'))) throw new Error('Closing was not matched across shifted slide ids');
 
 const textResult = run('text and number', snapshot([slide('s1', 1, [object('o1', { text: 'Revenue 1,200', fingerprint: 'a' })])]), snapshot([slide('s1', 1, [object('o1', { text: 'Revenue 1,450', fingerprint: 'b' })])]), { text: 1, number: 1 });
+
+const reorderedBefore = snapshot([slide('s-layer', 1, [
+  object('old-a', { text: 'Layer A', fingerprint: 'layer-a' }),
+  object('old-b', { text: 'Layer B', fingerprint: 'layer-b' })
+])]);
+const reorderedAfter = snapshot([slide('s-layer', 1, [
+  object('new-b', { text: 'Layer B', fingerprint: 'layer-b' }),
+  object('new-a', { text: 'Layer A', fingerprint: 'layer-a' })
+])]);
+run('stacking order with regenerated object IDs', reorderedBefore, reorderedAfter,
+  { object: 1, changedSlides: 1 });
+run('line break is a text change',
+  snapshot([slide('s-text', 1, [object('o', { text: 'Total\n100 yen', fingerprint: 'old' })])]),
+  snapshot([slide('s-text', 1, [object('o', { text: 'Total 100 yen', fingerprint: 'new' })])]),
+  { text: 1, changedSlides: 1 });
+run('full-width letters are a text change',
+  snapshot([slide('s-text', 1, [object('o', { text: 'ＡＢＣ', fingerprint: 'old' })])]),
+  snapshot([slide('s-text', 1, [object('o', { text: 'ABC', fingerprint: 'new' })])]),
+  { text: 1, changedSlides: 1 });
+
 const image = { kind: 'image', sha256: 'abc', size: 123 };
 run('image move is layout', snapshot([slide('s1', 1, [object('img', { type: 'image', resource: image, fingerprint: 'a' })])]), snapshot([slide('s1', 1, [object('img', { type: 'image', resource: image, x: 50000, fingerprint: 'b' })])]), { image: 0, layout: 1 });
 run('formatting', snapshot([slide('s1', 1, [object('o1', { text: 'Title', size: 20, fingerprint: 'a' })])]), snapshot([slide('s1', 1, [object('o1', { text: 'Title', size: 24, fingerprint: 'b' })])]), { formatting: 1 });
