@@ -266,6 +266,7 @@ foreach ($test in @(
   "header-language-regression.mjs",
   "version-dialog-regression.mjs",
   "comparison-ownership-regression.mjs",
+  "comparison-ui-regression.mjs",
   "compare-core-regression.mjs",
   "pptx-integrity-regression.mjs",
   "visual-compare-hardening-regression.mjs",
