@@ -2,6 +2,10 @@
 
 ## 1.2.0 - 2026-11-23
 
+- Hide the introductory copy and local-processing badge after opening a PPTX, while keeping them on the home screen.
+- Simplify preview and comparison labels, retain preview progress/errors, and align the merge heading at the top.
+- Replace heavy history/project-action button outlines with compact grouped controls, including two-column phone layouts.
+
 - Detect object stacking-order changes even when PowerPoint regenerates object IDs.
 - Report line-break and full-width/half-width changes in the text-diff category.
 - Validate project-backup references and PPTX structure before saving an imported history.

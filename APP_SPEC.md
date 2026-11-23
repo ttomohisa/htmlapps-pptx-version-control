@@ -1,5 +1,13 @@
 # PPTX Version Control — App Specification
 
+## v1.2.0 — Workspace UI refinement
+
+- Show the introductory copy and local-processing badge on the home view only. Hide both when loading, viewing, or managing a PPTX, and restore them when returning home.
+- Keep Preview available before committing a PPTX. Show the slide, navigation, and any loading/error status without redundant success or effect-limitation text. Retain a screen-reader-only panel heading.
+- Remove the explanatory paragraph above the comparison version pickers. Keep all comparison controls and safety notes.
+- Align Merge heading and explanatory text to the top of its toolbar at desktop widths.
+- Group History and Project Management actions visually, preserving every operation and touch targets on smartphones.
+
 ## v1.1.8 — Renderer dependency refresh
 
 - Update the bundled high-fidelity visual renderer to `@aiden0z/pptx-renderer` 1.4.0 while keeping the app fully offline at runtime and retaining the browser-only single-file distribution.

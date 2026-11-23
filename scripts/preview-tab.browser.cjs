@@ -23,6 +23,7 @@ async function main() {
       });
       try {
         await page.goto(pathToFileURL(path.resolve('dist/index.html')).href);
+        assert.equal(await page.locator('.page-intro').isVisible(), true, 'intro shown on home');
         await page.locator('#pptxInput').setInputFiles(path.resolve('examples/sample-presentation.pptx'));
         await page.locator('#previewPanel').waitFor({ state: 'visible', timeout: 30000 });
         assert.equal(await page.locator('#previewTab').getAttribute('aria-selected'), 'true', 'preview is initial tab before a save');
@@ -32,10 +33,11 @@ async function main() {
         await page.waitForFunction(() => {
           const host = document.querySelector('#previewHost');
           return host && host.querySelector(':scope > :not(.visual-render-fallback)') &&
-            document.querySelector('#previewStatus').textContent.length > 0 &&
             !/表示しています|Rendering/.test(document.querySelector('#previewStatus').textContent);
         }, null, { timeout: 30000 });
         assert.equal(await page.locator('#previewPosition').textContent(), '1 / ' + count);
+        assert.equal(await page.locator('#previewStatus').textContent(), '', 'success does not add a redundant preview message');
+        assert.equal(await page.locator('.page-intro').isVisible(), false, 'intro and privacy badge hidden after opening PPTX');
         assert.equal(await page.locator('#previewPrevButton').isDisabled(), true);
         assert.equal(await page.locator('#previewNextButton').isDisabled(), count === 1);
         const hostBox = await page.locator('#previewCanvas').boundingBox();
