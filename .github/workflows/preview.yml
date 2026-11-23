@@ -63,6 +63,8 @@ jobs:
         if ($LASTEXITCODE -ne 0) { throw "PPTX merge browser regression failed." }
         node scripts/renderer-upgrade.browser.cjs
         if ($LASTEXITCODE -ne 0) { throw "Renderer 1.4 browser regression failed." }
+        node scripts/capture-readme.browser.cjs
+        if ($LASTEXITCODE -ne 0) { throw "Release screenshots capture failed." }
     - name: Upload phone layout screenshots
       if: always()
       uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
