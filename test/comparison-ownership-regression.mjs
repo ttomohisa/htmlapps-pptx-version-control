@@ -36,7 +36,7 @@ function setup() {
     currentFileState:()=> 'changed',
     confirmDiscardWorkingChanges:()=>true, // Boundary tests proceed as if the user approved navigation.
     buildComparisonSession:async(from,to,{mode})=>({id:`${from.id}:${to.id}`,from,to,mode,result:{rows:[]},slidePairs:[]}),
-    clearRendererPairHandles(){events.push('clearRenderer');}, stopVisualBlink(){events.push('stopBlink');},
+    clearRendererPairHandles(){events.push('clearRenderer');}, clearPptxPreview(){events.push('clearPreview');}, stopVisualBlink(){events.push('stopBlink');},
     renderHistory(){events.push('history');},renderCompareControls(){events.push('controls');},renderDiff(){events.push('diff');},
     activateTab(tab){events.push(`activate:${tab}`);c.state.activeTab=tab;},
     renderRepositoryPanel(){},renderBranchPicker(){},renderBranches(){},resetMergeResolverState(){},refreshLocalProjects:async()=>{},
