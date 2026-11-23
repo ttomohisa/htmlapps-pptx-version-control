@@ -2,7 +2,7 @@
 
 ## 1.2.0 - 2026-11-23
 
-- Add a search for saved version names, original notes and filenames within the active branch.
+- Add a search for saved version names, original notes and filenames within the active branch; avoid rebuilding comparison pickers for each keystroke.
 - Add Previous change / Next change buttons that jump between changed slides matching current comparison filters.
 - Reveal selected mobile tabs automatically, show scroll-edge hints and support Arrow/Home/End keyboard navigation.
 

@@ -45,12 +45,12 @@ GitHub Pagesから最初のHTMLを読み込んだ後、PPTX解析、履歴保存
 
 ### HTMLをダウンロードして使う
 
-1. このリポジトリの [`dist/index.html`](dist/index.html) をダウンロードします。
-2. 最新版のChromeまたはEdgeで開きます。
+1. [最新のGitHub Release](https://github.com/ttomohisa/htmlapps-pptx-version-control/releases/latest) から通常版のHTMLをダウンロードします。リポジトリに保存されている [`pptx-version-control.html`](pptx-version-control.html) も使用できます。
+2. ChromeまたはEdgeで、そのHTMLファイルを開きます。
 
-生成物は単一HTMLです。`DecompressionStream` 対応ブラウザ向けに、より小さい自己展開版 `dist/index.self-extract.html` も同梱しています。
+Releaseには、`DecompressionStream` 対応ブラウザ用の小さい自己展開版もあります。`dist/index.html` と `dist/index.self-extract.html` はビルド時に生成されるファイルで、リポジトリにはコミットされていません。
 
-### 自分でビルドする（advance）
+### 自分でビルドする（開発者向け）
 
 1. このリポジトリをダウンロードまたはクローンします。
 2. Windowsで `build-standalone.bat` をダブルクリックするか、PowerShellから `./build-standalone.ps1` を実行します。
@@ -58,8 +58,6 @@ GitHub Pagesから最初のHTMLを読み込んだ後、PPTX解析、履歴保存
 4. 以降はそのHTML単体をインターネット接続なしで開けます。
 
 Python、Node.js、ローカルWebサーバーは不要です。Windows標準のPowerShellと `tar.exe` を使用します。
-
-マージでは対応するスライドとオブジェクトを保持し、競合する変更はマージ版を作る前に選択して解決します。
 
 ## 使い方
 
@@ -102,6 +100,8 @@ Python、Node.js、ローカルWebサーバーは不要です。Windows標準の
 古い版から別の編集を続けたい場合は、その保存版を起点に新しいBranchを作成します。
 
 ### BranchとMerge
+
+マージでは対応するスライドとオブジェクトを保持し、競合する変更はマージ版を作る前に選択して解決します。
 
 各Branchは独立したHEADを持ちます。別Branchを現在のBranchへ取り込むときは共通のBASEを探し、BASE / 現在 / 取り込み元を比較します。
 

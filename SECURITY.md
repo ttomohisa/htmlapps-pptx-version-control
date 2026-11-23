@@ -18,7 +18,7 @@ Include:
 
 ## Trust model
 
-The default template is a static browser application with no backend. Its primary protections are:
+PPTX Version Control is a static browser application without a backend. Its primary protections are:
 
 - No ordinary runtime CDN/API connection (`connect-src 'none'`). Optional peer-to-peer WebRTC must be explicit in the product specification and must not introduce hidden signaling/STUN/TURN services.
 - Explicitly pinned and embedded third-party files.
@@ -29,11 +29,15 @@ The default template is a static browser application with no backend. Its primar
 
 A generated HTML file is executable code. Distribute it through a trusted channel and verify hashes for high-trust workflows.
 
-If an app uses `components/webrtc-qr-pairing.html`, treat the paired browser as an explicit data recipient. “No server upload” does not mean “data never leaves this device.” Keep the manual signaling and `iceServers: []` boundary visible in the UI/help text, and do not silently add STUN/TURN later.
+PPTX Version Control does not use WebRTC. The reusable WebRTC component in `components/` is documentation and source material for other applications, not a network path in this app.
+
+PPTX and `.pptxvc` files are handled in the browser. PPTX parsing limits ZIP entry counts, expansion sizes and unsafe paths; backup import checks referenced object sizes, hashes and structural relationships before persistence. Visual rendering blocks linked external media while allowing embedded media. These checks reduce risk but cannot prove that every PowerPoint extension behaves safely or renders faithfully.
+
+History is saved in browser IndexedDB, not remotely backed up. Clearing site data or a browser storage eviction can erase it. Users should export important projects as `.pptxvc` files.
 
 ## Input files
 
-Applications created from this template may parse untrusted local files. Implementations should:
+This application parses untrusted local PPTX and `.pptxvc` files. Maintainers must:
 
 - Validate type, size, and structure before expensive processing.
 - Avoid unbounded allocation or recursion.

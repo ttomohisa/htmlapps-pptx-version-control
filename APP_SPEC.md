@@ -1,13 +1,13 @@
 # PPTX Version Control — App Specification
 
-## v1.2.0 — Review navigation and history search
+## v1.2.0 — Preview, review navigation, and history search
 
 - Search active-branch history by saved version name, original note, PPTX filename, version number, date or ID. Filtering never modifies stored commits or HEAD; opening a new project, returning home or switching branches clears the query.
 - Provide Previous change / Next change navigation for changed slides that match the current semantic category and Changed slides only filter. Keep the existing normal slide arrows for all visible slides, and display changed-slide progress with disabled endpoints.
 - On phones, reveal the selected workspace tab, indicate left/right overflow only when necessary, and support keyboard Arrow/Home/End switching across the five peer tabs.
 - Keep Japanese and English text, accessible input labels, failure/empty states, file:// support, and no-runtime-network behavior.
 
-## v1.2.0 — Workspace UI refinement
+### Workspace UI refinement
 
 - Show the introductory copy and local-processing badge on the home view only. Hide both when loading, viewing, or managing a PPTX, and restore them when returning home.
 - Keep Preview available before committing a PPTX. Show the slide, navigation, and any loading/error status without redundant success or effect-limitation text. Retain a screen-reader-only panel heading.

@@ -111,7 +111,10 @@ Keep source in one HTML while it remains understandable. When an app grows subst
 - Clear state ownership.
 - A build that fails on missing input.
 
-## PPTX semantic layer (v0.2.0)
+## PPTX package, history, and comparison layers
+
+The original semantic model was introduced in v0.2.0. In the current app it also feeds local history, comparisons, and 3-way merge; those are implemented features rather than future layers.
+
 
 PPTX Version Control keeps package preservation and comparison semantics separate:
 
@@ -122,7 +125,9 @@ PPTX ZIP / OOXML
        -> theme / relationship resolution
        -> Presentation / Slide / Object semantic model
        -> canonical XML + SHA-256 fingerprints
-       -> future repository / diff / merge layers
+       -> semantic diff and read-only rendered comparisons
+       -> IndexedDB project / commit / tree / ref history
+       -> branch selection and validated 3-way merge
 ```
 
 The semantic layer never becomes the sole source for reconstructing the PPTX. Unsupported or unknown OOXML remains in the original package.
