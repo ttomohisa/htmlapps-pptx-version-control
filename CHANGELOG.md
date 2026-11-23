@@ -1,12 +1,12 @@
 # Changelog
 
-## 1.1.9 - 2026-11-22
+## 1.2.0 - 2026-11-23
 
 - Detect object stacking-order changes even when PowerPoint regenerates object IDs.
 - Report line-break and full-width/half-width changes in the text-diff category.
 - Validate project-backup references and PPTX structure before saving an imported history.
 - Warn before navigation discards a loaded PPTX that has not been saved as a version.
-- Align the standalone app and the next GitHub Release under a new patch version.
+- Align the standalone app and GitHub Release under the new minor version.
 - Standardize the phone footer, Help build metadata, and local-processing badge.
 - Replace the hero heading and separate description with a single concise bilingual introduction; retain an accessible page heading and tighten mobile spacing.
 - Remove the Browser Kitty brand reference from Help privacy text in both languages.
@@ -15,6 +15,9 @@
 - Reduce the comparison header to three slide totals and an optional breakdown of detailed change categories; preserve all filters and visual comparison modes.
 - Wait for asynchronous branch/version options before swapping comparison sides and re-running the comparison, including cross-branch and unsaved working versions.
 - Refresh primary, secondary, destructive, icon, filter, and mode buttons with consistent focus and touch affordances.
+
+- Add a standalone, local slide preview tab alongside History / Compare / Branches / Merge, available before the first version is saved.
+- Render one slide at a time with slide navigation, mobile horizontal slide chooser, and clear preview fallbacks; reuse the bundled renderer without runtime data uploads.
 
 ## 1.1.8 - 2026-11-13
 
