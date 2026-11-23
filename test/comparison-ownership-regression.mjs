@@ -48,7 +48,7 @@ function setup() {
   };
   vm.createContext(c);
   vm.runInContext(lines.find(x=>x.startsWith('const state=')).replace('const state=','state='),c);
-  const names=['comparisonEmptyInput','comparisonInputFromCommit','comparisonInputFromWorking','currentWorkingComparable',
+  const names=['historySearchMatches','comparisonEmptyInput','comparisonInputFromCommit','comparisonInputFromWorking','currentWorkingComparable',
     'compareInputFromUi','comparisonSessionLegacy','applyComparisonSession','showCompareDiff','showCommitDiff','showWorkingVisualCompare','buildHeadWorkingComparisonSession',
     'updateCompareButtonState','invalidateVersionDialog','closeVersionDialog','invalidateVersionContext','startNewProject','loadFile','openProject','loadStoredCommit','switchBranch','confirmBranchDialog','branchRefName','validBranchName'];
   // The new helpers may be absent during RED, so existing paths still exercise

@@ -142,7 +142,7 @@ test(`${target}: buttons have distinct primary, neutral, selected and danger sty
 });
 
 test(`${target}: Preview is a peer of History, Compare, Branches and Merge`, () => {
-  const tabs = html.match(/<div class="tabs" role="tablist">([\s\S]*?)<\/div>/)?.[1];
+  const tabs = html.match(/<div class="tabs" id="projectTabs" role="tablist"[^>]*>([\s\S]*?)<\/div>/)?.[1];
   assert.ok(tabs);
   for (const tab of ['historyTab', 'diffTab', 'branchesTab', 'mergeTab', 'previewTab'])
     assert.ok(tabs.includes(`id="${tab}"`), tab);
