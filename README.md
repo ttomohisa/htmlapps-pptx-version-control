@@ -23,6 +23,7 @@ Visual Compare bundles `@aiden0z/pptx-renderer` 1.4.0. The renderer is configure
 
 - **Save PowerPoint versions locally** — Create a project from a PPTX, then drop each edited PPTX into the same project as a new version.
 - **Review meaningful changes** — Compare text, numbers, images, objects, layout, formatting, slide order, and speaker notes instead of raw OOXML noise.
+- **Preview the current PPTX** — Use the Preview tab to view each slide with next/previous controls or jump from the slide list, even before saving the first version.
 - **Compare the actual slides visually** — Review saved versions, branch heads, or the current unsaved edit with Side by side, Overlay, Split, and Blink views.
 - **Keep Git-like history in the browser** — Project, commit, branch, ref, and HEAD data are stored in IndexedDB with SHA-256 content-addressed objects.
 - **Branch without duplicating presentations manually** — Create, switch, rename, and delete branches, including branches created from older saved versions.
@@ -57,7 +58,7 @@ Python, Node.js, and a local web server are not required. The builder uses Windo
 
 ## Usage
 
-1. Drop or choose the first `.pptx` file.
+1. Drop or choose the first `.pptx` file, then use **Preview** to inspect its slides.
 2. Enter a project name and version note, then save the first version.
 3. Edit the presentation normally in PowerPoint.
 4. Drop the edited PPTX into the **edited PPTX** area, or choose it with the file button.
