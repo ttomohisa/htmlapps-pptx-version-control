@@ -140,6 +140,38 @@ test(`${target}: buttons have distinct primary, neutral, selected and danger sty
   assert.match(css, /\.compare-swap-button\.button\.icon-button\{width:42px;height:42px;border-radius:50%/);
   assert.match(css, /@media\(max-width:760px\)\{[\s\S]*?\.button\{min-height:44px;padding:10px 12px\}/);
 });
+
+test(`${target}: Preview is a peer of History, Compare, Branches and Merge`, () => {
+  const tabs = html.match(/<div class="tabs" role="tablist">([\s\S]*?)<\/div>/)?.[1];
+  assert.ok(tabs);
+  for (const tab of ['historyTab', 'diffTab', 'branchesTab', 'mergeTab', 'previewTab'])
+    assert.ok(tabs.includes(`id="${tab}"`), tab);
+  assert.ok(html.includes('id="previewPanel" role="tabpanel" aria-labelledby="previewTab"'));
+  assert.ok(html.includes('id="previewSlideList"'));
+  assert.ok(html.includes('id="previewCanvas"'));
+  assert.ok(html.includes('id="previewHost"'));
+  assert.ok(html.includes('id="previewPrevButton"'));
+  assert.ok(html.includes('id="previewNextButton"'));
+  assert.ok(html.includes("tabPreview:'プレビュー'"));
+  assert.ok(html.includes("tabPreview:'Preview'"));
+  assert.ok(html.includes("state.activeTab=state.project?'history':'preview'"), 'available before first save');
+  assert.ok(html.includes('if(navigation)navigation.hidden=!state.model;'));
+  assert.ok(html.includes("$('#previewTab').addEventListener('click',()=>activateTab('preview'))"));
+  assert.ok(css.includes('.preview-layout{display:grid;grid-template-columns:minmax(165px,225px) minmax(0,1fr)'));
+  assert.ok(css.includes('.preview-slide-list{display:flex;gap:4px;min-width:0}'), 'mobile picker scrolls horizontally');
+});
+
+test(`${target}: Preview reuses the bundled local renderer and disposes stale handles`, () => {
+  assert.ok(html.includes("RendererFoundation.prepare(comparisonInputFromWorking({model,file}))"));
+  assert.ok(html.includes('RendererFoundation.renderSlide(prepared,slide)'));
+  assert.ok(html.includes('RendererFoundation.releaseHandle(state.previewHandle)'));
+  assert.ok(html.includes("if(state.activeTab==='preview'&&which!=='preview')clearPptxPreview()"));
+  assert.ok(html.includes("if(which==='preview'&&state.model)renderPptxPreview()"));
+  assert.ok(html.includes('previewRenderEpoch:0'));
+  assert.ok(html.includes('previewHandle:null'));
+  assert.ok(html.includes('previewLimitation:'));
+});
+
 test(`${target}: existing shield/check privacy badge stays byte-identical`, () => {
   const badge = html.match(/<div class="local-badge">[\s\S]*?<\/div>/)[0];
   assert.equal(hash(badge), '77fe3f6c6d68577b9afb9fd4cecf97297dac96dcf5609a05bfe4ab93909bc85d');
