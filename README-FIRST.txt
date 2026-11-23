@@ -11,6 +11,7 @@ For development:
 2. Change src/index.template.html, not generated dist/index.html.
 3. Keep Japanese / English help and README, privacy guarantees, and third-party notices in sync.
 4. Run the PowerShell preflight and scripts/check-repository.ps1 before submitting a PR.
+   The PR preview runs scripts/capture-readme.browser.cjs and attaches current Japanese / English comparison screenshots for visual review.
 5. Verify both dist/index.html and dist/index.self-extract.html with real PPTX files, desktop / phone layouts, and runtime network monitoring.
 6. After merging into main, check the GitHub Pages deployment, tag, and GitHub Release.
 

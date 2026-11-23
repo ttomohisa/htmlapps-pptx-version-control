@@ -6,6 +6,7 @@
 - Provide Previous change / Next change navigation for changed slides that match the current semantic category and Changed slides only filter. Keep the existing normal slide arrows for all visible slides, and display changed-slide progress with disabled endpoints.
 - On phones, reveal the selected workspace tab, indicate left/right overflow only when necessary, and support keyboard Arrow/Home/End switching across the five peer tabs.
 - Keep Japanese and English text, accessible input labels, failure/empty states, file:// support, and no-runtime-network behavior.
+- Keep bilingual README screenshots representative of the actual current UI, and validate documentation links against tracked repository files.
 
 ### Workspace UI refinement
 

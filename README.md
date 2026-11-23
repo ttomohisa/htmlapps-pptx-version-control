@@ -14,7 +14,7 @@ A browser-only PowerPoint version-control tool for `.pptx` files. It stores proj
 
 GitHub Pages delivers the initial HTML. After it loads, PPTX parsing, version storage, semantic diff, branch and merge processing, project import/export, and Git-friendly export are processed locally on your device. The PPTX files you select are not uploaded by the app.
 
-[![PPTX Version Control screenshot](assets/screenshot-en.png)](https://ttomohisa.github.io/htmlapps-pptx-version-control/)
+[![PPTX Version Control compare screen showing changed slides and side-by-side rendering](assets/screenshot-en.png)](https://ttomohisa.github.io/htmlapps-pptx-version-control/)
 
 ## Features
 

@@ -14,7 +14,7 @@ PowerPoint（PPTX）の変更履歴を、内容の意味と実際の見た目の
 
 GitHub Pagesから最初のHTMLを読み込んだ後、PPTX解析、履歴保存、Semantic Diff、Branch / Merge、プロジェクトの入出力、Git向け書き出しは端末内で処理されます。選択したPPTXがアプリからサーバーへ送信されることはありません。
 
-[![PPTX Version Controlの画面](assets/screenshot.png)](https://ttomohisa.github.io/htmlapps-pptx-version-control/)
+[![PPTX Version Controlの比較画面（変更スライドと左右の見た目比較）](assets/screenshot.png)](https://ttomohisa.github.io/htmlapps-pptx-version-control/)
 
 ## 主な機能
 

@@ -3,6 +3,7 @@
 ## 1.2.0 - 2026-11-23
 
 - Add a search for saved version names, original notes and filenames within the active branch; avoid rebuilding comparison pickers for each keystroke.
+- Refresh both README screenshots from actual bilingual Chromium comparison sessions and check documentation links before release.
 - Add Previous change / Next change buttons that jump between changed slides matching current comparison filters.
 - Reveal selected mobile tabs automatically, show scroll-edge hints and support Arrow/Home/End keyboard navigation.
 

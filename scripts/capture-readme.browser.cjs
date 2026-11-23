@@ -1,7 +1,6 @@
 'use strict';
-// One-off release screenshot capture with a synthetic PPTXVC test fixture.
-// The base64 stream is emitted solely so a read-only CI run can supply
-// screenshots without giving pull-request code write credentials.
+// Capture current rendered comparison UI with the checked-in synthetic fixture.
+// Artifacts are saved only to the CI screenshot folder, never to user storage.
 const {chromium}=require('playwright');
 const path=require('node:path');
 const {pathToFileURL}=require('node:url');
@@ -31,10 +30,10 @@ async function main(){
     await page.waitForTimeout(200);
     if(errors.length)throw Error(errors.join('; '));
     const png=await page.screenshot({type:'png',fullPage:false,animations:'disabled'});
-    const base64=png.toString('base64'),chunkSize=4000,total=Math.ceil(base64.length/chunkSize);
-    console.log('BKSCREEN_BEGIN:'+locale+':'+base64.length+':'+total);
-    for(let i=0;i<total;i++)console.log('BKSCREEN_PART:'+locale+':'+i+':'+base64.slice(i*chunkSize,(i+1)*chunkSize));
-    console.log('BKSCREEN_END:'+locale);
+    const fs=require('node:fs'),outDir=path.resolve('test-results/mobile-layout');
+    fs.mkdirSync(outDir,{recursive:true});
+    fs.writeFileSync(path.join(outDir,'readme-'+locale+'.png'),png);
+    console.log('CAPTURED readme-'+locale+'.png ('+png.length+' bytes)');
    }finally{await ctx.close()}
   }
  }finally{await browser.close()}
