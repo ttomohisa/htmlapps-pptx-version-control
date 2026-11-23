@@ -2,6 +2,10 @@
 
 ## 1.2.0 - 2026-11-23
 
+- Add a search for saved version names, original notes and filenames within the active branch.
+- Add Previous change / Next change buttons that jump between changed slides matching current comparison filters.
+- Reveal selected mobile tabs automatically, show scroll-edge hints and support Arrow/Home/End keyboard navigation.
+
 - Hide the introductory copy and local-processing badge after opening a PPTX, while keeping them on the home screen.
 - Simplify preview and comparison labels, retain preview progress/errors, and align the merge heading at the top.
 - Replace heavy history/project-action button outlines with compact grouped controls, including two-column phone layouts.

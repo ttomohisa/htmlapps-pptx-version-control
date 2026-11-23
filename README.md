@@ -24,6 +24,9 @@ Visual Compare bundles `@aiden0z/pptx-renderer` 1.4.0. The renderer is configure
 - **Save PowerPoint versions locally** — Create a project from a PPTX, then drop each edited PPTX into the same project as a new version.
 - **Review meaningful changes** — Compare text, numbers, images, objects, layout, formatting, slide order, and speaker notes instead of raw OOXML noise.
 - **Preview the current PPTX** — Use the Preview tab to view each slide with next/previous controls or jump from the slide list, even before saving the first version.
+- **Search version history** — Find saved versions in the active branch by display name, note or source PPTX filename.
+- **Jump between changed slides** — Previous change and Next change move to changed slides matching the current filters.
+- **Switch tabs on a phone** — Edge hints and automatic active-tab scrolling make all five workspace tabs reachable.
 - **Compare the actual slides visually** — Review saved versions, branch heads, or the current unsaved edit with Side by side, Overlay, Split, and Blink views.
 - **Keep Git-like history in the browser** — Project, commit, branch, ref, and HEAD data are stored in IndexedDB with SHA-256 content-addressed objects.
 - **Branch without duplicating presentations manually** — Create, switch, rename, and delete branches, including branches created from older saved versions.
@@ -75,6 +78,8 @@ A small first-run sample is included at `examples/sample-presentation.pptx`.
 
 ### Visual Compare
 
+**Previous change** and **Next change** move only through changed slides matching the active filters. The regular slide arrows still navigate every visible slide.
+
 The **Compare** tab keeps Semantic Diff as the source of truth and adds rendered-slide confirmation. Choose a Branch and Version on each side, then review the selected slide with:
 
 - **Side by side** — Shows both versions at the same slide geometry. On narrow screens the two slides stack vertically.
@@ -87,6 +92,8 @@ Use category filters or **Changed slides only** to narrow the result list. Visua
 After dropping an edited PPTX, **Visual Compare** can also compare the current branch HEAD with that unsaved file before you save a new version. This review is read-only and does not create a commit.
 
 ### History and restore
+
+History search filters versions within the currently selected branch without changing saved versions or HEAD.
 
 In an older History row, **Compare with latest** compares that saved version with the current branch’s saved HEAD at the moment you click. It keeps the loaded PPTX, checkout and branch unchanged, including unsaved edits. **View changes** still compares with the previous version. Changing project, branch or source discards pending comparisons, so delayed results or errors cannot replace your newer work.
 
