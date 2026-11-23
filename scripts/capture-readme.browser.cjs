@@ -25,7 +25,8 @@ async function main(){
     await page.waitForFunction(()=>{const a=document.querySelector('#compareFromSelect')?.value,b=document.querySelector('#compareToSelect')?.value;return a&&b&&a!==b&&!document.querySelector('#compareVersionsButton').disabled});
     await page.locator('#compareVersionsButton').click();
     await page.waitForFunction(()=>{const status=document.querySelector('#visualRenderStatus')?.textContent||'';return !document.querySelector('#diffContent').hidden && /見た目比較を表示|Visual comparison is ready|Semantic changes are still available|差分情報は確認/.test(status)},null,{timeout:60000});
-    await page.waitForTimeout(350);
+    await page.waitForFunction(()=>!document.querySelector('#appToast')?.classList.contains('show'),null,{timeout:10000});
+    await page.waitForTimeout(200);
     await page.evaluate(()=>{const el=document.querySelector('#diffSummary');const y=window.scrollY+el.getBoundingClientRect().top-145;window.scrollTo({top:Math.max(0,y),behavior:'instant'})});
     await page.waitForTimeout(200);
     if(errors.length)throw Error(errors.join('; '));
