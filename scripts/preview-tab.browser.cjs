@@ -28,6 +28,14 @@ async function main() {
         await page.locator('#previewPanel').waitFor({ state: 'visible', timeout: 30000 });
         assert.equal(await page.locator('#previewTab').getAttribute('aria-selected'), 'true', 'preview is initial tab before a save');
         assert.equal(await page.locator('#historyTab').isVisible(), false, 'history is not actionable before initial save');
+        // No hidden destination may become active before the first commit.
+        await page.locator('#previewTab').focus();
+        for (const key of ['ArrowLeft','ArrowRight','Home','End']) {
+          await page.keyboard.press(key);
+          assert.equal(await page.locator('#previewTab').getAttribute('aria-selected'),'true',
+            key+': unsaved workspace must stay on Preview');
+          assert.equal(await page.locator('#previewPanel').isVisible(),true,key+': preview remains visible');
+        }
         const count = await page.locator('#previewSlideList .preview-slide-button').count();
         assert.ok(count > 0, 'slides are listed without requiring a project commit');
         await page.waitForFunction(() => {

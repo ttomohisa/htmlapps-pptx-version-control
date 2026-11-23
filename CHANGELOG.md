@@ -5,7 +5,7 @@
 - Add a search for saved version names, original notes and filenames within the active branch; avoid rebuilding comparison pickers for each keystroke.
 - Refresh both README screenshots from actual bilingual Chromium comparison sessions and check documentation links before release.
 - Add Previous change / Next change buttons that jump between changed slides matching current comparison filters.
-- Reveal selected mobile tabs automatically, show scroll-edge hints and support Arrow/Home/End keyboard navigation.
+- Reveal selected mobile tabs automatically, show scroll-edge hints and support Arrow/Home/End keyboard navigation without activating hidden tabs before the first save.
 
 - Hide the introductory copy and local-processing badge after opening a PPTX, while keeping them on the home screen.
 - Simplify preview and comparison labels, retain preview progress/errors, and align the merge heading at the top.

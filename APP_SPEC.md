@@ -4,7 +4,7 @@
 
 - Search active-branch history by saved version name, original note, PPTX filename, version number, date or ID. Filtering never modifies stored commits or HEAD; opening a new project, returning home or switching branches clears the query.
 - Provide Previous change / Next change navigation for changed slides that match the current semantic category and Changed slides only filter. Keep the existing normal slide arrows for all visible slides, and display changed-slide progress with disabled endpoints.
-- On phones, reveal the selected workspace tab, indicate left/right overflow only when necessary, and support keyboard Arrow/Home/End switching across the five peer tabs.
+- On phones, reveal the selected workspace tab, indicate left/right overflow only when necessary, and support keyboard Arrow/Home/End switching across visible peer tabs. Before the first save, only Preview is eligible; hidden tabs must never activate.
 - Keep Japanese and English text, accessible input labels, failure/empty states, file:// support, and no-runtime-network behavior.
 - Keep bilingual README screenshots representative of the actual current UI, and validate documentation links against tracked repository files.
 
