@@ -43,7 +43,7 @@ function setup() {
     openBranchDialog() {}, loadStoredCommit() {}, exportGitFriendly() {}, showCommitDiff() {},
     confirmBranchDialog() {}, confirmDeleteBranch() {}, confirmDeleteProject() {}, createRevertVersion() {},
     confirmDiscardWorkingChanges: () => true, // All existing fixture revisions are already saved.
-    renderProject() {}, clearRendererPairHandles() {}, setStatus() {}, updateProgress() {},
+    renderProject() {}, clearRendererPairHandles() {}, clearPptxPreview() {}, setStatus() {}, updateProgress() {},
     activateTab() {}, fmt: x => x, errorText: e => e.message,
     showState: phase => { context.state.phase = phase; },
     parsePresentation: async file => ({ filename: file.name, sourceSha256: 'gamma', fingerprint: 'gamma', _zip: { id: 'gamma-package' } }),
