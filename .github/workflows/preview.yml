@@ -55,6 +55,8 @@ jobs:
         if ($LASTEXITCODE -ne 0) { throw "Phone layout browser regression failed." }
         node scripts/comparison-ui.browser.cjs
         if ($LASTEXITCODE -ne 0) { throw "Comparison picker browser regression failed." }
+        node scripts/preview-tab.browser.cjs
+        if ($LASTEXITCODE -ne 0) { throw "Standalone slide preview browser regression failed." }
         node scripts/pptx-integrity.browser.cjs
         if ($LASTEXITCODE -ne 0) { throw "PPTX merge browser regression failed." }
         node scripts/renderer-upgrade.browser.cjs
