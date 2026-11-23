@@ -19,6 +19,8 @@ async function main(){
     await page.locator('#projectState').waitFor({state:'visible',timeout:30000});
     await page.locator('#historyTab').click();
     const rows=page.locator('#historyList .history-row'),before=await rows.count();
+    await page.waitForFunction(()=>document.querySelector('#compareFromSelect')?.options.length>=2);
+    await page.evaluate(()=>window.__searchCompareOption=document.querySelector('#compareFromSelect').options[0]);
     assert.ok(before>=2,'fixture has saved versions');
     const title=(await rows.first().locator('.history-message').textContent()).trim();
     await page.locator('#historySearchInput').fill(title);
@@ -29,6 +31,7 @@ async function main(){
     assert.equal(await page.locator('#historyList .repo-empty').count(),1,'no matches message');
     await page.locator('#historySearchInput').fill('');
     assert.equal(await rows.count(),before,'clearing search restores entries');
+    assert.equal(await page.evaluate(()=>window.__searchCompareOption===document.querySelector('#compareFromSelect').options[0]),true,'search must not rebuild comparison selectors');
     await page.locator('#diffTab').click();
     await page.waitForFunction(()=>document.querySelector('#compareFromSelect')?.options.length>=2);
     await page.locator('#compareToBranchSelect').selectOption('refs/heads/audit-incoming');

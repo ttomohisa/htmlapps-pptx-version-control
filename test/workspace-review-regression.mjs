@@ -35,3 +35,8 @@ test('changed-review traversal ignores unchanged slides and respects comparison 
  c.state.compareFilter='all';c.state.compareChangedOnly=true;
  assert.deepEqual(Array.from(c.visibleComparisonIndexes()),[1,3,4]);
 });
+
+test('history search input updates only the history list, not comparison pickers',()=>{
+ assert.match(source, /renderHistory\(\{refreshCompare=true\}=\{\}\)/);
+ assert.match(source, /historySearch=e\.target\.value;renderHistory\(\{refreshCompare:false\}\)/);
+});
