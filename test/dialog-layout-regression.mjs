@@ -51,7 +51,7 @@ test(`${target}: next-action panel uses a flat neutral surface`, () => {
 });
 
 test(`${target}: Hero has only one visible explanatory paragraph, with accessible heading`, () => {
-  const intro = html.match(/<section class="page-intro">([\s\S]*?)<div class="local-badge">/)?.[1];
+  const intro = html.match(/<section class="page-intro" id="pageIntro">([\s\S]*?)<div class="local-badge">/)?.[1];
   assert.ok(intro, 'Hero section should exist');
   assert.ok(intro.includes('<h1 class="sr-only">PPTX Version Control</h1>'), 'Heading is accessible but not visible');
   assert.ok(intro.includes('data-i18n="lead">PowerPoint（PPTX）の編集履歴を保存して、版ごとの変更点を比較できます。'));
@@ -169,7 +169,7 @@ test(`${target}: Preview reuses the bundled local renderer and disposes stale ha
   assert.ok(html.includes("if(which==='preview'&&state.model)renderPptxPreview()"));
   assert.ok(html.includes('previewRenderEpoch:0'));
   assert.ok(html.includes('previewHandle:null'));
-  assert.ok(html.includes('previewLimitation:'));
+  assert.ok(!html.includes('previewLimitation:'), 'static preview disclaimer was removed from the main view');
 });
 
 test(`${target}: existing shield/check privacy badge stays byte-identical`, () => {
