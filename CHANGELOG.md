@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.2.0 - 2026-11-23
+
+- Add a search for saved version names, original notes and filenames within the active branch; avoid rebuilding comparison pickers for each keystroke.
+- Refresh both README screenshots from actual bilingual Chromium comparison sessions and check documentation links before release.
+- Add Previous change / Next change buttons that jump between changed slides matching current comparison filters.
+- Reveal selected mobile tabs automatically, show scroll-edge hints and support Arrow/Home/End keyboard navigation without activating hidden tabs before the first save.
+
+- Hide the introductory copy and local-processing badge after opening a PPTX, while keeping them on the home screen.
+- Simplify preview and comparison labels, retain preview progress/errors, and align the merge heading at the top.
+- Replace heavy history/project-action button outlines with compact grouped controls, including two-column phone layouts.
+
+- Detect object stacking-order changes even when PowerPoint regenerates object IDs.
+- Report line-break and full-width/half-width changes in the text-diff category.
+- Validate project-backup references and PPTX structure before saving an imported history.
+- Warn before navigation discards a loaded PPTX that has not been saved as a version.
+- Align the standalone app and GitHub Release under the new minor version.
+- Standardize the phone footer, Help build metadata, and local-processing badge.
+- Replace the hero heading and separate description with a single concise bilingual introduction; retain an accessible page heading and tighten mobile spacing.
+- Remove the Browser Kitty brand reference from Help privacy text in both languages.
+- Simplify Project Management, File and Analysis Details, and Comparison Results: retain section boundaries, replace nested cards with dividers and aligned data rows, and group project actions.
+- Extend native Chromium checks for expanded sections and horizontal overflow at narrow widths.
+- Reduce the comparison header to three slide totals and an optional breakdown of detailed change categories; preserve all filters and visual comparison modes.
+- Wait for asynchronous branch/version options before swapping comparison sides and re-running the comparison, including cross-branch and unsaved working versions.
+- Refresh primary, secondary, destructive, icon, filter, and mode buttons with consistent focus and touch affordances.
+
+- Add a standalone, local slide preview tab alongside History / Compare / Branches / Merge, available before the first version is saved.
+- Render one slide at a time with slide navigation, mobile horizontal slide chooser, and clear preview fallbacks; reuse the bundled renderer without runtime data uploads.
+
 ## 1.1.8 - 2026-11-13
 
 - Update the bundled @aiden0z/pptx-renderer from 1.2.4 to 1.4.0 for Visual Compare (side-by-side, overlay, split and blink).
@@ -32,10 +60,6 @@
 - Keep the header version badge visible at narrow widths by truncating only the app title.
 - Remove redundant language-switching instructions from Japanese and English Help.
 
-
-## Unreleased
-
-- Standardize the phone informational footer, final Help build metadata, and equivalent local-processing badge wording.
 
 ## 1.1.5 - 2026-10-11
 

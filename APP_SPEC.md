@@ -1,5 +1,21 @@
 # PPTX Version Control — App Specification
 
+## v1.2.0 — Preview, review navigation, and history search
+
+- Search active-branch history by saved version name, original note, PPTX filename, version number, date or ID. Filtering never modifies stored commits or HEAD; opening a new project, returning home or switching branches clears the query.
+- Provide Previous change / Next change navigation for changed slides that match the current semantic category and Changed slides only filter. Keep the existing normal slide arrows for all visible slides, and display changed-slide progress with disabled endpoints.
+- On phones, reveal the selected workspace tab, indicate left/right overflow only when necessary, and support keyboard Arrow/Home/End switching across visible peer tabs. Before the first save, only Preview is eligible; hidden tabs must never activate.
+- Keep Japanese and English text, accessible input labels, failure/empty states, file:// support, and no-runtime-network behavior.
+- Keep bilingual README screenshots representative of the actual current UI, and validate documentation links against tracked repository files.
+
+### Workspace UI refinement
+
+- Show the introductory copy and local-processing badge on the home view only. Hide both when loading, viewing, or managing a PPTX, and restore them when returning home.
+- Keep Preview available before committing a PPTX. Show the slide, navigation, and any loading/error status without redundant success or effect-limitation text. Retain a screen-reader-only panel heading.
+- Remove the explanatory paragraph above the comparison version pickers. Keep all comparison controls and safety notes.
+- Align Merge heading and explanatory text to the top of its toolbar at desktop widths.
+- Group History and Project Management actions visually, preserving every operation and touch targets on smartphones.
+
 ## v1.1.8 — Renderer dependency refresh
 
 - Update the bundled high-fidelity visual renderer to `@aiden0z/pptx-renderer` 1.4.0 while keeping the app fully offline at runtime and retaining the browser-only single-file distribution.

@@ -34,8 +34,9 @@ function setup() {
     refreshBranchState:async()=>{},loadProjectHistory:async()=>[commits.c,commits.b,commits.a],computeProjectStats:async()=>({}),
     commitDisplayName:x=>x.label||x.message,formatDate:x=>x,shortHash:x=>x,
     currentFileState:()=> 'changed',
+    confirmDiscardWorkingChanges:()=>true, // Boundary tests proceed as if the user approved navigation.
     buildComparisonSession:async(from,to,{mode})=>({id:`${from.id}:${to.id}`,from,to,mode,result:{rows:[]},slidePairs:[]}),
-    clearRendererPairHandles(){events.push('clearRenderer');}, stopVisualBlink(){events.push('stopBlink');},
+    clearRendererPairHandles(){events.push('clearRenderer');}, clearPptxPreview(){events.push('clearPreview');}, stopVisualBlink(){events.push('stopBlink');},
     renderHistory(){events.push('history');},renderCompareControls(){events.push('controls');},renderDiff(){events.push('diff');},
     activateTab(tab){events.push(`activate:${tab}`);c.state.activeTab=tab;},
     renderRepositoryPanel(){},renderBranchPicker(){},renderBranches(){},resetMergeResolverState(){},refreshLocalProjects:async()=>{},
@@ -47,7 +48,7 @@ function setup() {
   };
   vm.createContext(c);
   vm.runInContext(lines.find(x=>x.startsWith('const state=')).replace('const state=','state='),c);
-  const names=['comparisonEmptyInput','comparisonInputFromCommit','comparisonInputFromWorking','currentWorkingComparable',
+  const names=['historySearchMatches','comparisonEmptyInput','comparisonInputFromCommit','comparisonInputFromWorking','currentWorkingComparable',
     'compareInputFromUi','comparisonSessionLegacy','applyComparisonSession','showCompareDiff','showCommitDiff','showWorkingVisualCompare','buildHeadWorkingComparisonSession',
     'updateCompareButtonState','invalidateVersionDialog','closeVersionDialog','invalidateVersionContext','startNewProject','loadFile','openProject','loadStoredCommit','switchBranch','confirmBranchDialog','branchRefName','validBranchName'];
   // The new helpers may be absent during RED, so existing paths still exercise

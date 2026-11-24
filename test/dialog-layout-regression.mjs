@@ -50,11 +50,24 @@ test(`${target}: next-action panel uses a flat neutral surface`, () => {
   assert.doesNotMatch(rule, /(?:linear|radial|conic)-gradient\(/, 'card has no gradient');
 });
 
-test(`${target}: Hero and Help use concise, version-independent copy`, () => {
-  assert.ok(html.includes('data-i18n="introTitle">PowerPointの編集履歴を保存・比較'));
+test(`${target}: Hero has only one visible explanatory paragraph, with accessible heading`, () => {
+  const intro = html.match(/<section class="page-intro" id="pageIntro">([\s\S]*?)<div class="local-badge">/)?.[1];
+  assert.ok(intro, 'Hero section should exist');
+  assert.ok(intro.includes('<h1 class="sr-only">PPTX Version Control</h1>'), 'Heading is accessible but not visible');
+  assert.ok(intro.includes('data-i18n="lead">PowerPoint（PPTX）の編集履歴を保存して、版ごとの変更点を比較できます。'));
+  assert.ok(!intro.includes('data-i18n="introTitle"'), 'Old headline should not appear');
+  assert.ok(html.includes("lead:'Save PowerPoint (PPTX) versions to keep an edit history and compare changes."));
+  assert.ok(css.includes('.page-intro p{margin:0;max-width:880px;'), 'Hero paragraph has no leftover title margin');
+  assert.ok(css.includes('.page-intro{padding-bottom:14px}.page-intro p{font-size:13px}'), 'Mobile copy stays readable');
+});
+test(`${target}: Help omits product-site name while retaining privacy information`, () => {
   assert.ok(html.includes('data-i18n="helpScopeTitle">主な機能'));
   assert.ok(html.includes("helpScopeTitle:'What you can do'"));
-  assert.ok(html.includes("introTitle:'Save and compare PowerPoint versions'"));
+  const help = html.match(/<dialog id="helpDialog">([\s\S]*?)<\/dialog>/)?.[1];
+  assert.ok(help);
+  assert.ok(help.includes('読み込んだPowerPointファイルはブラウザ内で処理され、外部サーバーには送信されません。'));
+  assert.ok(html.includes("helpPrivacyBody:'PowerPoint files are processed in your browser and are not sent to external servers.'"));
+  assert.ok(!help.includes('Browser Kitty') && !html.includes('Browser Kitty or any external server'));
   assert.ok(!html.includes('v1.1.2でできること') && !html.includes('What v1.1.2 does'));
 });
 
@@ -65,6 +78,98 @@ test(`${target}: all seven native dialogs retain their existing controls`, () =>
     assert.ok(dialog, id);
     for (const control of controls) assert.ok(dialog[0].includes(`id="${control}"`), control);
   }
+});
+
+
+test(`${target}: project management uses grouped actions and unboxed statistics`, () => {
+  const section = html.match(/<details class="project-tools"[^>]*>([\s\S]*?)<\/details>/)?.[1];
+  assert.ok(section, 'project management details exist');
+  assert.match(section, /class="repo-action-group repo-action-main"/);
+  assert.match(section, /class="repo-action-group repo-action-secondary"/);
+  for (const id of ['createBranchButton', 'exportProjectButton', 'exportGitButton', 'optimizeStorageButton',
+    'newProjectButton', 'deleteCurrentProjectButton', 'storageActionResult']) assert.ok(section.includes(`id="${id}"`), id);
+  assert.match(css, /\.project-tools \.repo-stat\{[^}]*background:transparent/);
+  assert.match(css, /\.project-tools \.repo-actions\{[^}]*border-top:1px solid var\(--line\)/);
+  assert.match(css, /\.repo-action-secondary\{[^}]*border-left:1px solid var\(--line\)/);
+});
+
+test(`${target}: file and analysis details separate content without nested bordered cards`, () => {
+  assert.match(css, /\.technical-drawer \.file-card,\.technical-drawer \.export-card\{[^}]*border:0/);
+  assert.match(css, /\.technical-drawer \.export-card\{[^}]*border-left:1px solid var\(--line\)/);
+  assert.match(css, /\.technical-drawer \.stat\{[^}]*background:transparent/);
+  assert.match(css, /\.technical-drawer \.semantic-stat\{[^}]*background:transparent/);
+  assert.match(css, /\.technical-drawer \.semantic-list,\.technical-drawer \.semantic-inspector\{[^}]*border:0/);
+  assert.match(css, /\.technical-drawer \.list-card\{border:0/);
+  assert.match(css, /\.technical-drawer \.export-card\{padding:16px 0 0;border:0;border-top:1px solid var\(--line\)/);
+  for (const id of ['slideCount', 'partCount', 'mediaCount', 'notesCount', 'outputFilename',
+    'downloadButton', 'semanticSlideList', 'partList']) assert.ok(html.includes(`id="${id}"`), id);
+});
+
+test(`${target}: comparison keeps a bordered slide stage but not stacked result cards`, () => {
+  assert.match(css, /\.compare-panel \.compare-picker-card\{[^}]*border:0/);
+  assert.match(css, /\.compare-panel \.compare-side-card\{[^}]*border:0/);
+  assert.match(css, /\.compare-panel \.diff-stat\{[^}]*border:0/);
+  assert.match(css, /\.compare-panel \.diff-toolbar\{[^}]*border:0/);
+  assert.match(css, /\.compare-panel \.visual-compare\{border:0/);
+  assert.match(css, /\.compare-panel \.visual-stage-shell\{[^}]*border:1px solid var\(--line\)/);
+  assert.match(css, /\.compare-panel \.visual-change-card\{[^}]*border:0/);
+  assert.match(css, /\.compare-panel \.compare-side-card:last-child\{padding:14px 0 0;border:0;border-top:1px solid var\(--line\)/);
+  for (const id of ['compareFromSelect', 'compareToSelect', 'compareVersionsButton',
+    'diffSummary', 'compareFilterList', 'compareSlideList', 'visualStageShell']) assert.ok(html.includes(`id="${id}"`), id);
+});
+
+
+test(`${target}: compact comparison and keyboard-accessible breakdown remain available`, () => {
+  assert.ok(html.includes('id="diffSummary"'));
+  assert.ok(html.includes('id="diffBreakdown" hidden'));
+  assert.ok(html.includes('<summary><span data-i18n="diffBreakdownTitle">変更内容の内訳</span>'));
+  assert.ok(html.includes('id="diffBreakdownGrid"'));
+  assert.ok(html.includes("diffBreakdownTitle:'Breakdown by change type'"));
+  assert.ok(html.includes("renderCompactCompareSummary(session.result.summary)"));
+  assert.ok(html.includes("$('#compareSwapButton').addEventListener('click',swapCompareSides)"));
+  assert.doesNotMatch(html, /setTimeout\(\(\)=>showCompareDiff\(/,
+    'swap must not race asynchronous version-option loading');
+  assert.match(css, /\.diff-breakdown>summary:focus-visible\{outline:2px solid var\(--focus\)/);
+});
+
+test(`${target}: buttons have distinct primary, neutral, selected and danger styles`, () => {
+  assert.match(css, /\.button\.primary\{border-color:var\(--accent\);background:var\(--accent\);color:#fff/);
+  assert.match(css, /\.button:hover:not\(:disabled\)\{border-color:var\(--accent\)/);
+  assert.match(css, /\.button\.danger-soft\{border-color:var\(--line\);background:transparent;color:var\(--danger\)/);
+  assert.match(css, /\.visual-mode-button\[aria-pressed="true"\]\{border-color:var\(--accent\);background:var\(--accent\);color:#fff/);
+  assert.match(css, /\.compare-swap-button\.button\.icon-button\{width:42px;height:42px;border-radius:50%/);
+  assert.match(css, /@media\(max-width:760px\)\{[\s\S]*?\.button\{min-height:44px;padding:10px 12px\}/);
+});
+
+test(`${target}: Preview is a peer of History, Compare, Branches and Merge`, () => {
+  const tabs = html.match(/<div class="tabs" id="projectTabs" role="tablist"[^>]*>([\s\S]*?)<\/div>/)?.[1];
+  assert.ok(tabs);
+  for (const tab of ['historyTab', 'diffTab', 'branchesTab', 'mergeTab', 'previewTab'])
+    assert.ok(tabs.includes(`id="${tab}"`), tab);
+  assert.ok(html.includes('id="previewPanel" role="tabpanel" aria-labelledby="previewTab"'));
+  assert.ok(html.includes('id="previewSlideList"'));
+  assert.ok(html.includes('id="previewCanvas"'));
+  assert.ok(html.includes('id="previewHost"'));
+  assert.ok(html.includes('id="previewPrevButton"'));
+  assert.ok(html.includes('id="previewNextButton"'));
+  assert.ok(html.includes("tabPreview:'プレビュー'"));
+  assert.ok(html.includes("tabPreview:'Preview'"));
+  assert.ok(html.includes("state.activeTab=state.project?'history':'preview'"), 'available before first save');
+  assert.ok(html.includes('if(navigation)navigation.hidden=!state.model;'));
+  assert.ok(html.includes("$('#previewTab').addEventListener('click',()=>activateTab('preview'))"));
+  assert.ok(css.includes('.preview-layout{display:grid;grid-template-columns:minmax(165px,225px) minmax(0,1fr)'));
+  assert.ok(css.includes('.preview-slide-list{display:flex;gap:4px;min-width:0}'), 'mobile picker scrolls horizontally');
+});
+
+test(`${target}: Preview reuses the bundled local renderer and disposes stale handles`, () => {
+  assert.ok(html.includes("RendererFoundation.prepare(comparisonInputFromWorking({model,file}))"));
+  assert.ok(html.includes('RendererFoundation.renderSlide(prepared,slide)'));
+  assert.ok(html.includes('RendererFoundation.releaseHandle(state.previewHandle)'));
+  assert.ok(html.includes("if(state.activeTab==='preview'&&which!=='preview')clearPptxPreview()"));
+  assert.ok(html.includes("if(which==='preview'&&state.model)renderPptxPreview()"));
+  assert.ok(html.includes('previewRenderEpoch:0'));
+  assert.ok(html.includes('previewHandle:null'));
+  assert.ok(!html.includes('previewLimitation:'), 'static preview disclaimer was removed from the main view');
 });
 
 test(`${target}: existing shield/check privacy badge stays byte-identical`, () => {

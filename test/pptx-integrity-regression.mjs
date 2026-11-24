@@ -322,3 +322,28 @@ test('package-only shape effects are included in ancillary comparison', () => {
   assert.match(code,/objectEffects/);
   assert.match(code,/cNvPr/);
 });
+
+const projectImportContext = vm.createContext({ Blob, Uint8Array });
+vm.runInContext(getLine('function validateProjectImportPayload(') + '\n' +
+  getLine('async function validateProjectImportRecords(') +
+  '\nthis.projectImport = { validateProjectImportPayload, validateProjectImportRecords };', projectImportContext);
+test('project import rejects incomplete, checksum-valid tree data', async () => {
+  const treeId = 'a'.repeat(64), commitId = 'b'.repeat(64);
+  const payload = { format: 'pptx-version-control-project', schemaVersion: 1,
+    project: { id: 'source-project', headRef: 'refs/heads/main' },
+    objects: [{ id: treeId, kind: 'tree', size: 2, data: 'e30=' }],
+    commits: [{ id: commitId, projectId: 'source-project', tree: treeId, parents: [] }],
+    refs: [{ name: 'HEAD', symbolic: 'refs/heads/main' }, { name: 'refs/heads/main', commitId }] };
+  assert.equal(projectImportContext.projectImport.validateProjectImportPayload(payload), true);
+  await assert.rejects(projectImportContext.projectImport.validateProjectImportRecords(payload,
+    [{ id: treeId, kind: 'tree', data: new Blob(['{}']) }]), /Incomplete tree object/);
+});
+
+test('unsaved PPTX guard is wired to all history-replacing navigation', () => {
+  for (const name of ['switchBranch', 'openProject', 'loadStoredCommit', 'startNewProject']) {
+    assert.match(getLine('async function ' + name + '('), /confirmDiscardWorkingChanges\(\)/, name);
+  }
+  assert.match(getLine('async function confirmBranchDialog('), /confirmDiscardWorkingChanges\(\)/);
+  assert.match(source, /id="discardWorkingDialog"/);
+  assert.match(source, /skipDiscardCheck:true/);
+});

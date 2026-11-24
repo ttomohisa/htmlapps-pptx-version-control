@@ -14,7 +14,7 @@ PowerPoint（PPTX）の変更履歴を、内容の意味と実際の見た目の
 
 GitHub Pagesから最初のHTMLを読み込んだ後、PPTX解析、履歴保存、Semantic Diff、Branch / Merge、プロジェクトの入出力、Git向け書き出しは端末内で処理されます。選択したPPTXがアプリからサーバーへ送信されることはありません。
 
-[![PPTX Version Controlの画面](assets/screenshot.png)](https://ttomohisa.github.io/htmlapps-pptx-version-control/)
+[![PPTX Version Controlの比較画面（変更スライドと左右の見た目比較）](assets/screenshot.png)](https://ttomohisa.github.io/htmlapps-pptx-version-control/)
 
 ## 主な機能
 
@@ -23,6 +23,10 @@ GitHub Pagesから最初のHTMLを読み込んだ後、PPTX解析、履歴保存
 
 - **PowerPointの版をローカル保存** — 最初のPPTXからプロジェクトを作り、編集後のPPTXを同じプロジェクトへ新しいバージョンとして追加できます。
 - **意味のある変更を確認** — 生のOOXML差分ではなく、文章、数値、画像、オブジェクト、配置、書式、スライド順、発表者ノートの変更を比較します。
+- **PPTXをプレビュー** — 初回保存前も含め、現在開いているPPTXのスライドを一覧から選び、大きく表示できます。
+- **履歴の検索** — 現在のブランチ内でバージョン名・メモ・元のPPTXファイル名を検索できます。
+- **変更スライドへの移動** — 比較結果の「前の変更」「次の変更」で、フィルターに合う変更スライドを順番に確認できます。
+- **スマホのタブ切り替え** — 続きがあるときは端に目印を表示し、選んだタブが隠れないように移動します。
 - **実際のスライドを見た目で比較** — 保存済みVersion、Branch HEAD、未保存の編集内容を、横並び・重ね合わせ・分割・点滅で確認できます。
 - **Gitのような履歴をブラウザ内に保持** — Project / Commit / Branch / ref / HEADをIndexedDBへ保存し、ObjectはSHA-256ベースで管理します。
 - **ファイルを複製せずBranch管理** — Branchの作成、切り替え、名前変更、削除に加え、過去の保存版を起点にBranchを作成できます。
@@ -41,12 +45,12 @@ GitHub Pagesから最初のHTMLを読み込んだ後、PPTX解析、履歴保存
 
 ### HTMLをダウンロードして使う
 
-1. このリポジトリの [`dist/index.html`](dist/index.html) をダウンロードします。
-2. 最新版のChromeまたはEdgeで開きます。
+1. [最新のGitHub Release](https://github.com/ttomohisa/htmlapps-pptx-version-control/releases/latest) から通常版のHTMLをダウンロードします。リポジトリに保存されている [`pptx-version-control.html`](pptx-version-control.html) も使用できます。
+2. ChromeまたはEdgeで、そのHTMLファイルを開きます。
 
-生成物は単一HTMLです。`DecompressionStream` 対応ブラウザ向けに、より小さい自己展開版 `dist/index.self-extract.html` も同梱しています。
+Releaseには、`DecompressionStream` 対応ブラウザ用の小さい自己展開版もあります。`dist/index.html` と `dist/index.self-extract.html` はビルド時に生成されるファイルで、リポジトリにはコミットされていません。
 
-### 自分でビルドする（advance）
+### 自分でビルドする（開発者向け）
 
 1. このリポジトリをダウンロードまたはクローンします。
 2. Windowsで `build-standalone.bat` をダブルクリックするか、PowerShellから `./build-standalone.ps1` を実行します。
@@ -55,11 +59,9 @@ GitHub Pagesから最初のHTMLを読み込んだ後、PPTX解析、履歴保存
 
 Python、Node.js、ローカルWebサーバーは不要です。Windows標準のPowerShellと `tar.exe` を使用します。
 
-マージでは対応するスライドとオブジェクトを保持し、競合する変更はマージ版を作る前に選択して解決します。
-
 ## 使い方
 
-1. 最初の `.pptx` をドロップまたは選択します。
+1. 最初の `.pptx` をドロップまたは選択し、**プレビュー** でスライドを確認します。
 2. プロジェクト名とバージョンメモを入力し、最初のバージョンを保存します。
 3. PowerPointで資料を通常どおり編集します。
 4. **編集後のPPTX** エリアへ編集済みファイルをドロップするか、ファイル選択ボタンから追加します。
@@ -74,6 +76,8 @@ Python、Node.js、ローカルWebサーバーは不要です。Windows標準の
 
 ### 見た目で比較
 
+「前の変更」「次の変更」は、現在のフィルターに合う変更スライドだけを移動します。通常の前後ボタンは表示中の全スライドを移動します。
+
 **比較** タブではSemantic Diffを変更判定の基準として維持しながら、同じスライドを実際の見た目でも確認できます。左右それぞれでBranchとVersionを選び、選択したスライドを次の4方式で比較できます。
 
 - **横並び** — 2つのVersionを同じスライド比率で表示します。狭い画面では上下に並べます。
@@ -87,6 +91,8 @@ Python、Node.js、ローカルWebサーバーは不要です。Windows標準の
 
 ### 履歴と復元
 
+履歴の検索は現在のブランチ内で行われます。検索しても保存済みの版やHEADは変わりません。
+
 履歴の過去の版にある **最新版と比較** は、押した時点の現在のBranchの保存済みHEADと比較します。未保存の編集内容を含め、読み込み中のPPTX、過去版の表示状態、Branchは変更しません。**変更を見る** は引き続き直前の版との差分を表示します。プロジェクト・Branch・PPTXを切り替えると、進行中だった比較の遅れた結果やエラーは表示されません。
 
 過去バージョンを開いても、現在のBranchのHEADは動きません。過去版をPPTXとして保存したり、任意の2バージョンを比較したり、過去の内容を**新しいバージョンとして復元**できます。
@@ -94,6 +100,8 @@ Python、Node.js、ローカルWebサーバーは不要です。Windows標準の
 古い版から別の編集を続けたい場合は、その保存版を起点に新しいBranchを作成します。
 
 ### BranchとMerge
+
+マージでは対応するスライドとオブジェクトを保持し、競合する変更はマージ版を作る前に選択して解決します。
 
 各Branchは独立したHEADを持ちます。別Branchを現在のBranchへ取り込むときは共通のBASEを探し、BASE / 現在 / 取り込み元を比較します。
 
