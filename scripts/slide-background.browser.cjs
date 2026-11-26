@@ -56,6 +56,7 @@ async function main() {
     const counts=await page.evaluate(()=>window.bgTest.state.compareSession.result.summary);
     assert.equal(counts.changedSlides,1);
     assert.equal(counts.formatting,1);
+    await page.locator('#reviewFilters > summary').click();
     await page.locator('[data-compare-filter="formatting"]').click();
     assert.equal(await page.locator('.compare-slide-row').count(),1);
     const card=await page.locator('#visualSemanticList').textContent();

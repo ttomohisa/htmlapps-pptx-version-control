@@ -28,7 +28,7 @@ for (const needle of [
   "visualBlinkPaused",
   "@media(max-width:760px){.repo-form{grid-template-columns:1fr}",
   ".visual-side-grid{grid-template-columns:1fr}",
-  ".visual-mobile-nav{position:sticky",
+  'id="reviewSlidePicker"',
   "connect-src 'none'"
 ]) {
   if (!source.includes(needle) && !built.includes(needle)) throw new Error(`v1.1.0 behavior marker missing: ${needle}`);

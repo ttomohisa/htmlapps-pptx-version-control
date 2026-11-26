@@ -78,6 +78,8 @@ A small first-run sample is included at `examples/sample-presentation.pptx`.
 
 ### Visual Compare
 
+The comparison shows the selected slide title and, for a single numeric replacement, the old and new values. Use **Filters** to narrow changes and **Slides** to choose a slide.
+
 **Previous change** and **Next change** move only through changed slides matching the active filters. The regular slide arrows still navigate every visible slide.
 
 The **Compare** tab keeps Semantic Diff as the source of truth and adds rendered-slide confirmation. Choose a Branch and Version on each side, then review the selected slide with:

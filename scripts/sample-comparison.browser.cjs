@@ -41,7 +41,7 @@ async function main() {
           await page.locator('#sampleState #visualFromHost[data-visual-state="ready"]').waitFor();
           await page.locator('#sampleState #visualToHost[data-visual-state="ready"]').waitFor();
           const selected = page.locator('.compare-slide-row[aria-current="true"]');
-          assert.match(await selected.innerText(), /Revenue/);
+          assert.match(await selected.textContent(), /Revenue/);
           assert.match(await page.locator('#visualFromHost').textContent(), /FY2027:\s*145/);
           assert.match(await page.locator('#visualToHost').textContent(), /FY2027:\s*165/);
           assert.equal(await page.locator('#saveVersionButton').isVisible(), false);
@@ -49,7 +49,16 @@ async function main() {
           assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
           await page.locator('#languageButton').click();
           assert.match(await page.locator('#diffMeta').innerText(), /1.*2/);
+          assert.equal(await page.locator('#reviewNewValue').innerText(), '165');
+          const titleBox = await page.locator('#reviewDelta').boundingBox();
+          const frameBox = await page.locator('#visualFromFrame').boundingBox();
+          assert.ok(titleBox.y >= 0 && frameBox.y + 80 < 700, 'delta and slide are in the initial viewport');
+          if (width <= 760) {
+            await page.locator('#reviewSlidePicker > summary').click();
+          }
           await page.locator('.compare-slide-row[data-pair-index="0"]').click();
+          assert.equal(await page.locator('#reviewDelta').isVisible(), false, 'old numbers clear on an unchanged slide');
+          assert.match(await page.locator('#visualCompareTitle').innerText(), /Quarterly/);
           await page.locator('#sampleBackButton').click();
           assert.equal(await open.isVisible(), true);
           assert.equal(await open.evaluate(el => el === document.activeElement), true);

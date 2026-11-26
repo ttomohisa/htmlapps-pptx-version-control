@@ -2,6 +2,7 @@
 
 ## 1.3.0 - 2026-11-26
 
+- Rework Home, the saved version list and the comparison workspace. The comparison leads with the slide title and single numeric change. Navigation and filters leave the slide unobstructed on phones.
 - Report slide background color changes under Formatting and allow visual review before saving whenever the PPTX bytes differ.
 - Recognize full-width Japanese amounts and percentages in the Numbers filter. The comparison displays the original spelling and units.
 - Apply the same 600 MiB file-size limit when exporting and importing project backups. Show the required size if a backup exceeds the limit.

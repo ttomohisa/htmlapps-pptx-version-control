@@ -41,6 +41,7 @@ async function main(){
     await page.waitForFunction(()=>{const a=document.querySelector('#compareFromSelect')?.value,b=document.querySelector('#compareToSelect')?.value;return a&&b&&a!==b&&!document.querySelector('#compareVersionsButton').disabled});
     await page.locator('#compareVersionsButton').click();
     await page.waitForFunction(()=>!document.querySelector('#diffContent').hidden&&!!document.querySelector('#compareSlideList .compare-slide-row'),null,{timeout:30000});
+    assert.ok(await page.locator('#diffTitle').evaluate(el=>el===document.activeElement),'running a comparison takes keyboard focus to the results');
     assert.equal(await page.locator('#changeReviewToolbar').isVisible(),true,'change navigation visible');
     const initial=await page.locator('#changeReviewPosition').textContent();
     assert.ok(/\d+ \/ \d+/.test(initial),'change counter');
@@ -62,6 +63,10 @@ async function main(){
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'no document overflow');
     assert.deepEqual(errors,[],'no browser errors');assert.deepEqual(requests,[],'no HTTP requests');
     await page.screenshot({path:path.join('test-results/mobile-layout',`workspace-review-${locale}-${width}.png`),fullPage:true});
+    await page.locator('#projectTools > summary').click();
+    await page.locator('#newProjectButton').click();
+    await page.waitForFunction(()=>!document.querySelector('#emptyState').hidden && document.querySelector('.local-project-row'));
+    assert.equal(await page.locator('#emptyState > :first-child').getAttribute('id'),'localProjectsSection','saved work comes first on a return visit');
     console.log('PASS workspace review',locale,width);
    }finally{await context.close()}
   }

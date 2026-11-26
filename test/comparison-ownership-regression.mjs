@@ -10,14 +10,19 @@ const lines = source.split('\n');
 const fn = name => {
   const matches = lines.filter(x => x.startsWith(`function ${name}(`) || x.startsWith(`async function ${name}(`));
   assert.ok(matches.length, `actual function ${name} exists`);
-  return matches.at(-1);
+  const declaration = matches.at(-1);
+  if (declaration.endsWith('}')) return declaration;
+  const start = lines.lastIndexOf(declaration);
+  const end = lines.findIndex((line, index) => index > start && /^}+$/.test(line));
+  assert.ok(end > start, `end of ${name} declaration`);
+  return lines.slice(start, end + 1).join('\n');
 };
 function deferred() { let resolve, reject; const promise = new Promise((r,j) => {resolve=r;reject=j;}); return {promise,resolve,reject}; }
 const tick = () => new Promise(setImmediate);
 function element(tag = 'div') {
   return { tag, value:'', disabled:false, open:false, dataset:{}, children:[], listeners:{}, className:'',
     set textContent(value) { this.text=value; this.children=[]; }, get textContent(){return this.text||'';},
-    append(...children){this.children.push(...children);}, close(){this.open=false;},
+    focus(){}, scrollIntoView(){}, append(...children){this.children.push(...children);}, close(){this.open=false;},
     addEventListener(type,fn){this.listeners[type]=fn;}, setAttribute(name,value){this[name]=value;} };
 }
 function setup() {

@@ -53,6 +53,7 @@ async function main() {
     const before = await page.locator('#diffMeta').textContent();
     assert.ok(before.includes(' → '), 'direction is shown');
     assert.equal(await page.locator('#diffSummary .diff-stat').count(), 3);
+    await page.locator('#reviewFilters > summary').click();
     const detail = page.locator('#diffBreakdown');
     if (await detail.isVisible()) {
       assert.equal(await detail.getAttribute('open'), null, 'category counts are collapsed by default');
