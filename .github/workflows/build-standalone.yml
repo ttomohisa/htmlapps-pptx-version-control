@@ -7,6 +7,7 @@ on:
       - main
     paths:
       - "src/**"
+      - "examples/sample-presentation.pptx"
       - "test/**"
       - "pptx-version-control.html"
       - "scripts/**"

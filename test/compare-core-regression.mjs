@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import crypto from 'node:crypto';
 import { Blob } from 'node:buffer';
@@ -69,6 +70,15 @@ if (!shiftedInsertion.rows.some(row => row.original?.title.includes('Closing') &
 
 const textResult = run('text and number', snapshot([slide('s1', 1, [object('o1', { text: 'Revenue 1,200', fingerprint: 'a' })])]), snapshot([slide('s1', 1, [object('o1', { text: 'Revenue 1,450', fingerprint: 'b' })])]), { text: 1, number: 1 });
 
+const budget = text => snapshot([slide('budget', 1, [object('amount', { text })])]);
+const budgetDiff = run('full-width Japanese budget', budget('予算 １００万円'), budget('予算 １５０万円'), { changedSlides: 1, text: 1, number: 1 });
+const [amount] = budgetDiff.rows[0].semantic.numberChanges;
+assert.equal(amount.original, '１００万円');
+assert.equal(amount.revised, '１５０万円');
+run('numeric width alone preserves the value', budget('価格 ￥１，０００．５０'), budget('価格 ¥1,000.50'), { text: 1, number: 0 });
+const rate = run('full-width signed percentage', budget('差額 −１．５％'), budget('差額 ＋２．５％'), { number: 1 });
+assert.equal(rate.rows[0].semantic.numberChanges[0].revised, '＋２．５％');
+
 const reorderedBefore = snapshot([slide('s-layer', 1, [
   object('old-a', { text: 'Layer A', fingerprint: 'layer-a' }),
   object('old-b', { text: 'Layer B', fingerprint: 'layer-b' })
@@ -92,6 +102,16 @@ const image = { kind: 'image', sha256: 'abc', size: 123 };
 run('image move is layout', snapshot([slide('s1', 1, [object('img', { type: 'image', resource: image, fingerprint: 'a' })])]), snapshot([slide('s1', 1, [object('img', { type: 'image', resource: image, x: 50000, fingerprint: 'b' })])]), { image: 0, layout: 1 });
 run('formatting', snapshot([slide('s1', 1, [object('o1', { text: 'Title', size: 20, fingerprint: 'a' })])]), snapshot([slide('s1', 1, [object('o1', { text: 'Title', size: 24, fingerprint: 'b' })])]), { formatting: 1 });
 run('speaker notes', snapshot([slide('s1', 1, [], 'old')]), snapshot([slide('s1', 1, [], 'new')]), { notes: 1 });
+
+const baseSlide = slide('s2', 2, [object('title', { text: 'Second slide' })]);
+const backdrop = color => snapshot([{ ...baseSlide, backgroundColor: color }]);
+const backgroundDiff = run('slide background only', backdrop('#FFFFFF'), backdrop('#FFE066'),
+  { changedSlides: 1, formatting: 1, object: 0, layout: 0 });
+const backgroundPair = context.buildComparisonSlidePair(backgroundDiff.rows[0]);
+if (backgroundPair.categoryCounts.formatting !== 1 || backgroundPair.markers.length) {
+  throw new Error('A slide background must be filterable without attaching a marker to a shape');
+}
+run('same background', backdrop('#FFFFFF'), backdrop('#FFFFFF'), { changedSlides: 0, formatting: 0 });
 
 const from = { kind: 'working', id: 'working:a', cacheKey: 'working:a', filename: 'a.pptx', sourceSha256: 'a', semanticFingerprint: 'a', _model: snapshot([slide('s1', 1, [object('o1', { text: 'Revenue 1,200', fingerprint: 'a' })])]), _file: new Blob(['a']) };
 const to = { kind: 'working', id: 'working:b', cacheKey: 'working:b', filename: 'b.pptx', sourceSha256: 'b', semanticFingerprint: 'b', _model: snapshot([slide('s1', 1, [object('o1', { text: 'Revenue 1,450', fingerprint: 'b' })])]), _file: new Blob(['b']) };

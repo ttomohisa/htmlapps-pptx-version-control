@@ -8,7 +8,8 @@ const normalize = html => html
   .replace(/data:image\/svg\+xml;base64,[A-Za-z0-9+/=]+/g, '__APP_ICON_DATA_URI__')
   .replace(/\r\n/g, '\n').trim();
 const hash = html => crypto.createHash('sha256').update(normalize(html)).digest('hex');
-const source = read('../src/index.template.html');
+const sample = fs.readFileSync(new URL('../examples/sample-presentation.pptx', import.meta.url)).toString('base64');
+const source = read('../src/index.template.html').replace('__SAMPLE_PPTX_BASE64__', sample);
 const rootOnly = process.argv.includes('--root-only');
 for (const path of rootOnly ? ['../pptx-version-control.html'] : ['../dist/index.html', '../pptx-version-control.html']) {
   assert.equal(hash(read(path)), hash(source), `${path} does not match the current source`);

@@ -138,6 +138,23 @@ test('divergent edits to the same formatting property remain explicit conflicts'
   assert.match(result.conflicts[0].path, /fontSize$/);
 });
 
+test('merge keeps a background edit alongside independent text edits and resolves conflicting colors', () => {
+  const base = snapshot({ fontSize: 12 });
+  base.slides[0].backgroundColor = '#FFFFFF';
+  const ours = structuredClone(base), theirs = structuredClone(base);
+  ours.slides[0].objects[0].text = 'Edited';
+  theirs.slides[0].backgroundColor = '#FFE066';
+  const merged = mergeContext.merge(base, ours, theirs);
+  assert.equal(merged.conflicts.length, 0);
+  assert.equal(merged.merged.slides[0].backgroundColor, '#FFE066');
+  assert.equal(merged.merged.slides[0].objects[0].text, 'Edited');
+  ours.slides[0].backgroundColor = '#0000FF';
+  const divergent = mergeContext.merge(base, ours, theirs);
+  assert.equal(divergent.conflicts.length, 1);
+  mergeContext.resolve(divergent, divergent.conflicts[0], { choice: 'theirs' });
+  assert.equal(divergent.slidePlans[0].merged.backgroundColor, '#FFE066');
+});
+
 test('manual text resolution keeps separate paragraphs rather than injecting raw newlines', () => {
   const code = getLine('function setTextContentInObject(');
   assert.match(code, /split\('\\n'\)/);
@@ -187,8 +204,9 @@ test('older stored fingerprint cannot mark byte-identical PPTX as changed', () =
   state.model.sourceSha256 = 'other-sha';
   state.model.fingerprint = 'old-model';
   assert.equal(fn.currentFileState(), 'noise');
+  assert.equal(fn.currentWorkingComparable(), true, 'different packages can be compared before saving');
+  state.checkoutCommitId = 'past';
   assert.equal(fn.currentWorkingComparable(), false);
-  assert.match(getLine('function renderRepositoryPanel('), /workingCompare.hidden=!\(state.project&&fileState==='changed'/);
 });
 
 test('manual merge text refuses table objects instead of rewriting only the first cell', () => {

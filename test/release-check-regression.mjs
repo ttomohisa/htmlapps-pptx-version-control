@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 const root = new URL('../', import.meta.url);
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'pptx-version-parity-'));
 try {
-  for (const name of ['src/index.template.html', 'pptx-version-control.html', 'test/release-parity-regression.mjs']) {
+  for (const name of ['src/index.template.html', 'examples/sample-presentation.pptx', 'pptx-version-control.html', 'test/release-parity-regression.mjs']) {
     const destination = path.join(temporary, name);
     fs.mkdirSync(path.dirname(destination), { recursive: true });
     fs.copyFileSync(new URL(name, root), destination);

@@ -271,6 +271,7 @@ foreach ($test in @(
   "documentation-regression.mjs",
   "compare-core-regression.mjs",
   "pptx-integrity-regression.mjs",
+  "project-backup-regression.mjs",
   "visual-compare-hardening-regression.mjs",
   "visual-compare-v110-regression.mjs",
   "renderer-foundation-regression.mjs",

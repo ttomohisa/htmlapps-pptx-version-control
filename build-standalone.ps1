@@ -332,12 +332,14 @@ Write-Step "Generating standalone HTML"
 $template = [System.IO.File]::ReadAllText($TemplatePath, [System.Text.Encoding]::UTF8)
 $assetBundleJson = ConvertTo-SafeJson $assetBundle 50
 $replacements = [ordered]@{
+  "__SAMPLE_PPTX_BASE64__" = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $Root "examples\sample-presentation.pptx")))
   "__APP_CONFIG_JSON__" = ConvertTo-SafeJson $appConfig 20
   "__BUILD_MANIFEST_JSON__" = ConvertTo-SafeJson $manifest 40
   "__EMBEDDED_ASSET_BUNDLE_JSON__" = $assetBundleJson
   "__APP_ICON_DATA_URI__" = $appIconDataUri
 }
 $replacementExpectedCounts = @{
+  "__SAMPLE_PPTX_BASE64__" = 1
   "__APP_CONFIG_JSON__" = 1
   "__BUILD_MANIFEST_JSON__" = 1
   "__EMBEDDED_ASSET_BUNDLE_JSON__" = 1
