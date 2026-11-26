@@ -43,6 +43,8 @@ Visual Compare bundles `@aiden0z/pptx-renderer` 1.4.0. The renderer is configure
 
 Just [open the demo](https://ttomohisa.github.io/htmlapps-pptx-version-control/). No installation or account is required.
 
+Try the sample comparison on the home screen to see the revised revenue figure before opening your own file. The sample also works offline and does not create a saved project.
+
 ### Use the downloaded HTML
 
 1. Download the regular HTML from the [latest GitHub Release](https://github.com/ttomohisa/htmlapps-pptx-version-control/releases/latest). You can also use the tracked [`pptx-version-control.html`](pptx-version-control.html).
@@ -89,6 +91,8 @@ Use category filters or **Changed slides only** to narrow the result list. Visua
 
 After dropping an edited PPTX, **Visual Compare** can also compare the current branch HEAD with that unsaved file before you save a new version. This review is read-only and does not create a commit.
 
+You can open Visual Compare whenever the file bytes differ, even when the change list is empty. Use **Formatting** to review slide background color changes and **Numbers** for changes such as `１００万円 → １５０万円`. Values keep their original spelling.
+
 ### History and restore
 
 History search filters versions within the currently selected branch without changing saved versions or HEAD.
@@ -112,6 +116,8 @@ Changes on different slides, different objects, or different supported propertie
 Project history is stored in IndexedDB. Browser data can be cleared, so important projects should also be exported as `.pptxvc` files.
 
 A `.pptxvc` file contains project metadata, refs, commits, and the required content-addressed objects. Imported projects are structurally validated and object sizes and SHA-256 hashes are checked before storage.
+
+The maximum backup file size is **600 MiB** for both export and import, including encoded PPTX data and history. If it exceeds the limit, the app displays the file size and the limit.
 
 ## Git-friendly export
 
@@ -196,6 +202,8 @@ The generated HTML includes a Content Security Policy containing `connect-src 'n
 Local project history is stored in IndexedDB on the device. Deleting browser site data can remove that history, which is why `.pptxvc` export is provided for portable backups.
 
 ## Limitations
+
+- Formatting reports solid slide background colors. Use Visual Compare to review gradient and picture backgrounds.
 
 - Merges re-parse the generated PPTX and verify that supported text, formatting, slide content and order match the merge plan. This does not prove compatibility with every PowerPoint feature.
 - If an edit cannot be safely composed (such as certain animations, linked shapes, complex text or table-wide manual text changes), the conflict resolver requires a slide-level choice. It does not silently drop a change.

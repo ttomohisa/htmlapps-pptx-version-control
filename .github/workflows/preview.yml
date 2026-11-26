@@ -55,6 +55,10 @@ jobs:
         if ($LASTEXITCODE -ne 0) { throw "Phone layout browser regression failed." }
         node scripts/comparison-ui.browser.cjs
         if ($LASTEXITCODE -ne 0) { throw "Comparison picker browser regression failed." }
+        node scripts/slide-background.browser.cjs
+        if ($LASTEXITCODE -ne 0) { throw "Slide background comparison regression failed." }
+        node scripts/sample-comparison.browser.cjs
+        if ($LASTEXITCODE -ne 0) { throw "Offline sample comparison regression failed." }
         node scripts/workspace-review.browser.cjs
         if ($LASTEXITCODE -ne 0) { throw "History, changed-slide navigation and phone tabs browser regression failed." }
         node scripts/preview-tab.browser.cjs

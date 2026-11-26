@@ -1,5 +1,12 @@
 # PPTX Version Control — App Specification
 
+## v1.3.0 — Comparison and backup improvements
+
+- A slide changing from an inherited white background to a yellow solid fill appears as one changed slide under Formatting. The user can open Visual Compare before saving any byte-different PPTX.
+- The Numbers filter detects changes between full-width Japanese monetary amounts and percentages, displaying the original tokens. A width-only change to the same number is still available under Text.
+- Apply an inclusive 600 MiB limit to the encoded project backup on both export and import. Report its size and the limit before attempting an oversized write or import.
+- From Home, open a bundled two-version comparison on the changed revenue slide in one action. The demo runs offline, supports Japanese and English, and leaves the local list of projects intact.
+
 ## v1.2.0 — Preview, review navigation, and history search
 
 - Search active-branch history by saved version name, original note, PPTX filename, version number, date or ID. Filtering never modifies stored commits or HEAD; opening a new project, returning home or switching branches clears the query.
